@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>5.6. Cauchy THM couplings: Hydroplasticity application &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5.6.1. Cauchy THM couplings: Hydroplasticity application - Isochoric triaxial test" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html" />
+    <link rel="prev" title="5.5. Cauchy THM couplings: Thermoplasticity application" href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html" title="5.6.1. Cauchy THM couplings: Hydroplasticity application - Isochoric triaxial test"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html" title="5.5. Cauchy THM couplings: Thermoplasticity application"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="Tutorial_Cauchy_THM_couplings.html" accesskey="U"><span class="section-number">5. </span>Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.6. </span>Cauchy THM couplings: Hydroplasticity application</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cauchy-thm-couplings-hydroplasticity-application">
+<h1><span class="section-number">5.6. </span>Cauchy THM couplings: Hydroplasticity application<a class="headerlink" href="#cauchy-thm-couplings-hydroplasticity-application" title="Permalink to this heading">¶</a></h1>
+<p>Because Hydro-plasticity involves the use of the more complex Drucker- Prager yield criterion, which introduces a
+hydromechanical coupling on th yield criterion, due to the dependence of the effective pressure <img class="math" src="_images/math/e66553477b42e8c60d9fcfc13e7f89db43813c0d.png" alt="p^\prime"/> on the pore fluid pressure <img class="math" src="_images/math/41c5440cac368da4510729836b512bbd620b029d.png" alt="P"/>
+according to the Terzaghi principle, and a second hydromechanical coupling on the pore fluid pressure diffusion equation (see <a class="reference internal" href="Tutorial_Cauchy_THM_couplings.html#application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab"><span class="std std-ref">previous tutorials</span></a>)
+we will perform two different applications in order to test the effect of each coupling separately. The effects of the hydro-mechanical couplings are shown in the following tutorials.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html">5.6.1. Cauchy THM couplings: Hydroplasticity application - Isochoric triaxial test</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html#begining-of-file">5.6.1.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html#finite-element-formulation">5.6.1.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html#finite-element-problem-description">5.6.1.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html#analysis-excecution-and-postprocessing">5.6.1.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Second%20Application.html">5.6.2. Cauchy THM couplings: Hydroplasticity application - Undrained Triaxial test</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Second%20Application.html#begining-of-file">5.6.2.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Second%20Application.html#finite-element-formulation">5.6.2.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Second%20Application.html#finite-element-problem-description">5.6.2.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Second%20Application.html#analysis-excecution-and-postprocessing">5.6.2.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html"
+                          title="previous chapter"><span class="section-number">5.5. </span>Cauchy THM couplings: Thermoplasticity application</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html"
+                          title="next chapter"><span class="section-number">5.6.1. </span>Cauchy THM couplings: Hydroplasticity application - Isochoric triaxial test</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html" title="5.6.1. Cauchy THM couplings: Hydroplasticity application - Isochoric triaxial test"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html" title="5.5. Cauchy THM couplings: Thermoplasticity application"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="Tutorial_Cauchy_THM_couplings.html" ><span class="section-number">5. </span>Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.6. </span>Cauchy THM couplings: Hydroplasticity application</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

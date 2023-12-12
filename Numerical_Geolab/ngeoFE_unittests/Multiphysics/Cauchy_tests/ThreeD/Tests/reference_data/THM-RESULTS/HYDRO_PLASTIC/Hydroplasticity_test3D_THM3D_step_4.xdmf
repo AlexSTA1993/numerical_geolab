@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
+<Xdmf Version="3.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <Domain>
+    <Grid Name="TimeSeries" GridType="Collection" CollectionType="Temporal">
+      <Grid Name="mesh" GridType="Uniform">
+        <Topology NumberOfElements="6" TopologyType="Tetrahedron" NodesPerElement="4">
+          <DataItem Dimensions="6 4" NumberType="UInt" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/Mesh/0/mesh/topology</DataItem>
+        </Topology>
+        <Geometry GeometryType="XYZ">
+          <DataItem Dimensions="8 3" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/Mesh/0/mesh/geometry</DataItem>
+        </Geometry>
+        <Time Value="4" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/0</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/1</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/2</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.0999999999999996" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/3</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/4</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/5</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.1999999999999993" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/6</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/7</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/8</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.2999999999999989" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/9</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/10</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/11</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.3999999999999986" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/12</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/13</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/14</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.4999999999999982" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/15</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/16</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/17</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.5999999999999979" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/18</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/19</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/20</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.6999999999999975" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/21</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/22</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/23</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.7999999999999972" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/24</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/25</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/26</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.8999999999999968" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/27</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/28</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/29</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="4.9999999999999964" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/30</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/31</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/32</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="5" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 5" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/33</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 12" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/34</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="8 62" Format="HDF">Hydroplasticity_test3D_THM3D_step_4.h5:/VisualisationVector/35</DataItem>
+        </Attribute>
+      </Grid>
+    </Grid>
+  </Domain>
+</Xdmf>

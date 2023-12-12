@@ -1,0 +1,60 @@
+.. _material description of state variables:
+
+=======================================
+Material description of state variables
+=======================================
+
+CAUCHY3D-DP
+-----------
+
+CAUCHY3D-DP-PR
+--------------
+
+CAUCHY3D-DP-PR-TEMP
+-------------------
+
+Material properties
+...................
+
+Thermal diffussivity
+********************
+
+| :math:`c_{th}=\frac{kT}{\rho C}`
+
+Hydraulic diffussivity
+**********************
+
+| :math:`c_{hy}=\frac{\chi}{\beta^\star \eta^f}`
+
+
+Mapping of the state variables
+..............................
+
+COSSERAT3D
+----------
+
+COSSERAT3D-BREAKAGE
+-------------------
+
+COSSERAT3D-EXP
+--------------
+
+COSSERAT3D-THM
+--------------
+
+Material properties
+...................
+
+
+Thermal diffussivity
+********************
+
+| :math:`c_{th}=\frac{kT}{\rho C}`
+
+Hydraulic diffussivity
+**********************
+
+| :math:`c_{hy}=\frac{\chi}{\beta^\star \eta^f}`
+
+Mapping of the state variables
+..............................

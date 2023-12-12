@@ -1,0 +1,38 @@
+ngeoFE\_unittests.Mechanics.ThreeD.BVP package
+==============================================
+
+Submodules
+----------
+
+ngeoFE\_unittests.Mechanics.ThreeD.BVP.Cauchy\_3D\_ref2 module
+--------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.ThreeD.BVP.Cauchy_3D_ref2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Mechanics.ThreeD.BVP.Triaxial\_3D\_Eleni\_tests module
+------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.ThreeD.BVP.Triaxial_3D_Eleni_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Mechanics.ThreeD.BVP.Triaxial\_3D\_Eleni\_umatCube module
+---------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.ThreeD.BVP.Triaxial_3D_Eleni_umatCube
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.ThreeD.BVP
+    :members:
+    :undoc-members:
+    :show-inheritance:

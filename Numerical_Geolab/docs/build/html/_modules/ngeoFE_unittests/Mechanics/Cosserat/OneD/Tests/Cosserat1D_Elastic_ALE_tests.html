@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../../_static/jquery.js"></script>
+    <script src="../../../../../../_static/underscore.js"></script>
+    <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 5, 2018</span>
+
+<span class="sd">@author: Alexandros Stathas</span>
+
+<span class="sd">Contains unit tests of ngeoFE applied to Cauchy continua in 1D linear elasticity</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests.Mechanics.Cosserat.OneD.BVP.Cosserat1D_Elastic_ALE</span> <span class="kn">import</span> <span class="n">Cosserat1DFEformulation</span><span class="p">,</span> <span class="n">Cosserat1DFEproblem</span>
+
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">plotting_params</span> 
+
+<span class="n">reference_data_path</span> <span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span>    
+
+<span class="c1"># Check if the environment variable or command-line argument is set to activate plots</span>
+<span class="n">activate_plots</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="s1">&#39;RUN_TESTS_WITH_PLOTS&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;RUN_TESTS_WITH_PLOTS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+    <span class="n">activate_plots</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;with_plots&#39;</span><span class="p">:</span>
+    <span class="n">activate_plots</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+
+<div class="viewcode-block" id="calculate_deviatoric_tensor"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.calculate_deviatoric_tensor">[docs]</a><span class="k">def</span> <span class="nf">calculate_deviatoric_tensor</span><span class="p">(</span><span class="n">sigma11</span><span class="p">,</span><span class="n">sigma12</span><span class="p">,</span><span class="n">sigma13</span><span class="p">,</span><span class="n">sigma21</span><span class="p">,</span><span class="n">sigma22</span><span class="p">,</span><span class="n">sigma23</span><span class="p">,</span><span class="n">sigma31</span><span class="p">,</span><span class="n">sigma32</span><span class="p">,</span><span class="n">sigma33</span><span class="p">):</span>
+    <span class="n">p_tot</span><span class="o">=</span><span class="p">(</span><span class="n">sigma11</span><span class="o">+</span><span class="n">sigma22</span><span class="o">+</span><span class="n">sigma33</span><span class="p">)</span><span class="o">/</span><span class="mf">3.</span>
+    <span class="n">s11</span><span class="o">=</span><span class="n">sigma11</span><span class="o">-</span><span class="n">p_tot</span>
+    <span class="n">s12</span><span class="o">=</span><span class="n">sigma12</span>
+    <span class="n">s13</span><span class="o">=</span><span class="n">sigma13</span>
+    
+    <span class="n">s21</span><span class="o">=</span><span class="n">sigma21</span>
+    <span class="n">s22</span><span class="o">=</span><span class="n">sigma22</span><span class="o">-</span><span class="n">p_tot</span>
+    <span class="n">s23</span><span class="o">=</span><span class="n">sigma23</span>
+    
+    <span class="n">s31</span><span class="o">=</span><span class="n">sigma31</span>
+    <span class="n">s32</span><span class="o">=</span><span class="n">sigma32</span>
+    <span class="n">s33</span><span class="o">=</span><span class="n">sigma33</span><span class="o">-</span><span class="n">p_tot</span>
+        
+    <span class="n">sij</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">s11</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">s11</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">s12</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">s21</span>
+
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">s22</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">s13</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">s31</span>
+
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">s33</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">s23</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">s32</span>
+
+    <span class="k">return</span> <span class="n">sij</span></div>
+
+<div class="viewcode-block" id="tensor_product"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.tensor_product">[docs]</a><span class="k">def</span> <span class="nf">tensor_product</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sji</span><span class="p">):</span>
+    <span class="n">J2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="nb">sum</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+                <span class="nb">sum</span><span class="o">+=</span><span class="n">sij</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">sji</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">J2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="nb">sum</span>
+    <span class="k">return</span> <span class="n">J2</span></div>
+    
+<div class="viewcode-block" id="calculate_J2"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.calculate_J2">[docs]</a><span class="k">def</span> <span class="nf">calculate_J2</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span><span class="n">h2</span><span class="p">,</span><span class="n">sigma11</span><span class="p">,</span><span class="n">sigma12</span><span class="p">,</span><span class="n">sigma13</span><span class="p">,</span><span class="n">sigma21</span><span class="p">,</span><span class="n">sigma22</span><span class="p">,</span><span class="n">sigma23</span><span class="p">,</span><span class="n">sigma31</span><span class="p">,</span><span class="n">sigma32</span><span class="p">,</span><span class="n">sigma33</span><span class="p">):</span>
+    <span class="n">sij</span><span class="o">=</span><span class="n">calculate_deviatoric_tensor</span><span class="p">(</span><span class="n">sigma11</span><span class="p">,</span><span class="n">sigma12</span><span class="p">,</span><span class="n">sigma13</span><span class="p">,</span><span class="n">sigma21</span><span class="p">,</span><span class="n">sigma22</span><span class="p">,</span><span class="n">sigma23</span><span class="p">,</span><span class="n">sigma31</span><span class="p">,</span><span class="n">sigma32</span><span class="p">,</span><span class="n">sigma33</span><span class="p">)</span>
+    
+    <span class="n">sji</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">sji</span><span class="p">[:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">J2_1</span><span class="o">=</span><span class="n">h1</span><span class="o">*</span><span class="n">tensor_product</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sij</span><span class="p">)</span>
+    
+    <span class="n">J2_2</span><span class="o">=</span><span class="n">h2</span><span class="o">*</span><span class="n">tensor_product</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sji</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">J2_1</span><span class="o">+</span><span class="n">J2_2</span></div>
+
+<div class="viewcode-block" id="calculate_eq_tot"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.calculate_eq_tot">[docs]</a><span class="k">def</span> <span class="nf">calculate_eq_tot</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span><span class="n">g2</span><span class="p">,</span><span class="n">epsilon11</span><span class="p">,</span><span class="n">epsilon12</span><span class="p">,</span><span class="n">epsilon13</span><span class="p">,</span><span class="n">epsilon21</span><span class="p">,</span><span class="n">epsilon22</span><span class="p">,</span><span class="n">epsilon23</span><span class="p">,</span><span class="n">epsilon31</span><span class="p">,</span><span class="n">epsilon32</span><span class="p">,</span><span class="n">epsilon33</span><span class="p">):</span>
+    <span class="n">eij</span><span class="o">=</span><span class="n">calculate_deviatoric_tensor</span><span class="p">(</span><span class="n">epsilon11</span><span class="p">,</span><span class="n">epsilon12</span><span class="p">,</span><span class="n">epsilon13</span><span class="p">,</span><span class="n">epsilon21</span><span class="p">,</span><span class="n">epsilon22</span><span class="p">,</span><span class="n">epsilon23</span><span class="p">,</span><span class="n">epsilon31</span><span class="p">,</span><span class="n">epsilon32</span><span class="p">,</span><span class="n">epsilon33</span><span class="p">)</span>
+    
+    <span class="n">eji</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">eij</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">eji</span><span class="p">[:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">eij</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">eq_tot_1</span><span class="o">=</span><span class="n">g1</span><span class="o">*</span><span class="n">tensor_product</span><span class="p">(</span><span class="n">eij</span><span class="p">,</span><span class="n">eji</span><span class="p">)</span>
+    <span class="n">eq_tot_2</span><span class="o">=</span><span class="n">g2</span><span class="o">*</span><span class="n">tensor_product</span><span class="p">(</span><span class="n">eij</span><span class="p">,</span><span class="n">eji</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">eq_tot_1</span><span class="o">+</span><span class="n">eq_tot_2</span></div>
+
+<div class="viewcode-block" id="assign_generalized_stress"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.assign_generalized_stress">[docs]</a><span class="k">def</span> <span class="nf">assign_generalized_stress</span><span class="p">(</span><span class="n">svars_values</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">total_comp</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
+    <span class="n">g_svars</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">start</span><span class="o">+</span><span class="n">total_comp</span><span class="p">):</span>
+        <span class="n">g_svars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">svars_values</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">step</span><span class="p">)])</span>
+        
+    <span class="k">return</span> <span class="n">g_svars</span></div>
+
+<div class="viewcode-block" id="apply_total_gen_strain_rate"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.apply_total_gen_strain_rate">[docs]</a><span class="k">def</span> <span class="nf">apply_total_gen_strain_rate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">dot_u11</span><span class="p">,</span><span class="n">dot_u12</span><span class="p">,</span><span class="n">dot_u13</span><span class="p">,</span><span class="n">dot_u21</span><span class="p">,</span><span class="n">dot_u22</span><span class="p">,</span><span class="n">dot_u23</span><span class="p">,</span><span class="n">dot_u31</span><span class="p">,</span><span class="n">dot_u32</span><span class="p">,</span><span class="n">dot_u33</span><span class="p">,</span><span class="o">*</span><span class="n">omega</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">omega</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">omega</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="n">dot_g_t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u11</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u12</span><span class="o">+</span><span class="n">omega</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u13</span><span class="o">-</span><span class="n">omega</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u21</span><span class="o">-</span><span class="n">omega</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u22</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u23</span><span class="o">+</span><span class="n">omega</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u31</span><span class="o">+</span><span class="n">omega</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u32</span><span class="o">-</span><span class="n">omega</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dot_g_t</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">dot_u33</span>
+    <span class="k">return</span> <span class="n">dot_g_t</span></div>
+
+<div class="viewcode-block" id="assign_material_parameters"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.assign_material_parameters">[docs]</a><span class="k">def</span> <span class="nf">assign_material_parameters</span><span class="p">(</span><span class="n">mats_param</span><span class="p">):</span>
+    <span class="n">K</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">G</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Gc</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="n">M</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">Mc</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    
+    <span class="n">R</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+    <span class="n">tanfi</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+    <span class="n">cc</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+    <span class="n">tanpsi</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span>
+    <span class="n">Hsfi</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
+    <span class="n">Hscc</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span>
+
+    <span class="n">h1</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span>
+    <span class="n">h2</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span>
+    <span class="n">h3</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span>
+    <span class="n">h4</span><span class="o">=</span><span class="n">mats_param</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">K</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">Gc</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">Mc</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">tanfi</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">tanpsi</span><span class="p">,</span> <span class="n">Hsfi</span><span class="p">,</span> <span class="n">Hscc</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">h3</span><span class="p">,</span> <span class="n">h4</span></div>
+
+<div class="viewcode-block" id="betakl"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.betakl">[docs]</a><span class="k">def</span> <span class="nf">betakl</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">tanfi</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">Gc</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">h2</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">sij</span><span class="p">):</span>
+    <span class="n">newaxis</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span>
+    <span class="n">sji</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">sji</span><span class="p">[:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        
+    <span class="n">bkl</span><span class="o">=</span><span class="n">sij</span><span class="p">[:]</span><span class="o">/</span><span class="n">tau</span><span class="p">[:,</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">G</span><span class="o">+</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="n">h1</span><span class="o">+</span><span class="p">(</span><span class="n">G</span><span class="o">-</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="n">h2</span><span class="p">)</span><span class="o">+</span><span class="n">sji</span><span class="p">[:]</span><span class="o">/</span><span class="n">tau</span><span class="p">[:,</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="p">((</span><span class="n">G</span><span class="o">+</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="n">h2</span><span class="o">+</span><span class="p">(</span><span class="n">G</span><span class="o">-</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="n">h1</span><span class="p">)</span>
+    <span class="n">bkl</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">bkl</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">K</span><span class="o">*</span><span class="n">tanfi</span>
+    <span class="n">bkl</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">bkl</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">K</span><span class="o">*</span><span class="n">tanfi</span>
+    <span class="n">bkl</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">bkl</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">K</span><span class="o">*</span><span class="n">tanfi</span>
+    <span class="k">return</span> <span class="n">bkl</span></div>
+
+<div class="viewcode-block" id="calculate_Hp"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.calculate_Hp">[docs]</a><span class="k">def</span> <span class="nf">calculate_Hp</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">Gc</span><span class="p">,</span><span class="n">tanfi</span><span class="p">,</span><span class="n">tanpsi</span><span class="p">,</span><span class="n">sij</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">h1</span><span class="p">,</span><span class="n">h2</span><span class="p">):</span>
+    <span class="n">sijsij</span><span class="o">=</span><span class="n">tensor_product</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sij</span><span class="p">)</span>
+    <span class="n">A</span><span class="o">=</span><span class="n">sijsij</span><span class="o">/</span><span class="n">tau</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">((</span><span class="n">G</span><span class="o">+</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">h1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">h2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">G</span><span class="o">-</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="n">h1</span><span class="o">*</span><span class="n">h2</span><span class="p">)</span>
+    
+    <span class="n">sji</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">sji</span><span class="p">[:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">sijsji</span><span class="o">=</span><span class="n">tensor_product</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sji</span><span class="p">)</span>
+    <span class="n">B</span><span class="o">=</span><span class="n">sijsji</span><span class="o">/</span><span class="n">tau</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">((</span><span class="n">G</span><span class="o">-</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">h1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">h2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">G</span><span class="o">+</span><span class="n">Gc</span><span class="p">)</span><span class="o">*</span><span class="n">h1</span><span class="o">*</span><span class="n">h2</span><span class="p">)</span>
+    
+    <span class="n">Hp</span><span class="o">=</span><span class="n">A</span><span class="o">+</span><span class="n">B</span><span class="o">+</span><span class="n">K</span><span class="o">*</span><span class="n">tanfi</span><span class="o">*</span><span class="n">tanpsi</span>
+    <span class="k">return</span> <span class="n">Hp</span></div>
+
+<div class="viewcode-block" id="Test"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.Test">[docs]</a><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="Test.setUpClass"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.Test.setUpClass">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Run FE analysis example</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">notfirsttime</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="o">=</span><span class="n">Cosserat1DFEformulation</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">=</span><span class="n">Cosserat1DFEproblem</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">give_me_solver_params</span><span class="p">(</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">converged1</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">run_analysis_procedure</span><span class="p">(</span><span class="n">reference_data_path</span><span class="p">)</span>       </div>
+        
+<div class="viewcode-block" id="Test.test_execution"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.html#ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests.Test.test_execution">[docs]</a>    <span class="k">def</span> <span class="nf">test_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests execution and convergence</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converged1</span><span class="p">,</span> <span class="s2">&quot;Convergence failed&quot;</span><span class="p">)</span></div></div>
+    
+    <span class="c1"># def test_shear_force_displacement_values(self):</span>
+    <span class="c1">#     &#39;&#39;&#39;</span>
+    <span class="c1">#     Tests calculated nodal forces and displacements to values in ./reference_data/Cosserat1D_Drucker_Prager_force_disp_values.out</span>
+    <span class="c1">#     &#39;&#39;&#39;</span>
+    <span class="c1">#     self.my_FEproblem1.extract_force_disp()</span>
+    <span class="c1">#     values_time1 = self.my_FEproblem1.array_time</span>
+    <span class="c1">#     values_force1 = self.my_FEproblem1.array_force</span>
+    <span class="c1">#     values_disp1 = self.my_FEproblem1.array_disp</span>
+    <span class="c1">#</span>
+    <span class="c1">#     values1=np.concatenate((values_time1, values_disp1, values_force1), axis=1)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # with open(reference_data_path+&quot;Cosserat1D_Drucker_Prager_force_disp_values_App_1.out&quot;, &quot;wb&quot;) as fp:   #Pickling</span>
+    <span class="c1">#     #     pickle.dump(values1,fp)        </span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#     with open(reference_data_path+&quot;Cosserat1D_Drucker_Prager_force_disp_values_App_1.out&quot;, &quot;rb&quot;) as fp:   #Pickling</span>
+    <span class="c1">#         values_ref=pickle.load(fp)        </span>
+    <span class="c1">#     values_diff_1=values_ref-values1</span>
+    <span class="c1">#</span>
+    <span class="c1">#     self.my_FEproblem1.extract_svars_gauss_point()</span>
+    <span class="c1">#     svars_values=self.my_FEproblem1.array_gp_svars_comp</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # with open(reference_data_path+&quot;Cosserat1D_Drucker_Prager_svars_values_App_1.out&quot;, &quot;wb&quot;) as fp:   #Pickling</span>
+    <span class="c1">#     #     pickle.dump(svars_values,fp)        </span>
+    <span class="c1">#</span>
+    <span class="c1">#     with open(reference_data_path+&quot;Cosserat1D_Drucker_Prager_svars_values_App_1.out&quot;, &quot;rb&quot;) as fp:   #Pickling</span>
+    <span class="c1">#         svars_values_ref=pickle.load(fp)        </span>
+    <span class="c1">#     values_diff_2=svars_values_ref-svars_values</span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#     equal_1=abs(np.linalg.norm(values_diff_1))&lt;=1.e-13</span>
+    <span class="c1">#     equal_2=abs(np.linalg.norm(values_diff_2))&lt;=1.e-13</span>
+    <span class="c1">#     self.assertTrue(equal_1 and equal_2, &quot;Not identical time, displacements, forces, svars: &quot;+str(abs(np.linalg.norm(values_diff_1)))+str(abs(np.linalg.norm(values_diff_2))))</span>
+    <span class="c1">#     #asserts that data are correct</span>
+    <span class="c1">#     #if data are correct then plot diagram</span>
+    <span class="c1">#     if equal_1 and equal_2 and activate_plots:</span>
+    <span class="c1">#         nw=self.my_FEproblem1.nw</span>
+    <span class="c1">#         K, G, Gc, M, Mc, R,tanfi,cc,tanpsi,Hsfi,Hscc,h1,h2,h3,h4=assign_material_parameters(self.my_FEproblem1.mats[0])</span>
+    <span class="c1">#</span>
+    <span class="c1">#         sigma=assign_generalized_stress(svars_values,start=0,step=1,total_comp=9)</span>
+    <span class="c1">#         sij= calculate_deviatoric_tensor(*sigma)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         mu=assign_generalized_stress(svars_values,start=9,step=1,total_comp=9)</span>
+    <span class="c1">#         mij= calculate_deviatoric_tensor(*mu)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         epsilon=assign_generalized_stress(svars_values,start=18,step=1,total_comp=9)</span>
+    <span class="c1">#         kappa=assign_generalized_stress(svars_values,start=27,step=1,total_comp=9)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         g1=self.my_FEproblem1.mats[0].props[19]</span>
+    <span class="c1">#         g2=self.my_FEproblem1.mats[0].props[20]</span>
+    <span class="c1">#         g3=self.my_FEproblem1.mats[0].props[21]</span>
+    <span class="c1">#         g4=self.my_FEproblem1.mats[0].props[22]</span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#         J2_1=calculate_J2(h1,h2,*sigma)</span>
+    <span class="c1">#         J2_2=calculate_J2(h3,h4,*mu)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         J2=np.sqrt(J2_1+1/R**2*J2_2)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         eq_tot_1=calculate_eq_tot(g1,g2,*epsilon)</span>
+    <span class="c1">#         eq_tot_2=calculate_eq_tot(g3,g4,*kappa)</span>
+    <span class="c1">#         eq_tot=np.sqrt(eq_tot_1+R**2*eq_tot_2)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         p_eff=(sigma[0]+sigma[4]+sigma[8])/3.</span>
+    <span class="c1">#</span>
+    <span class="c1">#         evol_tot_1=epsilon[0]+epsilon[4]+epsilon[8]           </span>
+    <span class="c1">#</span>
+    <span class="c1">#         x1=list(values_time1[:].copy())</span>
+    <span class="c1">#         y1=list(J2.copy())</span>
+    <span class="c1">#         x1.insert(0,0)</span>
+    <span class="c1">#         y1.insert(0,0.)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         x2=list(values_time1[:].copy())</span>
+    <span class="c1">#         y2=list(evol_tot_1.copy())</span>
+    <span class="c1">#         x2.insert(0,0)</span>
+    <span class="c1">#         y2.insert(0,0.)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         x3=list(p_eff.copy())</span>
+    <span class="c1">#         x3.insert(0,p_eff[0])</span>
+    <span class="c1">#</span>
+    <span class="c1">#         fig, ax1, color1 = plotting_params.object_plot_axes(&#39;$t$ [s]&#39;, y1_txt=&#39;$\sqrt{J_2}$ [MPa]&#39;,color1=&#39;k&#39;,y2_txt=&#39;&#39;,color2=&#39;&#39;, title=&#39;&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#         plotting_params.object_plot(x1, y1,&#39;y2&#39;, ax1, &#39;ax2&#39;,&#39;x2&#39;, mode=&#39;1&#39;,color1=color1,color2=&#39;&#39;,label_string=&#39;&#39;)</span>
+    <span class="c1">#         plotting_params.show_plot()</span>
+    <span class="c1">#         plotting_params.plot_legends(ngeo_parameters.reference_data_path, fig, filename=&#39;Cosserat_1D_Drucker-Prager_App_1_J2_t&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         x1=list(eq_tot.copy())</span>
+    <span class="c1">#         y1=list(J2.copy())</span>
+    <span class="c1">#         x1.insert(0,0)</span>
+    <span class="c1">#         y1.insert(0,0)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         fig, ax1, color1 = plotting_params.object_plot_axes(&#39;$q^{tot}$&#39;, y1_txt=&#39;$\sqrt{J_2}$ [MPa]&#39;,color1=&#39;k&#39;,y2_txt=&#39;&#39;,color2=&#39;&#39;, title=&#39;&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#         plotting_params.object_plot(x1, y1,&#39;y2&#39;, ax1, &#39;ax2&#39;,&#39;x2&#39;, mode=&#39;1&#39;,color1=&#39;r&#39;,color2=&#39;b&#39;,label_string=&#39;&#39;)</span>
+    <span class="c1">#         plotting_params.show_plot()</span>
+    <span class="c1">#         plotting_params.plot_legends(ngeo_parameters.reference_data_path, fig, filename=&#39;Cosserat_1D_Drucker-Prager_App_1_J2_q&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         fig, ax1, color1 = plotting_params.object_plot_axes(&#39;$p$ [MPa]&#39;, y1_txt=&#39;$\sqrt{J_2}$ [MPa]&#39;,color1=&#39;k&#39;,y2_txt=&#39;&#39;,color2=&#39;&#39;, title=&#39;&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#         plotting_params.object_plot(x3, y1,&#39;y2&#39;, ax1, &#39;ax2&#39;,&#39;x2&#39;, mode=&#39;1&#39;,color1=&#39;r&#39;,color2=&#39;b&#39;,label_string=&#39;&#39;)</span>
+    <span class="c1">#         plotting_params.show_plot()</span>
+    <span class="c1">#         plotting_params.plot_legends(ngeo_parameters.reference_data_path, fig, filename=&#39;Cosserat_1D_Drucker-Prager_App_1_J2_p&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1"># def test_analytical__lambda_dot(self):  </span>
+    <span class="c1">#</span>
+    <span class="c1">#     self.my_FEproblem1.extract_force_disp()</span>
+    <span class="c1">#     values_time1 = self.my_FEproblem1.array_time</span>
+    <span class="c1">#</span>
+    <span class="c1">#     self.my_FEproblem1.extract_svars_gauss_point()</span>
+    <span class="c1">#     svars_dtime=self.my_FEproblem1.array_dtime</span>
+    <span class="c1">#     svars_values=self.my_FEproblem1.array_gp_svars_comp</span>
+    <span class="c1">#</span>
+    <span class="c1">#     K, G, Gc, M, Mc, R,tanfi,cc,tanpsi,Hsfi,Hscc,h1,h2,h3,h4=assign_material_parameters(self.my_FEproblem1.mats[0])</span>
+    <span class="c1">#</span>
+    <span class="c1">#     sigma=assign_generalized_stress(svars_values,start=0,step=1,total_comp=9)</span>
+    <span class="c1">#     sij=calculate_deviatoric_tensor(*sigma)</span>
+    <span class="c1">#     mu=assign_generalized_stress(svars_values,start=9,step=1,total_comp=9)</span>
+    <span class="c1">#     mij= calculate_deviatoric_tensor(*mu)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     J2_1=calculate_J2(h1,h2,*sigma)    </span>
+    <span class="c1">#     J2_2=calculate_J2(h3,h4,*mu)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     J2=np.sqrt(J2_1+1/R**2*J2_2)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     p_eff=(sigma[0]+sigma[4]+sigma[8])/3.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     tau=J2</span>
+    <span class="c1">#</span>
+    <span class="c1">#     tauRR=tau*R**2</span>
+    <span class="c1">#</span>
+    <span class="c1">#     bkl_F= betakl(K,tanfi,G,Gc,h1,h2,tau,sij)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     bkl_FM= betakl(K,0,M,Mc,h3,h4,tauRR,mij)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Hp_F=calculate_Hp(K,G,Gc,tanfi,tanpsi,sij,tau,h1,h2)</span>
+    <span class="c1">#     Hp_FM=calculate_Hp(K,M,Mc,0,0,mij,tauRR,h3,h4)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Hp=Hp_F+Hp_FM</span>
+    <span class="c1">#</span>
+    <span class="c1">#     dot_u1=self.my_FEproblem1.u1_tot*svars_dtime.reshape((-1,))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     dot_gkl=apply_total_gen_strain_rate(svars_dtime,0,0,0,dot_u1,0,0,0,0,0,0,0,0,0)</span>
+    <span class="c1">#     dot_kkl=apply_total_gen_strain_rate(svars_dtime,0,0,0,0,0,0,0,0,0)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     lambda_dot_an=1./Hp*(tensor_product(bkl_F,dot_gkl)+tensor_product(bkl_FM,dot_kkl))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     FF=J2+tanfi*p_eff</span>
+    <span class="c1">#     mask= FF&gt;0</span>
+    <span class="c1">#     lambda_dot_an_star=np.where(mask,lambda_dot_an,0.)</span>
+    <span class="c1">#     lambda_dot_calc=self.my_FEproblem1.array_gp_svars_comp[:,-1]</span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#     time, indices = np.unique(values_time1[:,0].copy().round(decimals=8),return_index=True)</span>
+    <span class="c1">#     x1=list(time.copy())</span>
+    <span class="c1">#     y1a=list(lambda_dot_an_star[indices])</span>
+    <span class="c1">#     y2a=list(lambda_dot_calc[indices])</span>
+    <span class="c1">#</span>
+    <span class="c1">#     if activate_plots:</span>
+    <span class="c1">#         fig, ax1, color1 = plotting_params.object_plot_axes(&#39;$t$ [s]&#39;, y1_txt=&#39;$\dot{\lambda}_{an}$&#39;,color1=&#39;k&#39;,y2_txt=&#39;$\dot{\lambda}_{c}$&#39;,color2=&#39;k&#39;, title=&#39;&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#         plotting_params.object_plot(x1, y1a, y2a, ax1, ax1,x1,plot_mode=&#39;scatter&#39;,color1=[&#39;r&#39;,&#39;b&#39;],color2=[&#39;r&#39;,&#39;b&#39;],label_string=&#39;&#39;)    </span>
+    <span class="c1">#</span>
+    <span class="c1">#         plotting_params.show_plot()</span>
+    <span class="c1">#         plotting_params.plot_legends(ngeo_parameters.reference_data_path, fig, filename=&#39;Cosserat_1D_Drucker-Prager_App_1_ldot_error_an_c_t&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#     lambda_dot_an_star=lambda_dot_an_star[indices]</span>
+    <span class="c1">#     lambda_dot_calc=lambda_dot_calc[indices]</span>
+    <span class="c1">#     values_diff=lambda_dot_an_star[lambda_dot_calc&gt;10**(-8)]-lambda_dot_calc[lambda_dot_calc&gt;10**(-8)]</span>
+    <span class="c1">#</span>
+    <span class="c1">#     error_an = np.abs(lambda_dot_an_star-lambda_dot_calc)</span>
+    <span class="c1">#     error_rel = np.abs(lambda_dot_an_star-lambda_dot_calc)/np.abs(lambda_dot_an_star)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     values_error_abs= np.where(lambda_dot_calc&gt;10**(-8),error_an, 0)#[indices]</span>
+    <span class="c1">#     values_error_rel= np.where(lambda_dot_calc,error_rel, 0)#[indices]</span>
+    <span class="c1">#</span>
+    <span class="c1">#     equal=abs(np.linalg.norm(values_diff))&lt;=1.e-5</span>
+    <span class="c1">#     self.assertTrue(equal , &quot;Not identical ldot: &quot;+str(abs(np.linalg.norm(values_diff))))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     if activate_plots:</span>
+    <span class="c1">#         y1=list(values_error_abs[:].copy())</span>
+    <span class="c1">#         x1.insert(0,0)</span>
+    <span class="c1">#         y1.insert(0,0.)</span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#         fig, ax1, color1 = plotting_params.object_plot_axes(&#39;$t$ [s]&#39;, y1_txt=&#39;$\|\dot{\lambda}_{an}-\dot{\lambda}_{c}\|$&#39;,color1=&#39;k&#39;,y2_txt=&#39;&#39;,color2=&#39;&#39;, title=&#39;&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#         plotting_params.object_plot(x1, y1,&#39;y2&#39;, ax1, &#39;ax2&#39;,&#39;x2&#39;, mode=&#39;1&#39;,color1=color1,color2=&#39;&#39;,label_string=&#39;&#39;)</span>
+    <span class="c1">#         plotting_params.show_plot()</span>
+    <span class="c1">#         plotting_params.plot_legends(ngeo_parameters.reference_data_path, fig, filename=&#39;Cosserat_1D_Drucker-Prager_App_1_ldot_error_abs_t&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         y2=list(values_error_rel[:].copy())</span>
+    <span class="c1">#         y2.insert(0,0.)</span>
+    <span class="c1">#</span>
+    <span class="c1">#</span>
+    <span class="c1">#         fig, ax1, color1 = plotting_params.object_plot_axes(&#39;$t$ [s]&#39;, y1_txt=&#39;$\|\\frac{\dot{\lambda}_{an}-\dot{\lambda}_{c}}{\dot{\lambda}_{an}}\|$&#39;,color1=&#39;k&#39;,y2_txt=&#39;&#39;,color2=&#39;&#39;, title=&#39;&#39;,mode=&#39;1&#39;)</span>
+    <span class="c1">#         plotting_params.object_plot(x1, y2,&#39;y2&#39;, ax1, &#39;ax2&#39;,&#39;x2&#39;, mode=&#39;1&#39;,color1=color1,color2=&#39;&#39;,label_string=&#39;&#39;)</span>
+    <span class="c1">#         plotting_params.show_plot()</span>
+    <span class="c1">#         plotting_params.plot_legends(ngeo_parameters.reference_data_path, fig, filename=&#39;Cosserat_1D_Drucker-Prager_App_1_ldot_error_rel_t&#39;,mode=&#39;1&#39;)    </span>
+    <span class="c1">#</span>
+    <span class="c1">#     equal=abs(np.linalg.norm(values_diff))&lt;=1.e-5</span>
+    <span class="c1">#     self.assertTrue(equal , &quot;Not identical ldot: &quot;+str(abs(np.linalg.norm(values_diff))))</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cosserat.OneD.Tests.Cosserat1D_Elastic_ALE_tests</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

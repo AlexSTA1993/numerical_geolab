@@ -1,0 +1,18 @@
+ngeoFE\_unittests.Mechanics.ThreeD package
+==========================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    ngeoFE_unittests.Mechanics.ThreeD.BVP
+    ngeoFE_unittests.Mechanics.ThreeD.Tests
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.ThreeD
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../../_static/jquery.js"></script>
+    <script src="../../../../../../_static/underscore.js"></script>
+    <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on March 28, 2019</span>
+
+<span class="sd">@author: Eleni Gerolymatou &amp; Ioannis Stefanou</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">UserFEproblem</span><span class="p">,</span> <span class="n">General_FEproblem_properties</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEformulation</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.materials</span> <span class="kn">import</span> <span class="n">UserMaterial</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+<span class="c1"># ngeo_parameters.reference_data_path=&#39;/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Mechanics/reference_data/&#39;</span>
+
+
+<div class="viewcode-block" id="Cauchy_3D_FEformulation"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Cauchy_3D_FEformulation">[docs]</a><span class="k">class</span> <span class="nc">Cauchy_3D_FEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Defines a user FE formulation</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Cauchy_3D_FEformulation.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Cauchy_3D_FEformulation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Number of stress/deformation components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="c1"># Number of Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Cauchy_3D_FEformulation.generalized_epsilon"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Cauchy_3D_FEformulation.generalized_epsilon">[docs]</a>    <span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s generalized deformation vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale_u</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mf">1000.</span>
+        <span class="n">gde</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>             <span class="c1">#gamma_11</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>             <span class="c1">#gamma_22</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>             <span class="c1">#gamma_33</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>   <span class="c1">#gamma_23</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>   <span class="c1">#gamma_13</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">scale_u</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">#gamma_12</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cauchy_3D_FEformulation.create_element"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Cauchy_3D_FEformulation.create_element">[docs]</a>    <span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set desired element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Defines a Lagrangian FE of degree 1 for the 3 displacements</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">element</span></div></div>
+
+
+<div class="viewcode-block" id="Triaxial_FEproblem"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem">[docs]</a><span class="k">class</span> <span class="nc">Triaxial_FEproblem</span><span class="p">(</span><span class="n">UserFEproblem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a user FE problem for given FE formulation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Triaxial_FEproblem.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FEformulation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Triaxial test using Cauchy continuum&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Triaxial_FEproblem.set_general_properties"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.set_general_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set here all the parameters of the problem, except material properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span> <span class="o">=</span> <span class="n">General_FEproblem_properties</span><span class="p">()</span>
+        <span class="c1"># Number of state variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span> <span class="o">=</span> <span class="mi">32</span></div>
+
+<div class="viewcode-block" id="Triaxial_FEproblem.create_mesh"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.create_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set mesh and subdomains</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;Triaxial_3D_Eleni_mesh.xml&quot;</span><span class="p">)</span>
+<span class="c1">#         import matplotlib.pyplot as plt</span>
+<span class="c1">#         plot(mesh, title=&quot;cubic mesh&quot;, wireframe=True)</span>
+<span class="c1">#         plt.show()</span>
+        <span class="n">cd</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">fd</span></div>
+    
+<div class="viewcode-block" id="Triaxial_FEproblem.Boundary"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.Boundary">[docs]</a>    <span class="k">class</span> <span class="nc">Boundary</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="Triaxial_FEproblem.Boundary.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.Boundary.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xyz</span><span class="p">,</span><span class="n">param</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="o">=</span><span class="n">param</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+<div class="viewcode-block" id="Triaxial_FEproblem.Boundary.inside"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.Boundary.inside">[docs]</a>        <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+            <span class="n">tol</span> <span class="o">=</span> <span class="n">DOLFIN_EPS</span>
+            <span class="k">return</span> <span class="n">on_boundary</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">)</span>    </div></div>
+        
+<div class="viewcode-block" id="Triaxial_FEproblem.mark_boundaries"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.mark_boundaries">[docs]</a>    <span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mark left and right boundary points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">top0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="n">top0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bottom0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">bottom0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">left0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">left0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">right0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="n">right0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="c1">#         </span>
+        <span class="n">back0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">back0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">front0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="n">front0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Triaxial_FEproblem.set_bcs"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.set_bcs">[docs]</a>    <span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set boundary conditions for the user problem</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">iso_loading</span><span class="o">=</span><span class="mf">0.3</span><span class="o">/</span><span class="mf">1000.</span> <span class="c1">#1000.for scaling (look at generalized epsilon) &amp; variational form</span>
+        <span class="n">disp</span><span class="o">=-</span><span class="mf">0.1</span><span class="o">*</span><span class="mf">1000.</span> <span class="c1">#1000.for scaling (look at generalized epsilon)</span>
+        <span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="c1">#top</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">disp</span><span class="p">]],</span>
+                <span class="c1">#bottom</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>    
+                <span class="c1">#left</span>
+                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">iso_loading</span><span class="p">]],</span>
+                <span class="c1">#right</span>
+                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">iso_loading</span><span class="p">]],</span> 
+                <span class="c1">#back</span>
+                <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">iso_loading</span><span class="p">]],</span>
+                <span class="c1">#front </span>
+                <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">iso_loading</span><span class="p">]],</span>
+                 
+                <span class="p">[[</span><span class="mi">7</span><span class="p">,[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">]],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+                <span class="p">[[</span><span class="mi">7</span><span class="p">,[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">]],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+				
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="o">-</span><span class="n">iso_loading</span><span class="p">]],</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">bcs</span></div>
+
+<div class="viewcode-block" id="Triaxial_FEproblem.set_initial_conditions"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.set_initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize state variables vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="mi">7</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mf">1.95</span> <span class="c1">#void ratio</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="mi">14</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=-</span><span class="mf">.3</span>  <span class="c1">#compressive component ps (strength soil)</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="mi">15</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=-</span><span class="mf">.1</span>  <span class="c1">#compressive component pm (strength matrix)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Triaxial_FEproblem.set_materials"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.set_materials">[docs]</a>    <span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create material objects and set material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mats</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># load material #1</span>
+        <span class="n">env_lib</span><span class="o">=</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">env_lib</span>        <span class="c1">#umat_lib=&#39;./libplast_Cauchy3D-DP.so&#39;</span>
+        <span class="n">umat_lib_path</span><span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">umat_lib_path</span>
+        <span class="n">umat_lib</span> <span class="o">=</span> <span class="n">umat_lib_path</span><span class="o">+</span><span class="s1">&#39;ELENI/lib_comp.so&#39;</span>
+<span class="c1">#         env_lib=[&#39;/usr/lib/x86_64-linux-gnu/liblapack.so&#39;]</span>
+<span class="c1">#         umat_lib=&#39;/mnt/f/DEVELOPMENT/Numerical_Geolab_Materials-F/UMATERIALS/ELENI/lib_comp.so&#39;</span>
+        <span class="c1">#umat_lib=&#39;./lib_comp.so&#39;</span>
+        <span class="n">umat_id</span> <span class="o">=</span> <span class="mi">3</span>       <span class="c1"># if many materials exist in the same library</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span> <span class="n">umat_lib</span><span class="p">,</span> <span class="n">umat_id</span><span class="p">)</span>
+        <span class="n">mat</span><span class="o">.</span><span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_material_properties</span><span class="p">(</span><span class="mf">1000.</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">0.26</span><span class="p">,</span><span class="mf">200.</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">5.2e0</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+        <span class="c1"># load material #2</span>
+        <span class="c1"># ...</span>
+        <span class="k">return</span> <span class="n">mats</span></div>
+
+<div class="viewcode-block" id="Triaxial_FEproblem.set_material_properties"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube.Triaxial_FEproblem.set_material_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_material_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">EE</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">Mf</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">rhos</span><span class="p">,</span><span class="n">ksis</span><span class="p">,</span><span class="n">rhom</span><span class="p">,</span><span class="n">ksim</span><span class="p">,</span><span class="n">pc0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">props</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">EE</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">Mf</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">rhos</span><span class="p">,</span><span class="n">ksis</span><span class="p">,</span><span class="n">rhom</span><span class="p">,</span><span class="n">ksim</span><span class="p">,</span><span class="n">pc0</span><span class="p">])</span>
+        <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">props</span></div></div>
+
+    
+
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Triaxial_3D_Eleni_umatCube</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

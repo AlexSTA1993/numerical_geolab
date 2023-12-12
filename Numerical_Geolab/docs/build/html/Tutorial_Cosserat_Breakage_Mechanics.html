@@ -1,0 +1,506 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>7. Simple shear of a 1D Cosserat layer with Breakage Mechanics material &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="6. Cosserat THM couplings: Thermo-hydro plasticity application - Drucker-Prager yield criterion" href="Tutorial%20Cosserat_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorial%20Cosserat_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html" title="6. Cosserat THM couplings: Thermo-hydro plasticity application - Drucker-Prager yield criterion"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>Simple shear of a 1D Cosserat layer with Breakage Mechanics material</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="simple-shear-of-a-1d-cosserat-layer-with-breakage-mechanics-material">
+<h1><span class="section-number">7. </span>Simple shear of a 1D Cosserat layer with Breakage Mechanics material<a class="headerlink" href="#simple-shear-of-a-1d-cosserat-layer-with-breakage-mechanics-material" title="Permalink to this heading">¶</a></h1>
+<p>In this tutorial we will study a 1D Cosserat layer with Breakage Mechanics material under simple shear. The full description of this model is available in the paper <span class="xref std std-ref">Cosserat Breakage Mechanics</span>.
+In this tutorial we provide the basic structure of a script file in the framework of Numerical Geolab.
+Here we will study the model formulation and execute the analysis.</p>
+<p>The file for this tutorial can be found in: <code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE_unittests.Mechanics.Cosserat.OneD.BVP.Cosserat1D_Breakage_Mechanics_test</span></code></p>
+<section id="beginning-of-the-file">
+<h2><span class="section-number">7.1. </span>Beginning of the file<a class="headerlink" href="#beginning-of-the-file" title="Permalink to this heading">¶</a></h2>
+<p>First, we must load certain modules in order to run our simulation.
+Below we provide a list of the modules needed and a brief explanation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll">  <span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+</span>  <span class="kn">import</span> <span class="nn">time</span>
+  <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="hll">  <span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">UserFEproblem</span><span class="p">,</span> <span class="n">General_FEproblem_properties</span>
+</span><span class="hll">  <span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEformulation</span>
+</span><span class="hll">  <span class="kn">from</span> <span class="nn">ngeoFE.materials</span> <span class="kn">import</span> <span class="n">UserMaterial</span>
+</span><span class="hll">  <span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+</span>  <span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">plotting_params</span>
+  <span class="kn">import</span> <span class="nn">os</span>  <span class="c1"># allows easier manipulation of directories</span>
+  <span class="kn">import</span> <span class="nn">warnings</span>
+  <span class="kn">from</span> <span class="nn">ffc.quadrature.deprecation</span> <span class="kn">import</span> <span class="n">QuadratureRepresentationDeprecationWarning</span>
+  <span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+  <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+  <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">QuadratureRepresentationDeprecationWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">The dolfin package needs to be loaded since the classes used by Numerical Geolab inherit from the basic classes of the <span class="xref std std-ref">dolfin</span> package, which is part of the <span class="xref std std-ref">FEniCS project</span>.</div>
+</div>
+<div class="line-block">
+<div class="line">We import the time module for monitoring the simulation time during the analysis.</div>
+</div>
+<div class="line-block">
+<div class="line">We import numpy in order to manipulate the analysis results and insert the material parameters.</div>
+</div>
+<div class="line-block">
+<div class="line">We continue by importing the numerical geolab modules that wrap around FEniCS functionality:</div>
+</div>
+<ul class="simple">
+<li><p>from ngeoFE.feproblem we import the classes of UserFeproblem() and General_FEproblem_properties() that will transform our series of commands to a problem understood by dolfin</p></li>
+<li><p>from ngeoFE.fedefinitions we import the class of FEformulation() that defines the vector of unknown derivatives to be used in the variational form solved by the dolfin package.</p></li>
+<li><p>from ngeoFE.materials we import the UserMaterial() class where the material is specified.</p></li>
+<li><p>from ngeoFE_unittests we import ngeo_parameters. This file contains the material library path and reference data that can be used to check the analysis results in the context of a unit test.</p></li>
+</ul>
+<div class="line-block">
+<div class="line">We import os to allow for easier manipulation of directories.</div>
+</div>
+</section>
+<section id="material-and-numerical-parameters">
+<h2><span class="section-number">7.2. </span>Material and Numerical Parameters<a class="headerlink" href="#material-and-numerical-parameters" title="Permalink to this heading">¶</a></h2>
+<p>We define the parameters of the Cosserat Breakage material, some values that will help us calibrate the initial values of the system, and some numerical parameters that will determine the size of the system, as well as the accuracy (and thus speed) with which it is solved.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the material values</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mf">13833.</span>  <span class="c1"># Bulk stiffness</span>
+<span class="n">G</span> <span class="o">=</span> <span class="mf">7588.</span>  <span class="c1"># Shear stiffness</span>
+<span class="n">zeta</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1"># Elastic-to-plastic Cosserat length scale parameter</span>
+<span class="n">h1</span> <span class="o">=</span> <span class="mf">6.</span><span class="o">/</span><span class="mf">5.</span>  <span class="c1"># Cosserat stress invariant weighting factor (with 3D kinematic model)</span>
+<span class="n">h2</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">/</span><span class="mf">10.</span>  <span class="c1"># As above</span>
+<span class="n">h3</span> <span class="o">=</span> <span class="mf">6.</span><span class="o">/</span><span class="mf">5.</span><span class="o">*</span><span class="n">zeta</span><span class="o">**</span><span class="mi">2</span>  <span class="c1"># As above</span>
+<span class="n">h4</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">/</span><span class="mf">10.</span><span class="o">*</span><span class="n">zeta</span><span class="o">**</span><span class="mi">2</span>  <span class="c1"># As above</span>
+<span class="n">Gc</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">G</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">h1</span> <span class="o">-</span> <span class="n">h2</span><span class="p">))</span>  <span class="c1"># The Cosserat shear stiffness (fully determined by our other parameters)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mf">0.00001</span>  <span class="c1"># The Cosserat torsional stiffness (zero in the model, given a very small positive value for numerical reasons)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">G</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">h3</span> <span class="o">+</span> <span class="n">h4</span><span class="p">))</span>  <span class="c1"># The first Cosserat bending stiffness (fully determined by our other parameters)</span>
+<span class="n">Hc</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">G</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">h3</span> <span class="o">-</span> <span class="n">h4</span><span class="p">))</span>  <span class="c1"># The second Cosserat bending stiffness (fully determined by our other parameters)</span>
+<span class="n">theta_gamma</span> <span class="o">=</span> <span class="mf">0.80</span>  <span class="c1"># The grain size distribution parameter accompanying the strains</span>
+<span class="n">theta_kappa</span> <span class="o">=</span> <span class="mf">0.89</span>  <span class="c1"># The grain size distribution parameter accompanying the stresses</span>
+<span class="n">Ec</span> <span class="o">=</span> <span class="mf">4.65</span>  <span class="c1"># The critical grain crushing energy</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mf">1.7</span>  <span class="c1"># The slope of the critical state line in :math:`p-q` space (mean stress - triaxial deviatoric stress)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mf">70.</span>  <span class="c1"># Coupling angle describing the system&#39;s tendency to crush grains or favour pore collapse. It is given here in degrees (we will later automatically convert it to radians)</span>
+<span class="n">x_r</span> <span class="o">=</span> <span class="mf">0.105</span>  <span class="c1"># The reference grain size</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1"># A legacy parameter that is unimportant for understanding the model</span>
+
+<span class="c1"># Set the initial value of B</span>
+<span class="n">B_nought</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="c1"># Target confinement stress as a fraction of p_crit</span>
+<span class="n">p_frac</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="c1"># Set the target gamma (i.e. the equivalent homogeneous strain we wish to subject the system to)</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="c1"># Set the system size (in mm)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mf">17.5</span>
+<span class="c1"># Set the rescaling factor. A value of 1 solves the system &quot;as written&quot;. Values larger than this (say 1000) cause the system to be solved more quickly, at the cost of some accuracy.</span>
+<span class="n">rescale_factor</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># Set the desired tolerance level (for this code, material will have +1) for the residual. This can also be changed to increase accuracy at the cost of speed (or vice versa), provided the material has been compiled at the requested tolerance level.</span>
+<span class="n">tolerance_level</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="c1"># Set the number of elements that we want</span>
+<span class="n">element_number</span> <span class="o">=</span> <span class="mi">641</span>
+</pre></div>
+</div>
+</section>
+<section id="finite-element-formulation">
+<h2><span class="section-number">7.3. </span>Finite Element Formulation<a class="headerlink" href="#finite-element-formulation" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">In order to continue we need to provide the form of the test function to be used together with the interpolation function (solution) to be used in the specific problem’s weak formulation.</div>
+</div>
+<p>We do this by specifying the number of vector components for the test function, the interpolation function used inside the element and the number Gauss points present in the element for the integral evaluation
+of the weak form.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cosserat1DFEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Defines a user FE formulation</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># Number of stress/deformation components</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="c1"># Number of Gauss points</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ns</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">generalised_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set user&#39;s generalised deformation vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gde</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">rescale_factor</span><span class="p">,</span>  <span class="c1"># gamma_11</span>
+        <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">rescale_factor</span><span class="p">,</span>  <span class="c1"># gamma_12</span>
+        <span class="p">(</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">rescale_factor</span><span class="p">,</span>  <span class="c1"># gamma_21</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">rescale_factor</span>  <span class="c1"># kappa_31</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set desired element</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Defines a Lagrangian FE of degree 2 for the displacements</span>
+    <span class="n">element_disp</span> <span class="o">=</span> <span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Defines a Lagrangian FE of degree 1 for the rotations</span>
+    <span class="n">element_rot</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Creates a mixed element for Cosserat medium</span>
+    <span class="n">element</span> <span class="o">=</span> <span class="n">MixedElement</span><span class="p">([</span><span class="n">element_disp</span><span class="p">,</span> <span class="n">element_rot</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">element</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">We note here that our problem is a 1D problem, where while we have displacements in the <img class="math" src="_images/math/c0134966f504e47760966c624e04f7efcb0ab65d.png" alt="x_{1}"/> and <img class="math" src="_images/math/a493969f0e094d92c829110c0c98329764ea357a.png" alt="x_{2}"/> directions, we only allow variation in the <img class="math" src="_images/math/c0134966f504e47760966c624e04f7efcb0ab65d.png" alt="x_{1}"/> direction. This is analogous to the situation we would find in a fault, where variation within the fault plane is negligible, but variation across the fault is very important. Thus, we require only three strain components <img class="math" src="_images/math/5d61b9121bfe0ec83c562f42623126270ef35222.png" alt="(\gamma_{11}, \gamma_{12}, \gamma_{21})"/>, but because we are in the Cosserat continuum, these are defined to include the contribution of the Cosserat micro-rotations, and to not in general result in a symmetric strain tensor. Further, in this geometry one of the curvatures remains in the problem, so we also include <img class="math" src="_images/math/7159bd63e6e72295501344bba69bc0a547fcd05c.png" alt="\kappa_{31}"/> in our generalised deformation vector.</div>
+</div>
+<p>In the code snippet above, we provide the finite element formulation for the problem at hand. The class is initialised with four generalised strain components and two Gauss points (as we use finite elements of at least degree 2 for the displacements in the Cosserat continuum). The python function:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="generalised_epsilon">
+<span class="sig-name descname"><span class="pre">generalised_epsilon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generalised_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="line-block">
+<div class="line">presents the derivatives of the vector components of the Testfunction. The notation used by the dolfin package indicates that Dx(v[i], j) is the derivative of the vector component (i) of the Testfunction (v), with respect to the spatial direction (j). The Testfunction is an object of the dolfin package available in the FEniCS documentation. The python function:</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="create_element">
+<span class="sig-name descname"><span class="pre">create_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_element" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="line-block">
+<div class="line">sets the desired element from the dolfin library of finite elements. Here a one dimensional (dim = 1) second order (degree = 2) VectorElement() is used for the displacements, and then a one dimensional first order FiniteElement is used for the rotations. This is because in numerical implementations of the Cosserat continuum, it has been demonstrated that using finite elements for the displacements that is at least one polynomial degree higher than the finite elements used for the rotations leads to superior performance (see <span class="xref std std-ref">Godio_Cosserat_finite_elements</span> for further details on this point). The VectorElement() and FiniteElement() classes are documented in the dolfin finite element package of FEniCS.</div>
+</div>
+<p>We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.</p>
+</section>
+<section id="boundary-identification">
+<h2><span class="section-number">7.4. </span>Boundary identification<a class="headerlink" href="#boundary-identification" title="Permalink to this heading">¶</a></h2>
+<p>We proceed now by identifying the boundaries needed for the application of the boundary conditions at a later stage of the modelling procedure.
+We make use of the SubDomain() parent class inside dolfin:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SuDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SuDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_boundary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SuDomain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>We create two subclasses (children) of the class, one for each side of the linear domain, which inherit from it the spatial variables (x) and the boundary identification flag (on_boundary) and the method</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inside">
+<span class="sig-name descname"><span class="pre">inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_boundary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inside" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The subclasses are defined as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">bottom</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+ <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+     <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.</span>  <span class="ow">and</span> <span class="n">on_boundary</span>
+
+<span class="k">class</span> <span class="nc">top</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="ow">and</span> <span class="n">on_boundary</span>
+</pre></div>
+</div>
+<p>Inside each subclass we define the logical test for assigning the specific boundary node to one of the boundary regions, where the boundary conditions will be applied.
+The value x[i] indicates the spatial coordinate <img class="math" src="_images/math/85bd16458cc2e0cdad616ca7ba1e913776c225f3.png" alt="x_{i}"/> of the problem at hand.</p>
+</section>
+<section id="finite-element-problem-description">
+<h2><span class="section-number">7.5. </span>Finite element problem description<a class="headerlink" href="#finite-element-problem-description" title="Permalink to this heading">¶</a></h2>
+<p>We proceed now with building the main finite element model, corresponding to shearing in 1D a Cosserat Breakage Mechanics medium.
+The finite element model is built inside a child class that inherits its methods from the parent class UserFEproblem(). We will provide here commentary for each method used inside the child class Cosserat1DFEproblem(UserFEproblem).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cosserat1DFEproblem</span><span class="p">(</span><span class="n">UserFEproblem</span><span class="p">):</span>
+ <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"> Defines a user FE problem for given FE formulation</span>
+<span class="sd"> &quot;&quot;&quot;</span>
+ <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FEformulation</span><span class="p">):</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Example of a 1D shearing problem in the Cosserat continuum&quot;</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="mi">0</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the class __init__() method, the finite element formulation defined above is provided as an argument. The initialisation then proceeds to set up all the methods of the parent class UserFEproblem(). The methods inside the class are defined by overriding the methods inside the parent class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set here all the parameters of the problem, except material properties</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span> <span class="o">=</span> <span class="n">General_FEproblem_properties</span><span class="p">()</span>
+    <span class="c1"># Number of state variables</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span> <span class="o">=</span> <span class="mi">76</span>
+</pre></div>
+</div>
+<p>This method is used to provide the number of state variables of the material. In this tutorial only the mechanical behaviour is important and therefore, the state of material is described by
+While this is a 1D problem, the material is a fully 3D implementation, and so requires all of the information of the general 3D problem.
+For each material used by the Numerical Geolab, the number of state variable components is given in the section <a class="reference internal" href="material_description_state_variables.html#material-description-of-state-variables"><span class="std std-ref">Material description</span></a>.
+We also note that “state” here describes the information that is given and returned by the material model, chosen for numerical efficiency. This is rather more extensive information than the physical state variables of the system (the breakage index B, and the elastic strains and curvatures), as the extra information aids in making our calculation fast.</p>
+<div class="line-block">
+<div class="line">Next we continue by generating the mesh for the problem at hand. Here, a 1D Cosserat layer is modeled as a line of height 35 mm.</div>
+</div>
+<p>For this simple geometry the capabilities of dolfin can be used to define a linear mesh specifying the bottom and top of the domain, as well as the number of elements in the domain. The meshing step can also be accomplished using external software such as Gmsh, which may be required for more complicated geometries than dolfin is able to generate on its own.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set mesh and subdomains</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Generate mesh</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="mi">641</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">IntervalMesh</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+    <span class="n">cd</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">fd</span>
+</pre></div>
+</div>
+<p>For the domain at hand we specify a discretisation with ny = 641 elements along the x[0] component. The MeshFunction() method of dolfin is used to provide the mesh object, the interior domain and the boundary domains.</p>
+<p>We next assign values to the regions of the mesh (that could in principle be) defined by different material properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_subdomains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create subdomains by marking regions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subdomains</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+    <span class="n">subdomains</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># assigns material/props number 0 everywhere</span>
+    <span class="k">return</span> <span class="n">subdomains</span>
+</pre></div>
+</div>
+<p>In this tutorial the entire domain is defined by the same material properties and therefore the value 0 will be assigned everywhere inside the mesh. This value is a number indicating which material parameters need to be taken into account in each mesh region (see the corresponding method set_material_params()). For example, we could have also created another region with a material that has a slightly decreased critical breakage energy (Ec in the model), in order to represent a weaker material, or to favourably trigger localisation in an area that we may have meshed more finely.</p>
+<div class="line-block">
+<div class="line">We continue by marking the boundaries of the model based on the classes defined during the boundary identification phase (see section <a class="reference internal" href="Viscoplasticity_Application_3.html#boundary-identification"><span class="std std-ref">Boundary identification</span></a> above).</div>
+</div>
+<p>We do so by assigning the numbers 1 and 2 to the different boundaries of the model. To do this we use the method mark() from the SubDomain() class of dolfin.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mark bottom and top boundary points</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">boundaries</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">top0</span> <span class="o">=</span> <span class="n">top</span><span class="p">()</span>
+    <span class="n">top0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">bottom0</span> <span class="o">=</span> <span class="n">bottom</span><span class="p">()</span>
+    <span class="n">bottom0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span>
+</pre></div>
+</div>
+<section id="assigning-boundary-conditions">
+<h3><span class="section-number">7.5.1. </span>Assigning boundary conditions<a class="headerlink" href="#assigning-boundary-conditions" title="Permalink to this heading">¶</a></h3>
+<p>We are now able to identify the boundaries of the mesh and assign different boundary condition to each side of the boundary (if we wish).
+The way we apply the boundary conditions can be seen in the method:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="set_bcs">
+<span class="sig-name descname"><span class="pre">set_bcs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#set_bcs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set boundary conditions for the user problem. These take the structure</span>
+<span class="sd">    [region_id, [bc_type, [dof], value]], where region_id is the label we gave</span>
+<span class="sd">    the boundary in the mark_boundaries() function (1 or 2 in this case),</span>
+<span class="sd">    bc_type is one of Dirichlet (0), Neumann (1) or Robin (2), dof is the degree</span>
+<span class="sd">    of freedom we apply the boundary condition to (we are not obliged to specify</span>
+<span class="sd">    a condition on every dof on the boundary if we don&#39;t wish to), and value</span>
+<span class="sd">    is the value we set the boundary condition to take</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span>
+    <span class="n">p_crit_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">K</span><span class="o">*</span><span class="n">Ec</span><span class="o">/</span><span class="n">theta_gamma</span><span class="p">)</span>
+    <span class="n">stress_target</span> <span class="o">=</span> <span class="n">p_frac</span><span class="o">*</span><span class="n">p_crit_zero</span>
+    <span class="n">strain_target</span> <span class="o">=</span> <span class="n">stress_target</span><span class="o">/</span><span class="n">K</span>
+    <span class="n">u_n</span> <span class="o">=</span> <span class="n">strain_target</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">rescale_factor</span>
+    <span class="n">u_t</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">rescale_factor</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">u_n</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]]</span>
+            <span class="p">]</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">u_n</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">u_t</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]]</span>
+            <span class="p">]</span>
+    <span class="k">return</span> <span class="n">bcs</span>
+</pre></div>
+</div>
+<p>Inside this method the boundaries are assigned with the use of a nested list. Dirichlet, Neumann and Robin boundary conditions can be applied both incrementally (as we have done here) and instantaneously. The boundary conditions can be assigned to a boundary region or point-wise. In this case, we have set time-varying boundary conditions, by first applying an initial loading to a level of elastic strain that will correspond to a certain confining stress, and then maintaining that confining displacement <img class="math" src="_images/math/13ebe1f6fec6c2e464ef7582b534f50086bb8ac4.png" alt="u_{n}"/> and beginning to shear the system to a target displacement of <img class="math" src="_images/math/e96389f3c72aa57f887dfed27ff12caf2e13aa37.png" alt="u_{t}"/> on the top edge.</p>
+<div class="line-block">
+<div class="line">The nested list contains the following information:</div>
+</div>
+<div class="line-block">
+<div class="line">[region id, [type of bc, vector component, value]]</div>
+</div>
+<p>In this example, the region id ranges from 1 to 2 indicating the top and bottom regions of the boundaries. The type of bc is set to 0, specifying incremental Dirichlet boundary conditions. The vector component shows which component of the generalised displacement vector is to be affected and value indicates the value of the boundary condition to be set at the specific boundary.</p>
+</section>
+</section>
+<section id="material-specification">
+<h2><span class="section-number">7.6. </span>Material specification<a class="headerlink" href="#material-specification" title="Permalink to this heading">¶</a></h2>
+<p>Next, we define the analysis material that we have already assigned in the create_subdomains() method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create material objects and set material parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mats</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># load material #1</span>
+    <span class="n">env_lib</span> <span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">env_lib</span>
+    <span class="n">umat_lib_path</span> <span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">umat_lib_path</span>
+    <span class="n">umat_lib</span> <span class="o">=</span> <span class="n">umat_lib_path</span> <span class="o">+</span> <span class="s1">&#39;/COSSERAT3D-BREAKAGE/libplast_Cosserat3D-Breakage.so&#39;</span>
+    <span class="n">umat_id</span> <span class="o">=</span> <span class="mi">1</span>       <span class="c1"># if many materials exist in the same library</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span> <span class="n">umat_lib</span><span class="p">,</span> <span class="n">umat_id</span><span class="p">)</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_material_properties</span><span class="p">()</span>
+    <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mats</span>
+</pre></div>
+</div>
+<p>The ngeo_parameters.py module contains the relative path to the materials libraries, which specify the different materials available to the user.
+The variable umat_id = 1 needs to be set for the analyses performed here. It specifies the mapping of the updated vector components of the strain increment <img class="math" src="_images/math/6c21343c9334e682b47a8e7168442a4dc2bc6e83.png" alt="(\gamma_{11}, \gamma_{22}, \gamma_{12})"/> and corresponding tensor components of the constitutive matrix, with their position in the 3D strain vector and 3D constitutive matrix provided at the material subroutine (material algorithm).
+This mapping returns back the correct components of the stress vector and constitutive matrix to pass into the
+residual calculation of the weak form in dolfin (equilibrium iterations). The material properties passed into the material algorithm, are set with the helper method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_material_1_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets material parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">omega_rad</span> <span class="o">=</span> <span class="n">omega</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>  <span class="c1"># We convert the coupling angle to radians</span>
+    <span class="n">c2wEc</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">omega_rad</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">Ec</span>  <span class="c1"># We find cos^2(omega)/Ec (for numerical convenience)</span>
+    <span class="n">s2wEc</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega_rad</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">Ec</span>  <span class="c1"># We find sin^2(omega)/Ec (for numerical convenience)</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">K</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">Gc</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Hc</span><span class="p">,</span> <span class="n">theta_gamma</span><span class="p">,</span> <span class="n">theta_kappa</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">x_r</span><span class="p">,</span> <span class="n">Ec</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">c2wEc</span><span class="p">,</span> <span class="n">s2wEc</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="n">h3</span><span class="p">,</span> <span class="n">h4</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>  <span class="c1"># Load the properties as an array</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">props</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">Once the analysis material(s) have been set we are able to exit the class definition for Cosserat1DFEproblem(UserFEproblem).</div>
+</div>
+</section>
+<section id="analysis-execution-confining-step">
+<h2><span class="section-number">7.7. </span>Analysis execution - confining step<a class="headerlink" href="#analysis-execution-confining-step" title="Permalink to this heading">¶</a></h2>
+<p>Our model is now set and ready to run. In order to perform an analysis for the problem at hand, we can simply type:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path1</span> <span class="o">=</span> <span class="s1">&#39;../reference_data&#39;</span>
+<span class="n">my_FEformulation</span> <span class="o">=</span> <span class="n">Cosserat_1D_layer_FEformulation</span><span class="p">()</span>
+<span class="n">my_FEproblem</span> <span class="o">=</span> <span class="n">Cos_BKG_1D_layer_FEproblem</span><span class="p">(</span><span class="n">my_FEformulation</span><span class="p">)</span>
+<span class="n">saveto</span> <span class="o">=</span> <span class="n">path1</span> <span class="o">+</span> <span class="s2">&quot;c_rescaled_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rescale_factor</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.xdmf&quot;</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span> <span class="o">=</span> <span class="mf">.1</span>
+<span class="n">converged</span> <span class="o">=</span> <span class="n">my_FEproblem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">)</span>  <span class="c1"># This saves the first confining loading part of the problem</span>
+<span class="c1"># Now we change the boundary conditions</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">bcs</span> <span class="o">=</span> <span class="n">my_FEproblem</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">()</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">symbolic_bcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">my_FEproblem</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This will use the solve method inside the parent UserFeproblem() class that starts the solution procedure. The analysis results are the saved to an ‘.xdmf’ file to be
+postprocessed by a third party application (e.g. ParaView).</p>
+</section>
+<section id="control-of-the-solution-procedure">
+<h2><span class="section-number">7.8. </span>Control of the solution procedure<a class="headerlink" href="#control-of-the-solution-procedure" title="Permalink to this heading">¶</a></h2>
+<p>The FEproblem() class of Numerical Geolab allows for great flexibility in choosing the solver parameters with which an analysis can be performed.
+Below a set of parameters can be passed as attributes to the solver for controlling the maximum analysis time (my_FEproblem.slv.tmax), the maximum increment size (my_FEproblem.slv.dtmax), the maximum number of iterations (my_FEproblem.slv.nitermax), the maximum number of increments (my_FEproblem.slv.nincmax), and the convergence tolerance (my_FEproblem.slv.convergence_tol). We note that the convergence tolerance must be larger than the tolerance given in the material.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_FEproblem</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="mf">2.</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span> <span class="o">=</span> <span class="mf">.5</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nitermax</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nincmax</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">my_FEproblem</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">convergence_tol</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">tolerance_level</span><span class="p">)</span>  <span class="c1"># has to be bigger than the materials</span>
+</pre></div>
+</div>
+</section>
+<section id="analysis-execution-shearing-step">
+<h2><span class="section-number">7.9. </span>Analysis execution - shearing step<a class="headerlink" href="#analysis-execution-shearing-step" title="Permalink to this heading">¶</a></h2>
+<p>Finally, we execute the shearing stage of the simulation. Depending on the target homogeneous shear strain value chosen, as well as the rescaling factor, this can be quite time-consuming (on the order of hours for a personal computer). This is because we will have a shear band forming in the system, and the correct resolution of the system during the initial localisation process requires very small time increments. However, once the band is fully established the system speeds up again, so calculation time is not a simple linear function of target strain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">saveto</span> <span class="o">=</span> <span class="n">path1</span> <span class="o">+</span> <span class="s2">&quot;s_rescaled_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rescale_factor</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.xdmf&quot;</span>
+<span class="n">converged</span> <span class="o">=</span> <span class="n">my_FEproblem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="analysis-results">
+<h2><span class="section-number">7.10. </span>Analysis results<a class="headerlink" href="#analysis-results" title="Permalink to this heading">¶</a></h2>
+<p>For this example no analytical solution exists to be compared to. However, the results of the simulation are stored in .xdmf/hdf5 files that are easily viewable and analysable in software such as ParaView.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">7. Simple shear of a 1D Cosserat layer with Breakage Mechanics material</a><ul>
+<li><a class="reference internal" href="#beginning-of-the-file">7.1. Beginning of the file</a></li>
+<li><a class="reference internal" href="#material-and-numerical-parameters">7.2. Material and Numerical Parameters</a></li>
+<li><a class="reference internal" href="#finite-element-formulation">7.3. Finite Element Formulation</a></li>
+<li><a class="reference internal" href="#boundary-identification">7.4. Boundary identification</a></li>
+<li><a class="reference internal" href="#finite-element-problem-description">7.5. Finite element problem description</a><ul>
+<li><a class="reference internal" href="#assigning-boundary-conditions">7.5.1. Assigning boundary conditions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#material-specification">7.6. Material specification</a></li>
+<li><a class="reference internal" href="#analysis-execution-confining-step">7.7. Analysis execution - confining step</a></li>
+<li><a class="reference internal" href="#control-of-the-solution-procedure">7.8. Control of the solution procedure</a></li>
+<li><a class="reference internal" href="#analysis-execution-shearing-step">7.9. Analysis execution - shearing step</a></li>
+<li><a class="reference internal" href="#analysis-results">7.10. Analysis results</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Tutorial%20Cosserat_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html"
+                          title="previous chapter"><span class="section-number">6. </span>Cosserat THM couplings: Thermo-hydro plasticity application - Drucker-Prager yield criterion</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorial%20Cosserat_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html" title="6. Cosserat THM couplings: Thermo-hydro plasticity application - Drucker-Prager yield criterion"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>Simple shear of a 1D Cosserat layer with Breakage Mechanics material</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

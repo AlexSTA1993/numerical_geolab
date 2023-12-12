@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE.solvers &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.solvers</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE.solvers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Aug 1, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+
+
+<span class="sd">Contains various incremental solvers.</span>
+
+<span class="sd">.. todo:: </span>
+<span class="sd">    * Implement central finite difference scheme</span>
+<span class="sd">    * Implement forward Euler</span>
+<span class="sd">    * Implement Crank-Nicolson</span>
+<span class="sd">    * Implement Newmark scheme</span>
+<span class="sd">    * Implement arc-length</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">tracemalloc</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.ngio</span> <span class="kn">import</span> <span class="n">Msg</span><span class="p">,</span> <span class="n">FileExporter</span>
+
+<span class="kn">from</span> <span class="nn">dolfin.cpp.la</span> <span class="kn">import</span> <span class="n">LUSolver</span>
+
+<span class="c1">#from dolfin.cpp.common import MPI_barrier</span>
+<span class="c1"># from dolfin.cpp.common import MPI_sum</span>
+<span class="kn">from</span> <span class="nn">dolfin.cpp.la</span> <span class="kn">import</span> <span class="n">LUSolver</span><span class="p">,</span> <span class="n">KrylovSolver</span>
+
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="n">MPI</span> <span class="k">as</span> <span class="n">mpi</span>
+
+<span class="kn">import</span> <span class="nn">cProfile</span>
+<span class="kn">import</span> <span class="nn">pstats</span>
+<span class="kn">import</span> <span class="nn">io</span>
+
+<div class="viewcode-block" id="Backward_Euler_Solver"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.solvers.Backward_Euler_Solver">[docs]</a><span class="k">class</span> <span class="nc">Backward_Euler_Solver</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Newton-Raphson Solver for time dependent and time independent problems (backward Euler method)</span>
+
+<span class="sd">    :param feobj: finite element object</span>
+<span class="sd">    :type feobj: FEobject </span>
+<span class="sd">    :param mats: list of material objects</span>
+<span class="sd">    :type mats: UserMaterial</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Backward_Euler_Solver.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.solvers.Backward_Euler_Solver.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feobj</span><span class="p">,</span> <span class="n">mats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize default parameters for the solver</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dinc</span><span class="o">=</span><span class="mf">1.</span> <span class="c1"># cut in dinc increments e.g. 2.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dinc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtmin</span><span class="o">=</span><span class="mf">1e-8</span> <span class="c1">#1e-8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nincmax</span><span class="o">=</span><span class="mi">500</span> <span class="c1"># max increments; if more stops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">incmodulo</span><span class="o">=-</span><span class="mi">1</span> <span class="c1"># output to file every incmodulo increments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inctime</span><span class="o">=-</span><span class="mi">1</span> <span class="c1"># output to file every inctime duration of increments. </span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">waitpatience</span><span class="o">=</span><span class="mi">5</span> <span class="c1"># set alwsays to &gt;0 or to infinity to desactivate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reducedtfactor</span><span class="o">=</span><span class="mf">2.</span> <span class="c1"># factor to reduce time step if problem. Same factor used for increase.</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nitermax</span><span class="o">=</span><span class="mi">100</span> <span class="c1"># max iterations; if more reduces dt</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convergence_tol</span><span class="o">=</span><span class="mf">1e-6</span> <span class="c1"># necessary tolerance for residual</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="o">=</span><span class="n">DOLFIN_EPS</span> <span class="c1"># accuracy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">=</span><span class="n">feobj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mats</span><span class="o">=</span><span class="n">mats</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_init_stress</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assembleDCpreservingsymmetry</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removezerolines</span><span class="o">=</span><span class="kc">True</span>
+        <span class="c1"># Define solver and solver options</span>
+        <span class="c1">#LSsolver = KrylovSolver(&quot;gmres&quot;, &quot;ilu&quot;)</span>
+        <span class="c1">#LSsolver.parameters[&quot;verbose&quot;] = True</span>
+        <span class="c1">#for item in LSsolver.parameters.items():</span>
+        <span class="c1">#    print(item)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LSsolver</span><span class="o">=</span><span class="n">LUSolver</span><span class="p">()</span> <span class="c1">#10/3/2019</span></div>
+
+<span class="c1">#         self.LSsolver=PETScLUSolver()</span>
+
+<span class="c1">#         self.LSsolver=KrylovSolver(&quot;bicgstab&quot;, &quot;hypre_euclid&quot;)</span>
+<span class="c1">#         self.LSsolver=KrylovSolver(&quot;gmres&quot;, &quot;ilu&quot;)</span>
+<span class="c1">#         self.LSsolver=KrylovSolver(&quot;gmres&quot;, &quot;hypre_euclid&quot;)</span>
+<span class="c1">#         self.LSsolver=KrylovSolver(&quot;cg&quot;, &quot;hypre_amg&quot;)</span>
+
+        <span class="c1">#self.LSsolver.parameters[&#39;absolute_tolerance&#39;] = 1e-12</span>
+        <span class="c1">#self.LSsolver.parameters[&#39;relative_tolerance&#39;] = 1e-7</span>
+        <span class="c1">#&#39;absolute_tolerance&#39;:1e-9,&#39;relative_tolerance&#39;:1e-7</span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def inc_svars_dsde(self,a, b):</span>
+<span class="c1">#         svars_tdt=np.copy(a)</span>
+<span class="c1">#         dsde_tdt=np.copy(b) </span>
+<span class="c1">#         return(svars_tdt, dsde_tdt) </span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def alex_solver(self,A, du, b):</span>
+<span class="c1">#         self.LSsolver.solve(A, du, b)#,&quot;mumps&quot;) </span>
+<span class="c1">#         return</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def assign_Du(self,Du,du):</span>
+<span class="c1"># #         self.feobj.Du.assign(Du+du)</span>
+<span class="c1"># #         Du.vector().get_local()</span>
+<span class="c1"># #         du.vector().get_local()</span>
+<span class="c1">#         Du.vector().set_local(Du.vector().get_local()+du.vector().get_local())</span>
+<span class="c1">#         return</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def deGP_aux_deGP(self,Du):</span>
+<span class="c1">#         self.feobj.local_project(self.feobj.epsilon2(Du), self.feobj.Vstress, self.feobj.deGP2)</span>
+<span class="c1">#         deGP=np.reshape(self.feobj.deGP2.vector().get_local(),(-1,self.feobj.p_nstr))</span>
+<span class="c1">#                 # Calculate auxiliary total strain increments at Gauss points</span>
+<span class="c1">#         self.feobj.local_project(self.feobj.aux_field2(Du), self.feobj.Vaux, self.feobj.aux_deGP2)</span>
+<span class="c1">#         aux_deGP=np.reshape(self.feobj.aux_deGP2.vector().get_local(),(-1,self.feobj.p_aux))</span>
+<span class="c1">#         return (deGP,aux_deGP)</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile   </span>
+<span class="c1">#     def new_stress_svars(self,a,b):</span>
+<span class="c1">#         stress_tdt=np.copy(a)</span>
+<span class="c1">#                  </span>
+<span class="c1">#         svars_tdt=np.copy(b)</span>
+<span class="c1">#         return (stress_tdt,svars_tdt)</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile</span>
+<span class="c1">#     def set_local(self,a,b):</span>
+<span class="c1">#         sigma2=self.feobj.sigma2.vector().set_local(np.reshape(a,-1))</span>
+<span class="c1">#         dsde2=self.feobj.dsde2.vector().set_local(np.reshape(b,-1))</span>
+<span class="c1">#         return (sigma2,dsde2)</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile       </span>
+<span class="c1">#     def assemble_alex(self,A1,b1):</span>
+<span class="c1">#         A=assemble(A1)</span>
+<span class="c1">#         b=assemble(b1)</span>
+<span class="c1">#         return(A,b)  </span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def assign_usol(self,usol,Du):</span>
+<span class="c1"># #         self.feobj.Du.assign(Du+du)</span>
+<span class="c1"># #         Du.vector().get_local()</span>
+<span class="c1"># #         du.vector().get_local()</span>
+<span class="c1">#         usol.vector().set_local(usol.vector().get_local()+Du.vector().get_local())</span>
+<span class="c1">#         return</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def external_output(self,sfs,t,tolds,ninc):</span>
+<span class="c1">#         t=t</span>
+<span class="c1">#         tolds=tolds</span>
+<span class="c1">#         ninc=ninc</span>
+<span class="c1">#         if ((t-tolds)&gt;=self.inctime and ninc%self.incmodulo&lt;=0) or t==self.tmax:</span>
+<span class="c1">#             tolds=t</span>
+<span class="c1">#             sfs.export(t, self.feobj)</span>
+<span class="c1">#         return</span>
+<span class="c1">#     </span>
+<span class="c1"># #     @profile </span>
+<span class="c1">#     def export_hist_output(self,hist,t,b):</span>
+<span class="c1">#         if hist!=None: </span>
+<span class="c1">#             usol_nodal=self.feobj.usol.vector().get_local()[hist]</span>
+<span class="c1">#             self.feobj.problem_history.append([t,b,usol_nodal])</span>
+<span class="c1">#         return  </span>
+
+<div class="viewcode-block" id="Backward_Euler_Solver.set_initial_stress"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.solvers.Backward_Euler_Solver.set_initial_stress">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sts</span><span class="p">,</span><span class="n">dt</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sets initial stresses</span>
+
+<span class="sd">        :param dt: Time increment (normally unnecessary)</span>
+<span class="sd">        :type dt: double</span>
+<span class="sd">        :param sts: Messaging object</span>
+<span class="sd">        :type sts: Msg</span>
+
+<span class="sd">        :ivar feobj.u0: initial converged displacement field contained in the finite element object</span>
+<span class="sd">        :ivar feobj.deGP2: converged strain as projected from the initial displacement field</span>
+<span class="sd">        :ivar deGP: strain increment</span>
+<span class="sd">        :ivar aux_deGP: strain increment of auxilary fields</span>
+<span class="sd">        :ivar stress_t: current value of the problem stress tensor in Voight form</span>
+<span class="sd">        :ivar svars_t: current value of the material state variables</span>
+<span class="sd">        :ivar dsde_tdt: current value of the problem stiffness tensor</span>
+<span class="sd">        :ivar nill: value indicating that the material algorithm has converged (nill=0)</span>
+<span class="sd">        :ivar sigma2: updated value of the problem stress tensor</span>
+<span class="sd">        :ivar svars2: updated value of the material state variables</span>
+<span class="sd">        :ivar dsde2: updated values of the problem stiffness tensor</span>
+
+<span class="sd">        :return nill: value indicating that the material algorithm has converged (nill=0)</span>
+<span class="sd">        :rtype nill: integer</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<span class="c1">#         self.feobj.usol.interpolate(self.feobj.u0)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">local_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">u0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Vstress</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">deGP2</span><span class="p">)</span>
+<span class="c1">#         print(self.feobj.u0.vector().get_local())</span>
+<span class="c1">#         print(self.feobj.deGP2.vector().get_local())</span>
+<span class="c1">#         print(self.feobj.V0.dofmap().tabulate_dofs())</span>
+        <span class="n">deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">deGP2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">))</span>
+        <span class="n">aux_deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_deGP2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_aux</span><span class="p">))</span>
+        <span class="n">stress_t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">))</span>
+        <span class="n">svars_t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nsvars</span><span class="p">))</span>
+        <span class="n">dsde_tdt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="c1">#print(&quot;hello10&quot;,svars_t)</span>
+        <span class="c1">#</span>
+        <span class="n">nill</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">umat</span><span class="p">(</span><span class="n">stress_t</span><span class="p">,</span><span class="n">deGP</span><span class="p">,</span><span class="n">aux_deGP</span><span class="p">,</span><span class="n">svars_t</span><span class="p">,</span><span class="n">dsde_tdt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">domainidGP</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;material problem; have to reduce increment @ init stress&quot;</span><span class="p">,</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">stress_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">svars_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dsde_tdt</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c1">#print(&quot;hello20&quot;,svars_t)</span>
+        <span class="k">return</span> <span class="n">nill</span></div>
+
+    <span class="c1"># tracemalloc.start()   </span>
+
+<div class="viewcode-block" id="Backward_Euler_Solver.solve"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.solvers.Backward_Euler_Solver.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">outputfile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">start_dtmin</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span><span class="c1">#,first_step=True):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solves the problem with backward Euler</span>
+
+<span class="sd">        :param outputfile: output hdmf filename for saving results</span>
+<span class="sd">        :param silent: messages display</span>
+<span class="sd">        :param summary: display incrementation summary </span>
+<span class="sd">        :type outputfile: string</span>
+<span class="sd">        :type silent: boolean</span>
+<span class="sd">        :type summary: boolean</span>
+<span class="sd">        :return: True if converged</span>
+<span class="sd">        :rtype: boolean </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sfs</span><span class="o">=</span><span class="n">FileExporter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="p">,</span><span class="n">outputfile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">=</span><span class="n">sfs</span>
+        <span class="n">sts</span><span class="o">=</span><span class="n">Msg</span><span class="p">()</span>
+        <span class="n">sts</span><span class="o">.</span><span class="n">silent</span><span class="o">=</span><span class="n">silent</span>
+        <span class="n">waitbeforeincreasedt</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="n">tinit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="n">tfinal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span>
+        <span class="n">told</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="n">tolds</span><span class="o">=</span><span class="n">told</span>
+        <span class="k">if</span> <span class="n">start_dtmin</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtmin</span> <span class="c1">#starts with the minimum icrement and increases gradually</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtmax</span>
+        <span class="n">ninc</span><span class="o">=</span><span class="mi">1</span>
+        <span class="n">nill</span><span class="o">=</span><span class="mi">0</span>
+        <span class="c1">#</span>
+        <span class="c1">#Initialize Boundary Conditions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">initBCs</span><span class="p">()</span>
+        <span class="c1">#Initialize Jacobian and Residual</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">init_Jac_res</span><span class="p">()</span>
+        <span class="c1">#</span>
+        <span class="n">usol_nodal</span><span class="o">=</span><span class="kc">None</span><span class="p">;</span> <span class="n">b_nodal</span><span class="o">=</span><span class="kc">None</span>
+        <span class="c1">#start_time = time.time()</span>
+        <span class="c1"># Save externally - output</span>
+        <span class="n">sfs</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="p">)</span>
+        <span class="c1"># Set initial stresses</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">==</span><span class="mf">0.</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_init_stress</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="n">nill</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_initial_stress</span><span class="p">(</span><span class="n">sts</span><span class="p">,</span><span class="n">dt</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+            <span class="n">nnill</span><span class="o">=</span><span class="n">mpi</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span><span class="n">nill</span><span class="p">)</span>
+            <span class="n">mpi</span><span class="o">.</span><span class="n">barrier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nnill</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">False</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;Failed to set initial stresses - quitting&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span> 
+                <span class="k">return</span> <span class="n">converged</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_init_stress</span><span class="o">=</span><span class="kc">False</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">:</span>
+            <span class="n">converged</span><span class="o">=</span><span class="kc">True</span>
+            <span class="k">return</span> <span class="n">converged</span>
+        <span class="c1"># Increment</span>
+<span class="c1">#         snapshots=[] #alex put it here</span>
+        <span class="k">while</span> <span class="n">t</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">:</span> <span class="c1"># and ninc&lt;=nincmax:</span>
+<span class="c1">#             print(ninc, self.incmodulo)</span>
+<span class="c1">#             if (ninc%self.incmodulo&lt;=0):</span>
+<span class="c1">#                 snapshots.append(tracemalloc.take_snapshot())</span>
+<span class="c1">#                 top_stats = snapshots[-1].statistics(&#39;lineno&#39;)</span>
+
+<span class="c1">#                 print(&quot;[ Top 10 ]&quot;)</span>
+<span class="c1">#                 for stat in top_stats[:10]:</span>
+<span class="c1">#                     print(stat)</span>
+
+<span class="c1">#                 if len(snapshots)&gt;=2:</span>
+<span class="c1">#                     stats=snapshots[-1].compare_to(snapshots[-2],&#39;lineno&#39;)</span>
+
+<span class="c1">#                     for stat in stats[:10]:                </span>
+<span class="c1">#                         print(&quot;{} new KiB {} total KiB {} new {} total memory blocks: &quot;.format(stat.size_diff/1024, stat.size / 1024, stat.count_diff ,stat.count))                </span>
+<span class="c1">#                         for line in stat.traceback.format():                    </span>
+<span class="c1">#                             print(line)</span>
+
+            <span class="n">t</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">told</span><span class="o">+</span><span class="n">dt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">);</span> <span class="n">dt</span><span class="o">=</span><span class="n">t</span><span class="o">-</span><span class="n">told</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">set_dt</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+            <span class="c1"># if self.feobj.comm.Get_rank()==0: sts.PrintMsg(&quot;Increment: &quot;+str(ninc)+&quot; Time &quot;+str(t)+&quot; *** DTime &quot;+str(dt))   #ALEX 14/7</span>
+            <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;Increment: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ninc</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; Time &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; *** DTime &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+            <span class="c1"># Set boundary conditions </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">incrementBCs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">told</span><span class="p">,</span><span class="n">tinit</span><span class="p">,</span><span class="n">tfinal</span><span class="p">)</span>    
+            <span class="c1"># Set volumic forces</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">setfi</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> 
+            <span class="c1"># Initialize increment</span>
+<span class="c1">#             if self.feobj.initial == False: #Alex 9/9/2019</span>
+<span class="c1">#                 self.feobj.Du.interpolate(Constant(np.zeros(self.feobj.ndofs)))</span>
+<span class="c1">#             </span>
+<span class="c1">#             self.feobj.initial == False</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">ndofs</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">local_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Vstress</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">deGP2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">local_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_field2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Vaux</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_deGP2</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">deGP2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">))</span>
+            <span class="n">aux_deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_deGP2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_aux</span><span class="p">))</span>
+            <span class="n">stress_t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">))</span>
+            <span class="n">svars_t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nsvars</span><span class="p">))</span>
+            <span class="c1">#print(&quot;helloooo&quot;,svars_t)</span>
+            <span class="n">dsde_t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="c1">#</span>
+<span class="c1">#             svars_tdt,dsde_tdt=self.inc_svars_dsde(svars_t, dsde_t)</span>
+            <span class="n">svars_tdt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">svars_t</span><span class="p">)</span>
+            <span class="n">dsde_tdt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">dsde_t</span><span class="p">)</span>   
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">assembleDCpreservingsymmetry</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
+                <span class="c1"># Assemble without preserving symmetry        </span>
+<span class="c1">#                 A,b=self.assemble_alex(self.feobj.Jac,self.feobj.Res)   </span>
+                <span class="n">A</span><span class="o">=</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Jac</span><span class="p">);</span> <span class="n">b</span><span class="o">=</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Res</span><span class="p">)</span>
+                <span class="c1"># save nodal value for history output</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span> <span class="n">b_nodal</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">get_local</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="p">]</span> <span class="c1">#ALEX 13/05/2022</span>
+<span class="c1">#                 print(1,b.get_local())</span>
+                <span class="k">for</span> <span class="n">bc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">DCbcs</span><span class="p">:</span> <span class="n">bc</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>              
+                <span class="n">abcs</span><span class="o">=</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">BC</span> <span class="k">for</span> <span class="n">bc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">DCbcs</span><span class="p">]</span>
+                <span class="c1"># Assemle preserving symmetry</span>
+                <span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">assemble_system</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Jac</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Res</span><span class="p">,</span><span class="n">abcs</span><span class="p">)</span>
+                <span class="c1"># save nodal value for history output</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span> <span class="n">b_nodal</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">get_local</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="p">]</span> <span class="c1">#ALEX 13/05/2022</span>
+<span class="c1">#                 print(2,b.get_local())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">removezerolines</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="n">A</span><span class="o">.</span><span class="n">ident_zeros</span><span class="p">()</span>
+            <span class="c1">#print(&quot;A&quot;)</span>
+            <span class="c1">#print(A.array())</span>
+            <span class="c1">#print(&quot;b&quot;)</span>
+            <span class="c1">#print(b.get_local())</span>
+            <span class="n">nRes</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
+            <span class="c1">#if summary==False:</span>
+            <span class="c1">#    if self.feobj.comm.Get_rank()==0: sts.PrintMsg(&quot;   Iteration: &quot;+str(ninc)+&quot;.0    Residual:&quot;+str(nRes))</span>
+            <span class="n">niter</span><span class="o">=</span><span class="mi">0</span>
+<span class="c1">#             print(&quot;old&quot;,self.feobj.mesh.coordinates()[0],self.feobj.mesh.coordinates()[-1])</span>
+            <span class="k">while</span> <span class="n">nRes</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_tol</span> <span class="ow">or</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">niter</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># ALEX added niter==0 @ 20/05/22</span>
+                <span class="c1">#</span>
+<span class="c1">#                 self.alex_solver(A, self.feobj.du.vector(), b)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">LSsolver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">du</span><span class="o">.</span><span class="n">vector</span><span class="p">(),</span> <span class="n">b</span><span class="p">)</span><span class="c1">#,&quot;mumps&quot;)</span>
+                <span class="c1">#solve(A, du.vector(), b,&quot;gmres&quot;, &quot;ilu&quot;) #&quot;lu&quot;)#,&quot;mumps&quot;)</span>
+                <span class="c1">#print(&quot;u&quot;)</span>
+                <span class="c1">#print(du.vector().get_local())</span>
+<span class="c1">#                 self.assign_Du(self.feobj.Du,self.feobj.du)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">du</span><span class="p">)</span>
+                <span class="n">ndu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">du</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022&quot;)</span>
+                <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">ndu</span><span class="p">):</span>                
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;Displacement increment is not a number; have to reduce increment&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+                    <span class="n">nill</span><span class="o">=</span><span class="mi">1</span>
+                    
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">stress_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="c1">#&#39;ALEX 03/08/2022&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dsde_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="c1">#&#39;ALEX 03/08/2022&#39;</span>
+                    <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">reducedtfactor</span><span class="c1">#&#39;ALEX 03/08/2022&#39;</span>
+                    <span class="k">break</span> <span class="c1">#&#39;ALEX 03/08/2022&#39;</span>
+                    <span class="c1"># print(&quot;Alex 18-04-2022-1&quot;)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">large_displacements</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c1">#                     print(&#39;update&#39;)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">update_mesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">du</span><span class="p">)</span>
+                <span class="c1">#if self.feobj.comm.Get_rank()==0: sts.PrintMsg(&quot;    |du|: &quot;+str(ndu))</span>
+                <span class="c1"># Calculate total strain increments at Gauss points</span>
+<span class="c1">#                 deGP,aux_deGP = self.deGP_aux_deGP(self.feobj.Du)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">local_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Vstress</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">deGP2</span><span class="p">)</span>
+                <span class="n">deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">deGP2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">))</span>
+<span class="c1">#                 # Calculate auxiliary total strain increments at Gauss points</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">local_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_field2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Vaux</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_deGP2</span><span class="p">)</span>
+                <span class="n">aux_deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">aux_deGP2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">(),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_aux</span><span class="p">))</span>
+                <span class="c1">#</span>
+<span class="c1">#                 stress_tdt,svars_tdt=self.new_stress_svars(stress_t, svars_t)</span>
+                <span class="n">stress_tdt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">stress_t</span><span class="p">)</span>
+<span class="c1">#                  </span>
+                <span class="n">svars_tdt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">svars_t</span><span class="p">)</span>
+                <span class="c1">#</span>
+                <span class="n">nill</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">umat</span><span class="p">(</span><span class="n">stress_tdt</span><span class="p">,</span><span class="n">deGP</span><span class="p">,</span><span class="n">aux_deGP</span><span class="p">,</span><span class="n">svars_tdt</span><span class="p">,</span><span class="n">dsde_tdt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">domainidGP</span><span class="p">,</span><span class="n">dt</span><span class="p">)</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022-2&quot;)</span>
+                <span class="c1"># if nill==1: sts.PrintMsg(&quot;   Process &quot;+str(self.feobj.comm.Get_rank())+&quot;: material problem; have to reduce increment - 1&quot;, &quot;red&quot;)</span>
+                <span class="k">if</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;: material problem; have to reduce increment - 1&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span> <span class="c1">#ALEX 15/07</span>
+                <span class="c1"># Assure synchronous execution in case of material problem</span>
+                <span class="n">nnill</span><span class="o">=</span><span class="n">mpi</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span><span class="n">nill</span><span class="p">)</span>
+                <span class="n">mpi</span><span class="o">.</span><span class="n">barrier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">nnill</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span> <span class="n">nill</span><span class="o">=</span><span class="mi">1</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022-3&quot;)</span>
+                <span class="c1">#</span>
+                <span class="k">if</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># print(&quot;Alex 18-04-2022-4&quot;)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">large_displacements</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c1">#                         print(&#39;revert1&#39;)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">update_mesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="n">minus</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#                     sigma2, dsde2 = self.set_local(stress_t,dsde_t)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">stress_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dsde_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">reducedtfactor</span>
+
+                    <span class="k">del</span> <span class="n">stress_tdt</span>
+                    <span class="k">del</span> <span class="n">svars_tdt</span>
+<span class="c1">#                     del dsde_tdt</span>
+
+                    <span class="k">break</span>
+                <span class="k">elif</span> <span class="n">niter</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">nitermax</span><span class="p">:</span>
+                    <span class="c1"># print(&quot;Alex 18-04-2022-5&quot;)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">large_displacements</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c1">#                         print(&#39;revert2&#39;)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">update_mesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="n">minus</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;   reached max iterations; reducing increment - 3&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="c1">#                     sigma2, dsde2 = self.set_local(stress_t,dsde_t)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">stress_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dsde_t</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">reducedtfactor</span>
+
+                    <span class="k">del</span> <span class="n">stress_tdt</span>
+                    <span class="k">del</span> <span class="n">svars_tdt</span>
+<span class="c1">#                     del dsde_tdt</span>
+
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span> 
+<span class="c1">#                     sigma2, dsde2 = self.set_local(stress_tdt,dsde_tdt)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">stress_tdt</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dsde_tdt</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="c1"># When all done, assemble</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">assembleDCpreservingsymmetry</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
+                        <span class="c1"># Assemble without preserving symmetry   </span>
+<span class="c1">#                         A,b=self.assemble_alex(self.feobj.Jac,self.feobj.Res)           </span>
+                        <span class="n">A</span><span class="o">=</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Jac</span><span class="p">);</span> <span class="n">b</span><span class="o">=</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Res</span><span class="p">)</span>
+<span class="c1">#                         # save nodal value for history output</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span> <span class="n">b_nodal</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">get_local</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="p">]</span> <span class="c1">#ALEX 13/05/2022</span>
+                        <span class="k">for</span> <span class="n">bc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">DCbcs0</span><span class="p">:</span> <span class="n">bc</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">abcs</span><span class="o">=</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">BC</span> <span class="k">for</span> <span class="n">bc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">DCbcs0</span><span class="p">]</span>
+                        <span class="c1"># Assemle preserving symmetry</span>
+                        <span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">assemble_system</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Jac</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Res</span><span class="p">,</span><span class="n">abcs</span><span class="p">)</span>              
+<span class="c1">#                         # save nodal value for history output</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span> <span class="n">b_nodal</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">get_local</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="p">]</span>  <span class="c1">#ALEX 13/05/2022</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">removezerolines</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="n">A</span><span class="o">.</span><span class="n">ident_zeros</span><span class="p">()</span>
+
+                    <span class="k">del</span> <span class="n">stress_tdt</span>
+<span class="c1">#                     del dsde_tdt</span>
+<span class="c1">#                     del svars_tdt</span>
+
+                    <span class="n">nRes</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
+                    <span class="n">niter</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">summary</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;    Residual: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nRes</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">    |du|: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ndu</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">nRes</span><span class="p">):</span>                
+                <span class="c1"># print(&quot;Alex 18-04-2022-6&quot;)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;Failed to converge, residual is not a number - stopping&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">False</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">dt</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">dtmin</span> <span class="ow">and</span> <span class="n">nRes</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_tol</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dt</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">dtmin</span> <span class="ow">and</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022-7&quot;)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;Failed to converge, reached dtmin - stopping&quot;</span><span class="p">)</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">False</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> 
+                <span class="c1"># print(&quot;Alex 18-04-2022-8&quot;)</span>
+                <span class="n">waitbeforeincreasedt</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">False</span>
+                <span class="n">t</span><span class="o">=</span><span class="n">told</span>
+            <span class="k">elif</span> <span class="n">niter</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">nitermax</span> <span class="ow">and</span> <span class="n">nRes</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_tol</span><span class="p">:</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022-9&quot;)</span>
+                <span class="n">waitbeforeincreasedt</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">False</span>
+                <span class="n">t</span><span class="o">=</span><span class="n">told</span>
+            <span class="k">elif</span> <span class="n">ninc</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">nincmax</span><span class="p">:</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022-10&quot;)</span>
+                <span class="c1"># if self.feobj.comm.Get_rank()==0: sts.PrintMsg(&quot;Failed to converge, reached max increments - stopping&quot;) &quot;ALEX 15/07&quot;</span>
+                <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;Failed to converge, reached max increments - stopping&quot;</span><span class="p">)</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">False</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">nill</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># print(&quot;Alex 18-04-2022-11&quot;)</span>
+                <span class="c1"># Increment converged</span>
+                <span class="k">if</span> <span class="n">waitbeforeincreasedt</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">waitpatience</span><span class="p">:</span>
+                    <span class="n">dtnew</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">dt</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">reducedtfactor</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dtmax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="o">-</span><span class="n">told</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">dtnew</span><span class="o">-</span><span class="n">dt</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>
+                        <span class="c1"># if self.feobj.comm.Get_rank()==0: sts.PrintMsg(&quot;   Good behavior noticed, increasing timestep from &quot; + str(dt) + &quot; to &quot; + str(dtnew), &quot;green&quot;) &quot;ALEX 15/07&quot;</span>
+                        <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;   Good behavior noticed, increasing timestep from &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtnew</span><span class="p">),</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
+
+                        <span class="n">dt</span><span class="o">=</span><span class="n">dtnew</span>
+                    <span class="n">waitbeforeincreasedt</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">waitbeforeincreasedt</span><span class="o">+=</span><span class="mi">1</span>   
+                <span class="c1"># Update state variables </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">svars_tdt</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1">#                 del stress_tdt</span>
+
+                <span class="c1"># Update solution </span>
+<span class="c1">#                 self.assign_usol(self.feobj.usol,self.feobj.Du)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">Du</span><span class="p">)</span>
+<span class="c1">#                 print(&quot;hereee&quot;,self.feobj.usol.vector()[:])</span>
+                <span class="c1"># Print summary</span>
+                <span class="k">if</span> <span class="n">summary</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+                    <span class="c1"># if self.feobj.comm.Get_rank()==0: sts.PrintMsg(&quot;   Iterations: &quot;+str(niter)+&quot;    Residual: &quot;+str(nRes)) #ALEX 14/7</span>
+                    <span class="n">sts</span><span class="o">.</span><span class="n">PrintMsg</span><span class="p">(</span><span class="s2">&quot;   Iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">niter</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;    Residual: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">nRes</span><span class="p">))</span>
+                <span class="c1"># Save externally - output</span>
+<span class="c1">#                 self.external_output(sfs,t,tolds,ninc)</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">t</span><span class="o">-</span><span class="n">tolds</span><span class="p">)</span><span class="o">&gt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">inctime</span> <span class="ow">and</span> <span class="n">ninc</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">incmodulo</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">t</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">:</span>
+                    <span class="n">tolds</span><span class="o">=</span><span class="n">t</span>
+                    <span class="n">sfs</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="p">)</span>
+                <span class="c1">#update time</span>
+
+
+                <span class="n">told</span><span class="o">=</span><span class="n">t</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">=</span><span class="n">t</span>
+                <span class="n">ninc</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="n">converged</span><span class="o">=</span><span class="kc">True</span>
+
+                <span class="c1"># save nodal values for history output</span>
+<span class="c1">#                 self.export_hist_output(self.feobj.history_indices_ui,t,b_nodal)</span>
+
+                <span class="k">del</span> <span class="n">svars_tdt</span>
+                <span class="k">del</span> <span class="n">dsde_tdt</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ui</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span> 
+                    <span class="c1"># if niter != 0:</span>
+                    <span class="n">usol_nodal</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">history_indices_ui</span><span class="p">]</span>
+                    <span class="n">svars_gauss_points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars_history_indices</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_history</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">t</span><span class="p">,</span><span class="n">b_nodal</span><span class="p">,</span><span class="n">usol_nodal</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_svars_history</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dt</span><span class="p">,</span><span class="n">svars_gauss_points</span><span class="p">])</span>
+                    <span class="c1"># self.feobj.problem_svars_coordinates.append([dt,self.feobj.svars_coordinates])</span>
+                        <span class="c1"># svars_elem=self.feobj.sva2.vector().get_local()[self.feobj.svars_index]</span>
+                        <span class="c1"># self.feobj.problem_history.append([t,b_nodal,usol_nodal,svars_elem])</span>
+                    <span class="c1"># else:</span>
+                    <span class="c1">#     usol_nodal=self.feobj.usol.vector().get_local()[self.feobj.history_indices_ui]</span>
+                    <span class="c1">#     svars_gauss_points=self.feobj.svars2.vector().get_local()[self.feobj.svars_history_indices]</span>
+                    <span class="c1">#</span>
+                    <span class="c1">#     # self.feobj.problem_history[-1]=[t,b_nodal,usol_nodal]</span>
+                    <span class="c1">#</span>
+                    <span class="c1">#     self.feobj.problem_history.append([t,b_nodal,usol_nodal])</span>
+                    <span class="c1">#     self.feobj.problem_svars_history.append([dt,svars_gauss_points])</span>
+
+                <span class="c1"># print(self.feobj.problem_history)</span>
+                <span class="c1"># print(self.feobj.problem_svars_history)        </span>
+<span class="c1">#                 print(self.feobj.problem_history)</span>
+
+<span class="c1">#                 print(self.feobj.history_indices_ui)</span>
+<span class="c1">#                 print(usol_nodal)</span>
+
+
+
+        <span class="k">return</span> <span class="n">converged</span></div>
+
+<div class="viewcode-block" id="Backward_Euler_Solver.umat"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.solvers.Backward_Euler_Solver.umat">[docs]</a>    <span class="k">def</span> <span class="nf">umat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">stress_t</span><span class="p">,</span><span class="n">deGP</span><span class="p">,</span><span class="n">aux_deGP</span><span class="p">,</span><span class="n">svars_t</span><span class="p">,</span><span class="n">dsde_t</span><span class="p">,</span><span class="n">domainidGP</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls user material at Gauss points</span>
+
+<span class="sd">        :param stress_t: generalized stress - input/output</span>
+<span class="sd">        :param deGP: generalized deformation vector - input</span>
+<span class="sd">        :param aux_deGP: auxiliary generalized deformation vector - input</span>
+<span class="sd">        :param svars_t: state variables - input/output</span>
+<span class="sd">        :param dsde_t: jacobian - output</span>
+<span class="sd">        :param domainidGP: domain id for choosing the right material</span>
+<span class="sd">        :param dt: time increment</span>
+<span class="sd">        :type stress_t: numpy array</span>
+<span class="sd">        :type deGP: numpy array</span>
+<span class="sd">        :type aux_deGP: numpy array</span>
+<span class="sd">        :type svars_t: numpy array</span>
+<span class="sd">        :type dsde_t: numpy array</span>
+<span class="sd">        :type domainidGP: numpy array</span>
+<span class="sd">        :type dt: double</span>
+<span class="sd">        :return nill: parameter indicating convergence of material</span>
+<span class="sd">        :rtype nill: integer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">GP_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">deGP</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">)):</span>
+            <span class="c1"># print(GP_id)</span>
+            <span class="n">nill</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="n">domainidGP</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]]</span><span class="o">.</span><span class="n">usermatGP</span><span class="p">(</span><span class="n">stress_t</span><span class="p">[</span><span class="n">GP_id</span><span class="p">],</span><span class="n">deGP</span><span class="p">[</span><span class="n">GP_id</span><span class="p">],</span><span class="n">svars_t</span><span class="p">[</span><span class="n">GP_id</span><span class="p">],</span><span class="n">dsde_t</span><span class="p">[</span><span class="n">GP_id</span><span class="p">],</span><span class="n">dt</span><span class="p">,</span><span class="n">GP_id</span><span class="p">,</span><span class="n">aux_deGP</span><span class="p">[</span><span class="n">GP_id</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">nill</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1">#print(&quot;failed to converge at material level&quot;)</span>
+                <span class="k">return</span> <span class="n">nill</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.solvers</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

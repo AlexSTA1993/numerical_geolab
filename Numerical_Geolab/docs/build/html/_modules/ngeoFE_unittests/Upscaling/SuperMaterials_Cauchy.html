@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Aug 27, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.superFEmaterials</span> <span class="kn">import</span> <span class="n">SuperFEMaterial</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">General_FEproblem_properties</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.materials</span> <span class="kn">import</span> <span class="n">UserMaterial</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">ufl.operators</span> <span class="kn">import</span> <span class="n">Dx</span>
+<span class="kn">from</span> <span class="nn">ufl.tensors</span> <span class="kn">import</span> <span class="n">as_vector</span>
+<span class="kn">from</span> <span class="nn">ufl.finiteelement.mixedelement</span> <span class="kn">import</span> <span class="n">VectorElement</span>
+
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+
+<span class="n">reference_data_path</span> <span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span>   
+
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial">[docs]</a><span class="k">class</span> <span class="nc">Cauchy2DSuperFEmaterial</span><span class="p">(</span><span class="n">SuperFEMaterial</span><span class="p">):</span>
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.__init__"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Cauchy_2D&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation">[docs]</a>    <span class="k">class</span> <span class="nc">SuperFEMaterialFEformulation</span><span class="p">(</span><span class="n">SuperFEMaterial</span><span class="o">.</span><span class="n">SuperFEMaterialFEformulation</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Defines a user FE formulation for the supermaterial</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation.__init__"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1"># Number of stress/deformation components</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">3</span>
+            <span class="c1"># Number of Gauss points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">1</span></div>
+        
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation.generalized_epsilon"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation.generalized_epsilon">[docs]</a>        <span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set user&#39;s generalized deformation vector</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">gde</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>             <span class="c1">#gamma_11</span>
+                <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>             <span class="c1">#gamma_11</span>
+                <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">#gamma_12</span>
+                <span class="p">]</span> 
+            <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation.create_element"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEformulation.create_element">[docs]</a>        <span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cell</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set desired element</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Defines a Lagrangian FE of degree 1 for the displacements</span>
+            <span class="n">element_disp</span><span class="o">=</span><span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span><span class="n">cell</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">element_disp</span></div></div>
+<span class="c1">#             </span>
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem">[docs]</a>    <span class="k">class</span> <span class="nc">SuperFEMaterialFEproblem</span><span class="p">(</span><span class="n">SuperFEMaterial</span><span class="o">.</span><span class="n">SuperFEMaterialFEproblem</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines FE problem for given FE formulation of the supermaterial</span>
+<span class="sd">        </span>
+<span class="sd">        Only orthogonal elementary cells are supported</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.set_general_properties"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.set_general_properties">[docs]</a>        <span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set here all the parameters of the problem, except material properties </span>
+<span class="sd">            </span>
+<span class="sd">            When overidden, has to define the maximum number of the state variables of the materials of the supermaterial by setting: self.genprops.p_nsvars= ??</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">=</span><span class="n">General_FEproblem_properties</span><span class="p">()</span>
+            <span class="c1"># Number of state variables</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span><span class="o">=</span><span class="mi">27</span>
+            <span class="c1"># Periodic cell corners </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left_bottom_corner</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right_top_corner</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">]</span></div>
+        
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.create_mesh"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.create_mesh">[docs]</a>        <span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set mesh and subdomains</span>
+<span class="sd">             </span>
+<span class="sd">            :return: mesh object</span>
+<span class="sd">            :rtype: Mesh</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Generate mesh</span>
+            <span class="n">mesh</span><span class="o">=</span><span class="n">UnitSquareMesh</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+            <span class="n">cd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+            <span class="n">fd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">fd</span></div>
+        
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.set_materials"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.set_materials">[docs]</a>        <span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create material objects and set material parameters</span>
+<span class="sd">            </span>
+<span class="sd">            :return: Returns a list of UserMaterial objects</span>
+<span class="sd">            :rtype: UserMaterial</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">mats</span><span class="o">=</span><span class="p">[]</span>
+            
+            <span class="n">env_lib</span><span class="o">=</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">env_lib</span>        <span class="c1">#umat_lib=&#39;./libplast_Cauchy3D-DP.so&#39;</span>
+            <span class="n">umat_lib_path</span><span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">umat_lib_path</span>
+            <span class="n">umat_lib</span> <span class="o">=</span> <span class="n">umat_lib_path</span><span class="o">+</span><span class="s1">&#39;/CAUCHY3D-DP/libplast_Cauchy3D-DP.so&#39;</span>
+            <span class="c1"># load material #1</span>
+            <span class="n">umat_id</span><span class="o">=</span><span class="mi">2</span>       <span class="c1"># if many materials exist in the same library</span>
+            <span class="n">mat</span><span class="o">=</span><span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span><span class="n">umat_lib</span><span class="p">,</span><span class="n">umat_id</span><span class="p">)</span>
+            <span class="n">mat</span><span class="o">.</span><span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_material_1_properties</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1000.</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+            <span class="c1"># load material #2</span>
+            <span class="n">umat_id</span><span class="o">=</span><span class="mi">2</span>       <span class="c1"># if many materials exist in the same library</span>
+            <span class="n">mat</span><span class="o">=</span><span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span><span class="n">umat_lib</span><span class="p">,</span><span class="n">umat_id</span><span class="p">)</span>
+            <span class="n">mat</span><span class="o">.</span><span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_material_1_properties</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1000.</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mats</span></div>
+        
+<div class="viewcode-block" id="Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.set_material_1_properties"><a class="viewcode-back" href="../../../ngeoFE_unittests.Upscaling.html#ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy.Cauchy2DSuperFEmaterial.SuperFEMaterialFEproblem.set_material_1_properties">[docs]</a>        <span class="k">def</span> <span class="nf">set_material_1_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">EE</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">cc</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sets material parameters</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">GG</span><span class="o">=</span><span class="n">EE</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">nu</span><span class="p">))</span>
+            <span class="n">KK</span><span class="o">=</span><span class="n">EE</span><span class="o">*</span><span class="n">GG</span><span class="o">/</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="n">GG</span><span class="o">-</span><span class="n">EE</span><span class="p">))</span>
+            <span class="n">props</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">KK</span><span class="p">,</span><span class="n">GG</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="n">cc</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+            <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">props</span></div></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Upscaling.SuperMaterials_Cauchy</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

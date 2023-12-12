@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
+<Xdmf Version="3.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <Domain>
+    <Grid Name="TimeSeries" GridType="Collection" CollectionType="Temporal">
+      <Grid Name="mesh" GridType="Uniform">
+        <Topology NumberOfElements="2" TopologyType="Triangle" NodesPerElement="3">
+          <DataItem Dimensions="2 3" NumberType="UInt" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/Mesh/0/mesh/topology</DataItem>
+        </Topology>
+        <Geometry GeometryType="XY">
+          <DataItem Dimensions="4 2" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/Mesh/0/mesh/geometry</DataItem>
+        </Geometry>
+        <Time Value="1" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/0</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/1</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/2</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.1000000000000001" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/3</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/4</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/5</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.2000000000000002" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/6</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/7</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/8</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.3000000000000003" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/9</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/10</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/11</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.4000000000000004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/12</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/13</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/14</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.5000000000000004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/15</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/16</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/17</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.6000000000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/18</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/19</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/20</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.7000000000000006" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/21</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/22</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/23</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.8000000000000007" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/24</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/25</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/26</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="1.9000000000000008" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/27</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/28</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/29</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="2" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/30</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 3" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/31</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="4 38" Format="HDF">Cauchy_2D_Drucker-Prager_test_step_1_App_3.h5:/VisualisationVector/32</DataItem>
+        </Attribute>
+      </Grid>
+    </Grid>
+  </Domain>
+</Xdmf>

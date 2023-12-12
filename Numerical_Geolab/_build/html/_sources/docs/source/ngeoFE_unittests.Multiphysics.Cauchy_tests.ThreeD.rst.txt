@@ -1,0 +1,30 @@
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD package
+===========================================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP
+    ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests
+
+Submodules
+----------
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.CAUCHY\-TM\-11 module
+-------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.CAUCHY-TM-11
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD
+    :members:
+    :undoc-members:
+    :show-inheritance:

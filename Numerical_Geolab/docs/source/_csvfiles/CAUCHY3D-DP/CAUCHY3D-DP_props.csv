@@ -1,0 +1,20 @@
+Properties,Material Property,Compatible units
+1,:math:`K`,:math:`\text{[Pa]}`
+2,:math:`G`,:math:`\text{[Pa]}`
+3,-,-
+4,-,-
+5,-,-
+6,-,-
+7,-,-
+8,-,-
+9,-,-
+10,-,-
+11,:math:`\tan{\phi}`,-
+12,:math:`c`,:math:`\text{[Pa]}`
+13,:math:`\tan{\psi}`,-
+14,:math:`h_{\phi}`,-
+15,:math:`h_c`,-
+16,-,-
+17,-,-
+18,-,-
+19,:math:`\eta^{vp}`,:math:`\text{[Pa s]}`

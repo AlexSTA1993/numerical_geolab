@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ngeoFE.yadematerial_2D &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE.yadematerial_2D</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Jan 14, 2021</span>
+
+<span class="sd">@author: Ioannis Stefanou &amp; Filippo Masi</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">yade</span> <span class="k">as</span> <span class="nn">yd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="YadeMaterial"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial">[docs]</a><span class="k">class</span> <span class="nc">YadeMaterial</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    YADE material class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">##TODO: Messages with silent or not message IO of nGeo</span>
+<div class="viewcode-block" id="YadeMaterial.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">=</span><span class="n">silent</span>
+        <span class="k">if</span> <span class="n">file</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">O</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_sample</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">O</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_sample_from_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sample successfully loaded&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error in loading sample - exiting&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># General parameters for the DEM analysis</span>
+        <span class="c1">#self.O.trackEnergy=True # enable energy tracking   </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">trsf</span><span class="o">=</span><span class="n">yd</span><span class="o">.</span><span class="n">Matrix3</span><span class="o">.</span><span class="n">Identity</span> <span class="c1"># set the current cell configuration to be the reference one to compute strain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">dynDt</span><span class="o">=</span><span class="kc">True</span> <span class="c1"># enable adaptive critical time step calculation in yade (True by default, but fdor being sure)</span>
+        <span class="c1"># Other Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_increment_in_background</span><span class="o">=</span><span class="kc">True</span> <span class="c1"># runs yade increment in background</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">substeppingfactor</span><span class="o">=</span><span class="mf">1.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nparticles</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_particles</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">=</span><span class="n">file</span></div>
+
+
+<div class="viewcode-block" id="YadeMaterial.reset"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.generate_sample"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.generate_sample">[docs]</a>    <span class="k">def</span> <span class="nf">generate_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No code provided for in creating sample&quot;</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+    <span class="k">def</span> <span class="nf">_generate_sample_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>    
+        <span class="n">yd</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span> 
+        <span class="n">yd</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">yd</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">resetTime</span><span class="p">()</span> <span class="c1"># resets time of the anaysis</span>
+        <span class="k">return</span> <span class="n">yd</span><span class="o">.</span><span class="n">O</span>
+
+
+<div class="viewcode-block" id="YadeMaterial.doincrement"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.doincrement">[docs]</a>    <span class="k">def</span> <span class="nf">doincrement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">de</span><span class="p">,</span><span class="n">loading_delta_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">velGrad</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Voigt_to_velGrad</span><span class="p">(</span><span class="n">de</span><span class="p">,</span><span class="n">strain</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">/</span><span class="n">loading_delta_t</span>
+<span class="c1">#         self.O.cell.velGrad=self.Voigt_to_Tensor(de,strain=True)/loading_delta_t # valid for infinitesimal strains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_analysis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">time</span>
+        <span class="n">t_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_analysis</span><span class="o">+</span><span class="n">loading_delta_t</span>
+<span class="c1">#         print(loading_delta_t)</span>
+        <span class="c1"># yade O.stopAttime has a bug in yade and it doesn&#39;t work (01/2021) </span>
+        <span class="k">while</span> <span class="n">t_target</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">time</span><span class="p">:</span>
+<span class="c1">#             print(self.O.dt)</span>
+            <span class="n">dt_crit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">dt</span>
+            <span class="n">nsteps</span><span class="o">=</span><span class="nb">int</span><span class="p">(((</span><span class="n">t_target</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">/</span><span class="n">dt_crit</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">substeppingfactor</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nsteps</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1">#complete the last increment  can be problematic cause you re forcing Z to have dtc_crit</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="n">t_target</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">time</span>
+                <span class="n">nsteps</span><span class="o">=</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executing:&quot;</span><span class="p">,</span><span class="n">nsteps</span><span class="p">,</span><span class="s2">&quot; timesteps&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nSteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span><span class="n">wait</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run_increment_in_background</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="n">dt_crit</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_analysis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">time</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_analysis</span><span class="o">&gt;</span><span class="n">t_target</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;warning: targe time was exceeded by:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">t_analysis</span><span class="o">-</span><span class="n">t_target</span><span class="p">,</span> <span class="s2">&quot;last time step increment of the DEM analysis was&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_analysis</span><span class="o">/</span><span class="n">loading_delta_t</span> <span class="c1"># ratio of target epsilon achieved</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.get_sym_tensor"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.get_sym_tensor">[docs]</a>    <span class="k">def</span> <span class="nf">get_sym_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tensor</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="p">(</span><span class="n">tensor</span> <span class="o">+</span> <span class="n">tensor</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.output_increment_data"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.output_increment_data">[docs]</a>    <span class="k">def</span> <span class="nf">output_increment_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># get the stress tensor (as 3x3 matrix)</span>
+        <span class="n">stress_tensor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_sym_tensor</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yd</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">getStress</span><span class="p">())))</span>  <span class="c1"># stress tensor v</span>
+        <span class="c1">#### A FAIRE put controller on traction, sigma_ii &lt; 0 always!</span>
+        <span class="c1">#### si statique, stress_tensor doit etre symmetrique! A verifier!</span>
+        <span class="c1">#### Une possibilite est verifier que le tenseur soit symmetrique et sinon augmente dt!</span>
+
+        <span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">trsf</span> <span class="c1"># transformation tensor</span>
+        <span class="n">eps_tensor</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">*</span> <span class="n">F</span> <span class="o">-</span> <span class="n">yd</span><span class="o">.</span><span class="n">Matrix3</span><span class="o">.</span><span class="n">Identity</span><span class="p">)))</span>
+        <span class="n">vol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">volume</span>
+        <span class="n">E_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">energy</span><span class="o">.</span><span class="n">total</span><span class="p">()</span><span class="o">/</span><span class="n">vol</span>
+        <span class="n">E_elast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;elastPotential&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">vol</span>
+        <span class="n">E_dissipated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="s1">&#39;plastDissip&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">vol</span> <span class="c1">#dissipation is total</span>
+        <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">time</span>
+<span class="c1">#         print(np.array(yd.utils.getStress()))</span>
+        <span class="n">s</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">vel</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">bodies</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">yd</span><span class="o">.</span><span class="n">Sphere</span><span class="p">)])</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">s</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">s</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">vs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">s</span><span class="p">[:,</span><span class="mi">3</span><span class="p">],</span><span class="n">s</span><span class="p">[:,</span><span class="mi">4</span><span class="p">],</span><span class="n">s</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1">#         print(s[:10,2])</span>
+        <span class="n">rad</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:,</span><span class="mi">6</span><span class="p">]</span>
+<span class="c1">#         </span>
+        <span class="n">rot</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">b</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">rot</span><span class="p">())</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">bodies</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">yd</span><span class="o">.</span><span class="n">Sphere</span><span class="p">)])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tensor_to_Voigt</span><span class="p">(</span><span class="n">stress_tensor</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tensor_to_Voigt</span><span class="p">(</span><span class="n">eps_tensor</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">yd</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">unbalancedForce</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">vs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">rad</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">rot</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1">#         res=np.array([(b.state.pos,b.state.vel) for b in self.O.bodies if isinstance(b.shape,yd.Sphere)]) #,b.shape.radius</span>
+<span class="c1">#         xs=res[:,0].flatten()</span>
+<span class="c1">#         vs=res[:,1].flatten()</span>
+<span class="c1">#         print(res[2,0],res[2,1],res[2,2])</span>
+        <span class="k">return</span> <span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tensor_to_Voigt</span><span class="p">(</span><span class="n">stress_tensor</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tensor_to_Voigt</span><span class="p">(</span><span class="n">eps_tensor</span><span class="p">,</span><span class="kc">True</span><span class="p">),</span> <span class="n">E_elast</span><span class="p">,</span> <span class="n">E_dissipated</span><span class="p">,</span> <span class="n">E_total</span><span class="p">,</span> <span class="n">yd</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">unbalancedForce</span><span class="p">(),</span> <span class="n">xs</span><span class="p">,</span><span class="n">vs</span><span class="p">,</span><span class="n">rad</span><span class="c1">#,rot</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.get_number_of_particles"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.get_number_of_particles">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_of_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">O</span><span class="o">.</span><span class="n">bodies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">yd</span><span class="o">.</span><span class="n">Sphere</span><span class="p">):</span>
+                <span class="n">n</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">n</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.Voigt_to_Tensor"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.Voigt_to_Tensor">[docs]</a>    <span class="k">def</span> <span class="nf">Voigt_to_Tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">strain</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">mult</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="k">if</span> <span class="n">strain</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="n">mult</span><span class="o">=.</span><span class="mi">5</span>
+        <span class="n">tensor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>   <span class="n">mult</span><span class="o">*</span><span class="n">vector</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                           <span class="n">mult</span><span class="o">*</span><span class="n">vector</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>  <span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                            <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">tensor</span><span class="o">=</span><span class="n">tensor</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tensor</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.Voigt_to_velGrad"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.Voigt_to_velGrad">[docs]</a>    <span class="k">def</span> <span class="nf">Voigt_to_velGrad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">strain</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">mult</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="k">if</span> <span class="n">strain</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="n">mult</span><span class="o">=.</span><span class="mi">5</span>
+        <span class="n">tensor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>   <span class="n">mult</span><span class="o">*</span><span class="n">vector</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span>
+                           <span class="n">mult</span><span class="o">*</span><span class="n">vector</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>  <span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span>
+                           <span class="mi">0</span><span class="p">,</span>                        <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                            <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">tensor</span><span class="o">=</span><span class="n">tensor</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tensor</span></div>
+
+<div class="viewcode-block" id="YadeMaterial.Tensor_to_Voigt"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.yadematerial_2D.YadeMaterial.Tensor_to_Voigt">[docs]</a>    <span class="k">def</span> <span class="nf">Tensor_to_Voigt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">,</span> <span class="n">strain</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">mult</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="k">if</span> <span class="n">strain</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="n">mult</span><span class="o">=</span><span class="mf">2.</span>
+        <span class="n">voigt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">tensor</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">tensor</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">mult</span><span class="o">*</span><span class="n">tensor</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">voigt</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

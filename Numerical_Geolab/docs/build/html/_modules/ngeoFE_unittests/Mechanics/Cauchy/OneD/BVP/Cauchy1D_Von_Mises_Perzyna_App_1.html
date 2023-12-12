@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1 &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../../_static/jquery.js"></script>
+    <script src="../../../../../../_static/underscore.js"></script>
+    <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 05, 2018</span>
+
+<span class="sd">@author: Alexandros Stathas</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">UserFEproblem</span><span class="p">,</span> <span class="n">General_FEproblem_properties</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEformulation</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.materials</span> <span class="kn">import</span> <span class="n">UserMaterial</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">ffc.quadrature.deprecation</span> <span class="kn">import</span> <span class="n">QuadratureRepresentationDeprecationWarning</span>
+<span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+<span class="kn">from</span> <span class="nn">sympy.sets.tests.test_sets</span> <span class="kn">import</span> <span class="n">test_union_boundary_of_joining_sets</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">plotting_params</span> 
+
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">QuadratureRepresentationDeprecationWarning</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Cauchy1DFEformulation"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEformulation">[docs]</a><span class="k">class</span> <span class="nc">Cauchy1DFEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Defines a user FE formulation</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Cauchy1DFEformulation.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEformulation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Number of stress/deformation components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">2</span>
+        <span class="c1"># Number of Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">1</span></div>
+    
+<div class="viewcode-block" id="Cauchy1DFEformulation.generalized_epsilon"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEformulation.generalized_epsilon">[docs]</a>    <span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s generalized deformation vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gde</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#gamma_11</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#gamma_21</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Cauchy1DFEformulation.create_element"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEformulation.create_element">[docs]</a>    <span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cell</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set desired element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Defines a Lagrangian FE of degree 1 for the displacements</span>
+        <span class="n">element_disp</span><span class="o">=</span><span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span><span class="n">cell</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">element_disp</span>  </div></div>
+
+<div class="viewcode-block" id="left"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.left">[docs]</a><span class="k">class</span> <span class="nc">left</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="left.inside"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.left.inside">[docs]</a>    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>  <span class="ow">and</span> <span class="n">on_boundary</span></div></div>
+
+<div class="viewcode-block" id="right"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.right">[docs]</a><span class="k">class</span> <span class="nc">right</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="right.inside"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.right.inside">[docs]</a>    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">on_boundary</span></div></div>
+
+<div class="viewcode-block" id="Gauss_point_Querry"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Gauss_point_Querry">[docs]</a><span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="Gauss_point_Querry.inside"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Gauss_point_Querry.inside">[docs]</a>    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="mf">80.</span></div></div>
+           
+<div class="viewcode-block" id="Cauchy1DFEproblem"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem">[docs]</a><span class="k">class</span> <span class="nc">Cauchy1DFEproblem</span><span class="p">(</span><span class="n">UserFEproblem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a user FE problem for given FE formulation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Cauchy1DFEproblem.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">FEformulation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example of 1D plane strain problem, Cauchy continuum&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">)</span>  </div>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.set_general_properties"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.set_general_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set here all the parameters of the problem, except material properties </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">=</span><span class="n">General_FEproblem_properties</span><span class="p">()</span>
+        <span class="c1"># Number of state variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span><span class="o">=</span><span class="mi">38</span></div>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.create_mesh"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.create_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set mesh and subdomains </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generate mesh</span>
+        <span class="c1">#mesh=IntervalMesh(self.genprops.ny,-self.genprops.h/2.,self.genprops.h/2.)</span>
+        <span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span>
+        <span class="n">ny</span><span class="o">=</span><span class="mi">80</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">IntervalMesh</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span><span class="o">-</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="c1">#&quot;crossed&quot;)</span>
+        <span class="c1">#print(mesh.topology().dim())</span>
+        <span class="n">cd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">fd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">fd</span></div>
+
+<div class="viewcode-block" id="Cauchy1DFEproblem.create_subdomains"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.create_subdomains">[docs]</a>    <span class="k">def</span> <span class="nf">create_subdomains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create subdomains by marking regions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subdomains</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">subdomains</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
+        <span class="k">return</span> <span class="n">subdomains</span></div>
+
+
+<div class="viewcode-block" id="Cauchy1DFEproblem.create_Gauss_point_querry_domain"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.create_Gauss_point_querry_domain">[docs]</a>    <span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create subdomains by marking regions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
+        <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="n">Gauss_point_Querry</span><span class="p">()</span>
+        <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GaussDomain</span></div>
+
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.mark_boundaries"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.mark_boundaries">[docs]</a>    <span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">boundaries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mark left and right boundary points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">boundaries</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">left0</span><span class="o">=</span><span class="n">left</span><span class="p">()</span>
+        <span class="n">left0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">right0</span><span class="o">=</span><span class="n">right</span><span class="p">()</span>
+        <span class="n">right0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span></div>
+        
+<div class="viewcode-block" id="Cauchy1DFEproblem.set_bcs"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.set_bcs">[docs]</a>    <span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set boundary conditions for the user problem / could be replaced by external mesher, e.g. Abaqus, Gmsh...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bcs</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mf">0.1</span><span class="p">]],</span>
+                <span class="c1"># [1,[0, [0],0]],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bcs</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mf">0.1</span><span class="p">]],</span>
+                <span class="c1"># [1,[0, [0],0]],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mf">0.0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mf">0.0</span><span class="p">]]</span>
+                <span class="p">]</span>
+        <span class="k">return</span> <span class="n">bcs</span>    </div>
+
+<div class="viewcode-block" id="Cauchy1DFEproblem.history_output"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.history_output">[docs]</a>    <span class="k">def</span> <span class="nf">history_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to get output of residual at selected node </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hist</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+              <span class="p">]</span>
+        <span class="k">return</span> <span class="n">hist</span></div>
+
+<div class="viewcode-block" id="Cauchy1DFEproblem.history_svars_output"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.history_svars_output">[docs]</a>    <span class="k">def</span> <span class="nf">history_svars_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to get output of svars at selected Gauss point </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hist_svars</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">21</span><span class="p">]]]]</span> <span class="c1">#Calculate elastoviscoplastic shear strain increment</span>
+        <span class="k">return</span> <span class="n">hist_svars</span>    </div>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.set_materials"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.set_materials">[docs]</a>    <span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create material objects and set material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mats</span><span class="o">=</span><span class="p">[]</span>
+        <span class="c1"># load material #1</span>
+        
+        <span class="n">env_lib</span><span class="o">=</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">env_lib</span>        <span class="c1">#umat_lib=&#39;./libplast_Cauchy3D-DP.so&#39;</span>
+        <span class="n">umat_lib_path</span><span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">umat_lib_path</span>
+        <span class="n">umat_lib</span> <span class="o">=</span> <span class="n">umat_lib_path</span><span class="o">+</span><span class="s1">&#39;/CAUCHY3D-DP/libplast_Cauchy3D-DP.so&#39;</span>
+        <span class="n">umat_id</span><span class="o">=</span><span class="mi">1</span>       <span class="c1"># if many materials exist in the same library</span>
+        <span class="n">mat</span><span class="o">=</span><span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span><span class="n">umat_lib</span><span class="p">,</span><span class="n">umat_id</span><span class="p">)</span>
+        <span class="n">mat</span><span class="o">.</span><span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_material_1_properties</span><span class="p">(</span><span class="mf">2000.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">100.</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mats</span></div>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.set_material_1_properties"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.set_material_1_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_material_1_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">EE</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">cc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GG</span><span class="o">=</span><span class="n">EE</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">nu</span><span class="p">))</span>
+        <span class="n">KK</span><span class="o">=</span><span class="n">EE</span><span class="o">*</span><span class="n">GG</span><span class="o">/</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="n">GG</span><span class="o">-</span><span class="n">EE</span><span class="p">))</span>
+        <span class="n">props</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">19</span><span class="p">)</span>
+        <span class="n">props</span><span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">KK</span>
+        <span class="n">props</span><span class="p">[</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">GG</span>
+        <span class="n">props</span><span class="p">[</span><span class="mi">12</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">cc</span>
+        <span class="n">props</span><span class="p">[</span><span class="mi">15</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">props</span><span class="p">[</span><span class="mi">19</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">props</span></div>
+    
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.give_me_solver_params"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.give_me_solver_params">[docs]</a>    <span class="k">def</span> <span class="nf">give_me_solver_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span> <span class="o">=</span> <span class="n">scale_t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">incmodulo</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="mf">1.</span><span class="o">*</span><span class="n">scale_t</span>
+            <span class="n">ninc</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="p">)</span>   
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nincmax</span><span class="o">=</span><span class="mi">1000000</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">convergence_tol</span><span class="o">=</span><span class="mi">10</span><span class="o">**-</span><span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">removezerolines</span><span class="o">=</span><span class="kc">False</span></div>
+            
+<div class="viewcode-block" id="Cauchy1DFEproblem.run_analysis_procedure"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.run_analysis_procedure">[docs]</a>    <span class="k">def</span> <span class="nf">run_analysis_procedure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">reference_data_path</span><span class="p">):</span>
+        <span class="n">saveto</span><span class="o">=</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;./Cauchy_1D_Von_Mises_test_step_0.xdmf&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">symbolic_bcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># print(cls.my_FEproblem.feobj.symbolic_bcs)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;initial&quot;</span><span class="p">)</span>
+        <span class="n">converged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">scale_t_program</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;shearing1&quot;</span><span class="p">)</span>
+    
+        <span class="n">nsteps</span><span class="o">=</span><span class="mi">5</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span><span class="p">):</span>
+<span class="c1">#         print(&#39;step&#39;,i)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">scale_t</span> <span class="o">=</span> <span class="n">scale_t_program</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nincmax</span><span class="o">=</span><span class="mi">1000000</span><span class="c1">#1000000       </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">scale_t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">+</span><span class="mf">1.</span><span class="o">*</span><span class="n">scale_t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">symbolic_bcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">(),</span> <span class="n">key</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">initBCs</span><span class="p">()</span>
+<span class="c1">#         print(&#39;tmax&#39;, my_FEproblem.slv.tmax)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;Cauchy_1D_Von_Mises_test_step_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">saveto</span><span class="o">=</span> <span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;./Cauchy_1D_Von_Mises_test_step_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;.xdmf&quot;</span>
+            <span class="n">converged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">converged</span></div>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.history_unpack"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.history_unpack">[docs]</a>    <span class="k">def</span> <span class="nf">history_unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">list1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
+                <span class="k">continue</span>
+        
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">])))))</span> </div>
+
+<div class="viewcode-block" id="Cauchy1DFEproblem.svars_history_unpack"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.svars_history_unpack">[docs]</a>    <span class="k">def</span> <span class="nf">svars_history_unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">list1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="c1"># self.array_gp_2_svasr_comp=elem[2].reshape((1,2))</span>
+
+                <span class="c1"># self.array_disp=elem[2].reshape((1,2))</span>
+                <span class="k">continue</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))))</span></div>
+            <span class="c1"># print(self.array_dtime)</span>
+            <span class="c1"># print(self.array_gp_svars_comp.copy())</span>
+            <span class="c1"># print(self.feobj.svars_history_indices)</span>
+            <span class="c1"># self.array_disp=np.concatenate((self.array_gp_svasr_comp.copy(),elem[2].reshape((1,2)))) </span>
+
+        
+        <span class="c1"># print(self.array_force)</span>
+        <span class="c1"># return self.array_time, self.array_force, self.array_disp</span>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.extract_force_disp"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.extract_force_disp">[docs]</a>    <span class="k">def</span> <span class="nf">extract_force_disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">analysis_history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_history</span>
+        <span class="c1"># print(analysis_history)</span>
+        <span class="c1"># analysis_history_flat=[elem1 for elem in analysis_history for elem1 in elem]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_unpack</span><span class="p">(</span><span class="n">analysis_history</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+        
+<div class="viewcode-block" id="Cauchy1DFEproblem.extract_elastoplastic_matrix"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.extract_elastoplastic_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">extract_elastoplastic_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_dforce</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_ddisp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># print(self.array_dforce)</span>
+        <span class="c1"># print(self.array_ddisp)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EH</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dforce</span><span class="p">[:],</span><span class="bp">self</span><span class="o">.</span><span class="n">array_ddisp</span><span class="p">[:])</span></div>
+    
+<div class="viewcode-block" id="Cauchy1DFEproblem.extract_svars_gauss_point"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1.Cauchy1DFEproblem.extract_svars_gauss_point">[docs]</a>    <span class="k">def</span> <span class="nf">extract_svars_gauss_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">analysis_svars_history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_svars_history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_history_unpack</span><span class="p">(</span><span class="n">analysis_svars_history</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
+<span class="c1"># if __name__ == &#39;__main__&#39;:</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cauchy.OneD.BVP.Cauchy1D_Von_Mises_Perzyna_App_1</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

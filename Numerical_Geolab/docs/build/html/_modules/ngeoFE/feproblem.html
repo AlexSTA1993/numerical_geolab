@@ -1,0 +1,904 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE.feproblem &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.feproblem</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE.feproblem</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Aug 6, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">dolfin</span> <span class="k">as</span> <span class="nn">d</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="n">mpi_comm_world</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">MPI</span><span class="o">.</span><span class="n">comm_world</span>
+<span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEobject</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.solvers</span> <span class="kn">import</span> <span class="n">Backward_Euler_Solver</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">gc</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="General_FEproblem_properties"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.General_FEproblem_properties">[docs]</a><span class="k">class</span> <span class="nc">General_FEproblem_properties</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines general properties of the FE problem</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="General_FEproblem_properties.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.General_FEproblem_properties.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="UserFEproblem"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem">[docs]</a><span class="k">class</span> <span class="nc">UserFEproblem</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a user FE problem</span>
+
+<span class="sd">    :param feform: finite element variational formulation</span>
+<span class="sd">    :type feform: FEformulation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="UserFEproblem.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">feform</span><span class="p">):</span>
+        <span class="c1"># Get attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_general_properties</span><span class="p">()</span>
+        <span class="c1"># Creates MPI environment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">=</span><span class="n">mpi_comm_world</span>
+        <span class="c1">#print(&quot;Hello from process&quot;, self.comm.Get_rank())</span>
+        <span class="c1"># Generate mesh and set topology </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subdomains</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_mesh</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">()</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span>
+        <span class="c1"># Get regions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subdomains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_subdomains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">)</span>
+        <span class="c1"># Create material objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mats</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_materials</span><span class="p">()</span>
+        <span class="c1"># Dictionary for BC types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BCtype</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;DC&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="c1">#Dirichlet: increment proportionally to step time</span>
+            <span class="s2">&quot;DC-C&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="c1">#Dirichlet: set at the beginning and keep constant</span>
+            <span class="s2">&quot;NM&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">#Neumann: increment proportionally to step time</span>
+            <span class="s2">&quot;NM-C&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="c1">#Neumann: set at the beginning and keep constant</span>
+            <span class="s2">&quot;RB&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">#Robin</span>
+            <span class="s2">&quot;NM-n&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="c1">#Neumann: normal to the boundary traction (pressure); increment proportionally to step time</span>
+            <span class="s2">&quot;NM-n-C&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="c1">#Neumann: normal to the boundary traction (pressure); set at the biginning and keep constant</span>
+            <span class="p">}</span>
+        <span class="c1"># Set BCs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">()</span>
+        <span class="c1"># Set FE formulation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">=</span><span class="n">feform</span> 
+        <span class="c1"># Set indices for history output from residual</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">histories</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">history_output</span><span class="p">()</span>
+        <span class="c1">#Set indices for state variables output at the Gauss points #ALEX 19/05/2022</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gausspointsquerry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+               
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_histories</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">history_svars_output</span><span class="p">()</span>
+        <span class="c1"># print(self.svars_histories)</span>
+        <span class="c1"># Creates FE object</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># If periodic boundary conditions are defined</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">=</span><span class="n">UserFEobject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subdomains</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_previous</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>   
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">=</span><span class="n">UserFEobject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subdomains</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span><span class="n">symbolic_histories</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">histories</span><span class="p">,</span><span class="n">Gausspointsquerry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Gausspointsquerry</span><span class="p">,</span><span class="n">symbolic_svars_histories</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">svars_histories</span><span class="p">,</span><span class="n">large_displacements</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span><span class="p">)</span>
+        <span class="c1"># Initializes state variables vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_initial_conditions</span><span class="p">()</span>
+        <span class="c1"># Creates Incremental Solver object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">=</span><span class="n">Backward_Euler_Solver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mats</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UserFEproblem.set_general_properties"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.set_general_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set here all the parameters of the problem, except material properties </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.set_materials"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.set_materials">[docs]</a>    <span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create material objects and set material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.create_mesh"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.create_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set mesh</span>
+<span class="sd">        :return mesh: problem&#39;s mesh </span>
+<span class="sd">        :return subdomains: problem&#39;s regions of interest. E.g. Different materials</span>
+<span class="sd">        :return self.boundaries: Define problem boundaries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.set_bcs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.set_bcs">[docs]</a>    <span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set boundary conditions for the user problem / could be replaced by external mesher, e.g. Abaqus, Gmsh...</span>
+<span class="sd">        Form of the symbolic bcs is a list:</span>
+<span class="sd">        bcs = [</span>
+<span class="sd">                | [region_id,[0,[dof],value]]] for Dirichlet incremental</span>
+<span class="sd">                | [region_id,[1,ti_vector] for Neumann incremental</span>
+<span class="sd">                | [region_id,[2,[dof],value]]] for Dirichlet instantaneous</span>
+<span class="sd">                | [region_id,[3,ti_vector] for Neumann instantaneous</span>
+<span class="sd">                | [region_id,[5,ti_vector] for Robin incremental</span>
+<span class="sd">                | [region_id,[6,ti_vector] for point load (Neuman) incremental</span>
+<span class="sd">                | [region_id,[7,ti_vector] for point load (Neuman) instantaneous</span>
+<span class="sd">                ]</span>
+<span class="sd">        :return bcs</span>
+<span class="sd">        :type nested list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.set_periodic_bcs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.set_periodic_bcs">[docs]</a>    <span class="k">def</span> <span class="nf">set_periodic_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set periodic boundary conditions for the user problem</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.create_subdomains"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.create_subdomains">[docs]</a>    <span class="k">def</span> <span class="nf">create_subdomains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create subdomains by marking regions. If no subdomains, set subdomain id=0 everywhere. </span>
+<span class="sd">        Subdomains define regions with different properties in the problem</span>
+
+<span class="sd">        :param mesh: Domain dolfin mesh</span>
+<span class="sd">        :type mesh: Mesh</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subdomains</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">subdomains</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
+        <span class="k">return</span> <span class="n">subdomains</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.mark_boundaries"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.mark_boundaries">[docs]</a>    <span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">boundaries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mark boundary domains if not marked by mesh file</span>
+
+<span class="sd">        :param boundaries: dolfin MeshFunction of mesh order ndim-1 marked with boundary ids </span>
+<span class="sd">        :type boundaries: MeshFunction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.set_initial_conditions"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.set_initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize state variables vector</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#tmp=np.zeros(self.genprops.p_nsvars)</span>
+        <span class="c1">#tmp[1-1]=self.matprops[0,20-1];tmp[5-1]=self.matprops[0,20-1];tmp[9-1]=self.matprops[0,20-1]</span>
+        <span class="c1">#self.feobj.svars2.interpolate(Constant(tmp))</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.history_output"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.history_output">[docs]</a>    <span class="k">def</span> <span class="nf">history_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to get output of residual at selected node </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="UserFEproblem.create_Gauss_point_querry_domain"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.create_Gauss_point_querry_domain">[docs]</a>    <span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates separate Gauss querry domain for extraction of appropriate svars degrees of freedom from FunctionSpace Vsvars</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="UserFEproblem.history_svars_output"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.history_svars_output">[docs]</a>    <span class="k">def</span> <span class="nf">history_svars_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to get output of svars at selected Gauss point </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="UserFEproblem.solve"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solves the FE problem</span>
+
+<span class="sd">        The final solution is contained in feobj</span>
+
+<span class="sd">        :param file: output hdmf filename for saving results (default: &quot;&quot; - no output)</span>
+<span class="sd">        :param silent: messages display</span>
+<span class="sd">        :param summary: display incrementation summary </span>
+<span class="sd">        :type file: string</span>
+<span class="sd">        :type silent: boolean</span>
+<span class="sd">        :type summary: boolean</span>
+<span class="sd">        :return: True if converged</span>
+<span class="sd">        :rtype: boolean </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="n">silent</span><span class="p">,</span><span class="n">summary</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.plot_me"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.plot_me">[docs]</a>    <span class="k">def</span> <span class="nf">plot_me</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to plot selected quantities </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+<div class="viewcode-block" id="UserFEproblem.large_displacements"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.large_displacements">[docs]</a>    <span class="k">def</span> <span class="nf">large_displacements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets large displacements flag</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UserFEproblem.class_update_mesh"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEproblem.class_update_mesh">[docs]</a>    <span class="nd">@classmethod</span> 
+    <span class="k">def</span> <span class="nf">class_update_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">displacement</span><span class="p">,</span><span class="n">minus</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that utilizes the ALE module of dolfin to update the mesh after each iteration. </span>
+<span class="sd">        If the increment in total is not converged then it resets to the previously converged increment.</span>
+<span class="sd">        :param mesh: dolfin mesh.e    </span>
+<span class="sd">        :type mesh: Mesh.</span>
+<span class="sd">        :param displacement: displacement calculated at the specific iteration of the increment/ total displacement of the unconverged increment.</span>
+<span class="sd">        :type displacement: dolfin Function.</span>
+<span class="sd">        :param minus: If true resets position of the mesh to previously converged increment.</span>
+<span class="sd">        :type minus: Logical.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># For VectorFunctionSpace: works when mesh geometrical dimension (x[:]) is equal to the topological (v[:])</span>
+        <span class="c1"># V = VectorFunctionSpace(mesh,&quot;CG&quot;, 1)</span>
+        <span class="c1"># disp1= Function(V)</span>
+        <span class="c1"># v = displacement</span>
+
+        <span class="c1"># For MixedFunctionSpace: Works for works for 1D problems with mixed elements. </span>
+        <span class="c1"># Displacements are at the first VectorFunctionSpace</span>
+        <span class="c1"># For an Interval domain: Only the displacement parallel to the interval is considered </span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">disp1</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+        <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">deepcopy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">minus</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span> <span class="c1">#when the solver does not converge the applied displacement needs to be removed before the new half increment is applied see the solver</span>
+            <span class="c1"># v.vector().set_local(v.vector().get_local()) #Suitable for the VectorFunctionSpace definition</span>
+            <span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span><span class="c1">#/1000.) #Suitable for the MixedFunctionSpace definition. When scaling is applied this needs to be taken into account</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># v.vector().set_local(-1.*v.vector().get_local()) #Same as above </span>
+            <span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span><span class="c1">#/1000.)</span>
+        <span class="c1"># assign(disp1,v)</span>
+        <span class="n">assign</span><span class="p">(</span><span class="n">disp1</span><span class="p">,</span><span class="n">v1</span><span class="p">)</span>
+        <span class="c1"># new_mesh = Mesh(mesh)</span>
+        <span class="c1"># boundaries = MeshFunction(&quot;size_t&quot;, new_mesh, 0)</span>
+        <span class="c1"># boundaries.set_values(self.boundaries.array())</span>
+        
+        <span class="n">ALE</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">disp1</span><span class="p">)</span>
+        
+        <span class="c1"># write coordinates of the moved mesh to a new file </span>
+        <span class="c1"># from ngeoFE_unittests import ngeo_parameters</span>
+        <span class="c1"># import os</span>
+        <span class="c1"># # print(os.path.abspath(ngeo_parameters.reference_data_path+&quot;./meshes_ALE/Cauchy_2D_Von_MisesElastic_ALE_test_mesh_&quot;+str(i)+&quot;.pvd&quot;))</span>
+        <span class="c1"># outfile = File(ngeo_parameters.reference_data_path+&quot;./meshes_ALE/Cosserat_1D_Elastic_ALE_test_mesh_&quot;+str(next(counter))+&quot;.pvd&quot;)</span>
+        <span class="c1"># outfile &lt;&lt; mesh</span>
+        <span class="k">return</span></div></div>
+<div class="viewcode-block" id="BoC"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.BoC">[docs]</a><span class="k">class</span> <span class="nc">BoC</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a Boundary Condition</span>
+
+<span class="sd">    :param symbolic: symbolic, user input form of BCs</span>
+<span class="sd">    :param BC: Boundary Condition </span>
+<span class="sd">    :type symbolic: List</span>
+<span class="sd">    :type BC: list of dof&#39;s for Neumann and Robin or dolfin DirichletBC</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BoC.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.BoC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">symbolic</span><span class="p">,</span><span class="n">BC</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">symbolic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">symbolic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dvalue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region_id</span><span class="o">=</span><span class="n">symbolic</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dof</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">symbolic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1">#self.symbolic=symbolic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BC</span><span class="o">=</span><span class="n">BC</span></div></div>
+
+<div class="viewcode-block" id="UserFEobject"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject">[docs]</a><span class="k">class</span> <span class="nc">UserFEobject</span><span class="p">(</span><span class="n">FEobject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a user FE formulation</span>
+
+<span class="sd">    :param mesh: dolfin mesh</span>
+<span class="sd">    :type mesh: Mesh</span>
+<span class="sd">    :param feform: finite element variational formulation</span>
+<span class="sd">    :type feform: FEformulation</span>
+<span class="sd">    :param subdomains: list of dolfin subdomains</span>
+<span class="sd">    :type subdomains: SubDomain</span>
+<span class="sd">    :param boundaries: dolfin MeshFunction of mesh order ndim-1 marked with boundary ids </span>
+<span class="sd">    :type boundaries: MeshFunction</span>
+<span class="sd">    :param generalprops: general properties</span>
+<span class="sd">    :type generalprops: General_FEproblem_properties    </span>
+<span class="sd">    :param symbolic: symbolic, user input form of BCs </span>
+<span class="sd">    :type symbolic: list</span>
+<span class="sd">    :param comm: parallel communicator</span>
+<span class="sd">    :type comm: d.MPI.comm_world</span>
+<span class="sd">    :param pbc: periodic boundary conditions for supermaterial</span>
+<span class="sd">    :type pbc: SuperFEMaterialPeriodicBoundary</span>
+<span class="sd">    :param keep_previous: Indicates whether to keep previous solution or not</span>
+<span class="sd">    :type keep_previous: Logical</span>
+<span class="sd">    :type symbolic_histories: set of dofs whose values need to be saved</span>
+<span class="sd">    :param symbolic_histories: list of values</span>
+<span class="sd">    :type large_displacements: Indicates that large displacements are calculated with the ALE method</span>
+<span class="sd">    :param large_displacements: Logical</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="UserFEobject.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">,</span><span class="n">feform</span><span class="p">,</span><span class="n">subdomains</span><span class="p">,</span><span class="n">boundaries</span><span class="p">,</span><span class="n">generalprops</span><span class="p">,</span><span class="n">symbolic_bcs</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">pbc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">keep_previous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">symbolic_histories</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">Gausspointsquerry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">symbolic_svars_histories</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">large_displacements</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;put your description&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="o">=</span><span class="n">pbc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="o">=</span><span class="n">boundaries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DCbcs0</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">DCbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="o">=</span><span class="p">[];</span>
+<span class="c1">#         self.initial=False ####9/9/2019 Alex put it</span>
+
+        <span class="k">if</span> <span class="n">symbolic_bcs</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">symbolic_bcs</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="o">=</span><span class="kc">None</span>
+        <span class="c1">#set general properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="o">=</span><span class="n">generalprops</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">feform</span><span class="p">,</span> <span class="n">generalprops</span><span class="o">.</span><span class="n">p_nsvars</span><span class="p">,</span> <span class="n">subdomains</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="n">pbc</span><span class="p">,</span> <span class="n">keep_previous</span><span class="p">)</span>
+        <span class="c1">#Set history output dofs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="o">=</span><span class="n">symbolic_histories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_history_output_indices</span><span class="p">()</span>
+        <span class="c1">#Set state variables history output dofs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gausspointsquerry</span><span class="o">=</span><span class="n">Gausspointsquerry</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_svars_history</span><span class="o">=</span><span class="n">symbolic_svars_histories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_svars_history_output_indices</span><span class="p">()</span>
+<span class="c1">#         #Initialize Boundary Conditions</span>
+<span class="c1">#         self.initBCs()</span>
+<span class="c1">#         #Initialize Jacobian and Residual</span>
+<span class="c1">#         self.init_Jac_res()</span>
+        <span class="k">if</span> <span class="n">large_displacements</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span><span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">large_displacements</span><span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="UserFEobject.update_mesh"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.update_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">update_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">displacement</span><span class="p">,</span><span class="n">minus</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that utilizes the ALE module of dolfin to update the mesh after each iteration. </span>
+<span class="sd">        If the increment in total is not converged then it resets to the previously converged increment.</span>
+<span class="sd">        :param mesh: dolfin mesh.e    </span>
+<span class="sd">        :type mesh: Mesh.</span>
+<span class="sd">        :param displacement: displacement calculated at the specific iteration of the increment/ total displacement of the unconverged increment.</span>
+<span class="sd">        :type displacement: dolfin Function.</span>
+<span class="sd">        :param minus: If true resets position of the mesh to previously converged increment.</span>
+<span class="sd">        :type minus: Logical.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># For VectorFunctionSpace: works when mesh geometrical dimension (x[:]) is equal to the topological (v[:])</span>
+        <span class="c1"># V = VectorFunctionSpace(mesh,&quot;CG&quot;, 1)</span>
+        <span class="c1"># disp1= Function(V)</span>
+        <span class="c1"># v = displacement</span>
+
+        <span class="c1"># For MixedFunctionSpace: Works for works for 1D problems with mixed elements. </span>
+        <span class="c1"># Displacements are at the first VectorFunctionSpace</span>
+        <span class="c1"># For an Interval domain: Only the displacement parallel to the interval is considered </span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">disp1</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+        <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">deepcopy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">minus</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span> <span class="c1">#when the solver does not converge the applied displacement needs to be removed before the new half increment is applied see the solver</span>
+            <span class="c1"># v.vector().set_local(v.vector().get_local()) #Suitable for the VectorFunctionSpace definition</span>
+            <span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span><span class="c1">#/1000.) #Suitable for the MixedFunctionSpace definition. When scaling is applied this needs to be taken into account</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># v.vector().set_local(-1.*v.vector().get_local()) #Same as above </span>
+            <span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">v1</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span><span class="c1">#/1000.)</span>
+        <span class="c1"># assign(disp1,v)</span>
+        <span class="n">assign</span><span class="p">(</span><span class="n">disp1</span><span class="p">,</span><span class="n">v1</span><span class="p">)</span>
+        <span class="c1"># new_mesh = Mesh(mesh)</span>
+        <span class="c1"># boundaries = MeshFunction(&quot;size_t&quot;, new_mesh, 0)</span>
+        <span class="c1"># boundaries.set_values(self.boundaries.array())</span>
+        
+        <span class="n">ALE</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">disp1</span><span class="p">)</span>
+        
+        <span class="c1"># write coordinates of the moved mesh to a new file </span>
+        <span class="c1"># from ngeoFE_unittests import ngeo_parameters</span>
+        <span class="c1"># import os</span>
+        <span class="c1"># # print(os.path.abspath(ngeo_parameters.reference_data_path+&quot;./meshes_ALE/Cauchy_2D_Von_MisesElastic_ALE_test_mesh_&quot;+str(i)+&quot;.pvd&quot;))</span>
+        <span class="c1"># outfile = File(ngeo_parameters.reference_data_path+&quot;./meshes_ALE/Cosserat_1D_Elastic_ALE_test_mesh_&quot;+str(next(counter))+&quot;.pvd&quot;)</span>
+        <span class="c1"># outfile &lt;&lt; mesh</span>
+        <span class="k">return</span></div>
+
+
+<span class="c1">#</span>
+<span class="c1">#     def update_mesh(self, mesh, displacement,minus=False):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Function that utilizes the ALE module of dolfin to update the mesh after each iteration. </span>
+<span class="c1">#         If the increment in total is not converged then it resets to the previously converged increment.</span>
+<span class="c1">#         :param mesh: dolfin mesh.e    </span>
+<span class="c1">#         :type mesh: Mesh.</span>
+<span class="c1">#         :param displacement: displacement calculated at the specific iteration of the increment/ total displacement of the unconverged increment.</span>
+<span class="c1">#         :type displacement: dolfin Function.</span>
+<span class="c1">#         :param minus: If true resets position of the mesh to previously converged increment.</span>
+<span class="c1">#         :type minus: Logical.</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         V = FunctionSpace(mesh,&quot;CG&quot;, 1)</span>
+<span class="c1">#         disp1=Function(V)</span>
+<span class="c1">#         v1,v2 = displacement.sub(0).split(deepcopy=False)</span>
+<span class="c1">#</span>
+<span class="c1">#         if minus == False:</span>
+<span class="c1">#             v1.vector().set_local(v1.vector().get_local()/1000.)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             v1.vector().set_local(-1.*v1.vector().get_local()/1000.)</span>
+<span class="c1">#         assign(disp1,v1)</span>
+<span class="c1"># #         disp1 = project(v1,V)</span>
+<span class="c1"># #         print(displacement.vector().get_local())</span>
+<span class="c1"># #         new_boundaries = MeshFunction(&quot;size_t&quot;, nmesh, 2)</span>
+<span class="c1"># #         new_boundaries.set_values(boundaries.array())</span>
+<span class="c1">#         ALE.move(mesh, disp1)</span>
+<span class="c1"># #         del V</span>
+<span class="c1">#         del disp1</span>
+<span class="c1"># #         self.boundaries = MeshFunction(&#39;size_t&#39;,mesh,mesh.topology().dim()-1)</span>
+<span class="c1"># #         self.boundaries.set_values(self.boundaries.array())</span>
+<span class="c1">#</span>
+<span class="c1"># #         print(mesh.coordinates()[0],mesh.coordinates()[-1])</span>
+<span class="c1"># #         print(self.boundaries.array())</span>
+<span class="c1">#         del v1</span>
+<span class="c1">#         del v2</span>
+<span class="c1">#</span>
+<span class="c1"># #         gc.collect()</span>
+<span class="c1">#         return mesh</span>
+
+<span class="c1">#     def revert_mesh(self, mesh, displacement):</span>
+<span class="c1">#         print(&quot;helloooo&quot;, mesh)</span>
+<span class="c1"># #         du1 , du2 = displacement.sub(0).split()</span>
+<span class="c1">#         zero_displacement = interpolate(Constant((0,0,0,0,0)),self.V)</span>
+<span class="c1">#         disp1 = Function(self.V)</span>
+<span class="c1">#         dofs0 = disp1.sub(0).sub(0).dofmap().dofs()</span>
+<span class="c1">#         dofs1 = disp1.sub(0).sub(1).dofmap().dofs()</span>
+<span class="c1">#         dofs2 = disp1.sub(1).dofmap().dofs()</span>
+<span class="c1">#         dofs3 = disp1.sub(2).dofmap().dofs()</span>
+<span class="c1">#         disp1.vector()[dofs0] = -1*displacement.vector()</span>
+<span class="c1">#         disp1.vector()[dofs1] = zero_displacement.vector()</span>
+<span class="c1">#         disp1.vector()[dofs2] = zero_displacement.vector()</span>
+<span class="c1">#         disp1.vector()[dofs3] = zero_displacement.vector()</span>
+<span class="c1"># #         assign(disp1.sub(0).sub(0), displacement.sub(0).sub(0))</span>
+<span class="c1"># #         assign(disp1.sub(0).sub(1), zero_displacement.sub(0).sub(1))</span>
+<span class="c1"># #         assign(disp1.sub(1), zero_displacement.sub(1))</span>
+<span class="c1"># #         assign(disp1.sub(2).sub(0), zero_displacement.sub(2).sub(0))</span>
+<span class="c1"># #         assign(disp1.sub(2).sub(1), zero_displacement.sub(2).sub(1))</span>
+<span class="c1"># #         new_mesh = Mesh(mesh)</span>
+<span class="c1"># #         new_boundaries = MeshFunction(&quot;size_t&quot;, new_mesh, 2)</span>
+<span class="c1"># #         new_boundaries.set_values(boundaries.array())</span>
+<span class="c1">#         ALE.move(mesh, disp1)</span>
+<span class="c1">#         return mesh    </span>
+
+<div class="viewcode-block" id="UserFEobject.init_Jac_res"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.init_Jac_res">[docs]</a>    <span class="k">def</span> <span class="nf">init_Jac_res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the Jacobian and the residual through their respective variational forms. </span>
+<span class="sd">        Change between transient or quasistatic problems suitable for first derivative in time.</span>
+<span class="sd">        ::* To do: add inertial variational formulation.</span>
+<span class="sd">        :ivar dotv_coeffs(): if empty then quasistatic case.</span>
+<span class="sd">        :var dt: time increment. </span>
+<span class="sd">        :type dt: dolfin Expression object.</span>
+<span class="sd">        :var Jac: Initialized Jacobian object.</span>
+<span class="sd">        :type Jac: numpy array of reals.</span>
+<span class="sd">        :var Res: Initialized Residual object.</span>
+<span class="sd">        :type Res: numpy array of reals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#Set variational forms</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dotv_coeffs</span><span class="p">()</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>           
+            <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="n">Expression</span><span class="p">(</span><span class="s2">&quot;dt&quot;</span><span class="p">,</span><span class="n">dt</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Jac</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setVarFormTransient</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Jac</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setVarForm</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__get_BC_point_or_facet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">region_id</span><span class="p">,</span><span class="n">sV</span><span class="p">,</span><span class="n">bc_value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Treats point, edge and with surface id BC&#39;s</span>
+<span class="sd">        :param region_id: A list of values. If len(region_id)=1 indicates</span>
+<span class="sd">             the appropriate boundary for the Dirichlet condition to be applied. Else if len(region_id)=2 then</span>
+<span class="sd">             A point generalized displacement will be applied.</span>
+<span class="sd">             region_id[0]= the boundary where the condition will be applied</span>
+<span class="sd">             region_id[1]= nested list of the position [x1,x2,x3] of the applied displacement  </span>
+<span class="sd">            The position is given as argument via dolphin syntax inside the DirichletBC dolfin function.</span>
+<span class="sd">            Alternatively region_id[1] can be given as a string in dolfin syntax.</span>
+<span class="sd">        :type region_id: nested list </span>
+<span class="sd">        :param bc_value: Indicated the value of the Boundary condition</span>
+<span class="sd">        :type bc_value: real</span>
+<span class="sd">        :param sV: </span>
+<span class="sd">        :type sV: dolfin FunctionSpace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">region_id</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">meta</span><span class="o">=</span><span class="n">region_id</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1">#            id0=region_id[0];  print(id0)</span>
+            <span class="n">point_load</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i_dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meta</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">meta</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span><span class="o">!=</span><span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                        <span class="n">point_load</span><span class="o">=</span><span class="n">point_load</span><span class="o">+</span><span class="s2">&quot;near(x[&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i_dim</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;],&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="n">i_dim</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;) &amp;&amp; &quot;</span>
+                <span class="n">point_load</span><span class="o">=</span><span class="n">point_load</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="n">point_load</span><span class="o">=</span><span class="n">meta</span>
+            <span class="c1"># print(&quot;hello&quot;,point_load)</span>
+            <span class="c1"># print(point_load)</span>
+            <span class="c1"># print(sV)</span>
+            <span class="c1"># print(bc_value)</span>
+            <span class="n">BC</span><span class="o">=</span><span class="n">DirichletBC</span><span class="p">(</span><span class="n">sV</span><span class="p">,</span> <span class="n">bc_value</span><span class="p">,</span> <span class="n">point_load</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pointwise&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># BC=DirichletBC(sV, bc_value, self.boundaries, region_id, method=&quot;geometric&quot;) #Change to work also for discontinuous elements</span>
+            <span class="n">BC</span><span class="o">=</span><span class="n">DirichletBC</span><span class="p">(</span><span class="n">sV</span><span class="p">,</span> <span class="n">bc_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">,</span> <span class="n">region_id</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;topological&quot;</span><span class="p">)</span> <span class="c1">#Change to work also for discontinuous elements</span>
+
+        <span class="k">return</span> <span class="n">BC</span>
+
+<div class="viewcode-block" id="UserFEobject.set_history_output_indices"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.set_history_output_indices">[docs]</a>    <span class="k">def</span> <span class="nf">set_history_output_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the ids of the nodes in the residual marked by the user for history output and saves them to FEobject</span>
+<span class="sd">        :var symbolic_history: List containing the region and dofs whose history output is needed.</span>
+<span class="sd">        :type symbolic_history: nested list.</span>
+<span class="sd">        :var sV: Function subspace of the degrees of freedom needed.</span>
+<span class="sd">        :type sV: dolfin FunctionSubspace object.</span>
+<span class="sd">        :var history_indices_ui:</span>
+<span class="sd">        :var history_indices_ti:</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="c1">#reset at each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hist_DCbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">hist_NMbcs</span><span class="o">=</span><span class="p">[];</span>
+        <span class="c1"># get dofmap</span>
+        <span class="n">dofmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">dofmap</span><span class="p">()</span>
+        <span class="c1">#get local to global dof map        </span>
+        <span class="n">lc_to_gl_dof</span><span class="o">=</span><span class="n">dofmap</span><span class="o">.</span><span class="n">dofs</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_indices_ui</span><span class="o">=</span><span class="p">[];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">=</span><span class="p">[];</span>  
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="p">)):</span>
+            <span class="c1"># print(self.symbolic_history[i])</span>
+            <span class="n">region_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">bc_dof</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">bc_value</span><span class="o">=</span><span class="mf">0.</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">num_sub_spaces</span><span class="p">()</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">;</span> <span class="n">bc_value</span><span class="o">=</span><span class="p">[</span><span class="n">bc_value</span><span class="p">]</span> 
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">BC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_BC_point_or_facet</span><span class="p">(</span><span class="n">region_id</span><span class="p">,</span><span class="n">sV</span><span class="p">,</span><span class="n">bc_value</span><span class="p">)</span>
+            <span class="n">local_dofs_values</span><span class="o">=</span><span class="n">BC</span><span class="o">.</span><span class="n">get_boundary_values</span><span class="p">()</span> <span class="c1">#returns in local....... perversity  </span>
+            <span class="c1"># print(local_dofs_values)</span>
+            <span class="c1"># print(local_dofs_values)</span>
+            <span class="c1"># print(self.symbolic_history[i])</span>
+            <span class="c1"># Set Dirichlet Boundary Conditions</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>                                  
+<span class="c1"># initial position of history_indices_ui=[]</span>
+                <span class="k">for</span> <span class="n">lc_dof</span> <span class="ow">in</span> <span class="n">local_dofs_values</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">lc_dof</span><span class="o">&lt;=</span><span class="nb">len</span><span class="p">(</span><span class="n">lc_to_gl_dof</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">history_indices_ui</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lc_dof</span><span class="p">)</span>
+            <span class="c1"># Set Neumann Boundary Conditions  </span>
+<span class="c1"># initial position of history_indices_ti=[]d           </span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_history</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">lc_dof</span> <span class="ow">in</span> <span class="n">local_dofs_values</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">lc_dof</span><span class="o">&lt;=</span><span class="nb">len</span><span class="p">(</span><span class="n">lc_to_gl_dof</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lc_dof</span><span class="p">)</span></div>
+        
+        <span class="c1"># print(&#39;heloo!!!dd&#39;)</span>
+        <span class="c1"># print(self.history_indices_ti, self.history_indices_ui)</span>
+
+
+<div class="viewcode-block" id="UserFEobject.set_svars_history_output_indices"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices">[docs]</a>    <span class="k">def</span> <span class="nf">set_svars_history_output_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the ids of the gauss_points in the state variables vector marked by the user for state variable history output and saves them to FEobject</span>
+<span class="sd">        :var symbolic_svars_history: List containing the region and dofs whose history output is needed.</span>
+<span class="sd">        :type symbolic_svars_history: nested list.</span>
+<span class="sd">        :var sV: Quadrature Function subspace of the degrees of freedom needed in the discontinuous Quadrature space.</span>
+<span class="sd">        :type sV: dolfin FunctionSubspace object.</span>
+<span class="sd">        :var svars_history_indices_ui:</span>
+<span class="sd">        :var svars_history_indices_ti:</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="c1"># __Ve = VectorElement(&quot;DG&quot;, self.cell, degree=0,dim=38,quad_scheme=&#39;default&#39;) #P_NSVARS components</span>
+        <span class="c1"># self.VsvarsDG = FunctionSpace(mesh,__Ve)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_svars_history</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="c1">#reset at each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_hist_DCbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">svars_hist_NMbcs</span><span class="o">=</span><span class="p">[];</span>
+        <span class="n">gdim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+        <span class="c1"># get dofmap of the Quadrature state variables FunctionSpace</span>
+        <span class="c1"># dofmap = self.Vsvars.dofmap()</span>
+        <span class="c1">#get local to global dof map        </span>
+        <span class="c1"># lc_to_gl_dof=dofmap.dofs()</span>
+        
+        <span class="c1"># print(lc_to_gl_dof)</span>
+        <span class="c1"># print(self.Vsvars.tabulate_dof_coordinates())</span>
+        <span class="c1"># print(self.Vsvars.dofmap().cell_dofs(0))</span>
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_history_indices</span><span class="o">=</span><span class="p">[];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_coordinates</span><span class="o">=</span><span class="p">[];</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_svars_history</span><span class="p">)):</span>
+            <span class="n">region_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_svars_history</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">bc_dof</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_svars_history</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">bc_value</span><span class="o">=</span><span class="mf">0.</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># print(&quot;here1&quot;)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span><span class="o">.</span><span class="n">num_sub_spaces</span><span class="p">()</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># print(&quot;here11&quot;, self.Vsvars.num_sub_spaces(),bc_dof[0])</span>
+                    <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># print(&quot;here12&quot;)</span>
+                    <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span><span class="p">;</span> <span class="n">bc_value</span><span class="o">=</span><span class="p">[</span><span class="n">bc_value</span><span class="p">]</span> 
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># print(&quot;here2&quot;)</span>
+                <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                
+            <span class="n">marked_cells</span> <span class="o">=</span> <span class="n">SubsetIterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gausspointsquerry</span><span class="p">,</span> <span class="n">region_id</span><span class="p">)</span> <span class="c1">#1</span>
+            <span class="c1"># marked_cells =  d.cpp.mesh.CellIterator(self.Gausspointsquerry, region_id) #managed to call Celliterator</span>
+
+            <span class="k">for</span> <span class="n">cell_no</span> <span class="ow">in</span> <span class="n">marked_cells</span><span class="p">:</span>
+                <span class="c1"># print(cell_no.dim())</span>
+                <span class="c1"># print(cell_no.index())</span>
+                <span class="c1"># print(sV.dofmap().dofs())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">svars_history_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sV</span><span class="o">.</span><span class="n">dofmap</span><span class="p">()</span><span class="o">.</span><span class="n">cell_dofs</span><span class="p">(</span><span class="n">cell_no</span><span class="o">.</span><span class="n">index</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1"># print(cell_no.index())</span>
+                <span class="n">cell</span><span class="o">=</span><span class="n">cells</span><span class="p">(</span><span class="n">cell_no</span><span class="p">)</span>
+                <span class="c1"># cell1=next(cell)</span>
+                <span class="k">for</span> <span class="n">cell1</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">:</span>
+                    <span class="c1"># print(cell1)</span>
+                <span class="c1"># self.svars_coordinates.append(sV.dofmap().tabulate_entity_dofs(1,cell_no.index()))#arg0: topological dimension==1 then cell number</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">svars_coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sV</span><span class="o">.</span><span class="n">element</span><span class="p">()</span><span class="o">.</span><span class="n">tabulate_dof_coordinates</span><span class="p">(</span><span class="n">cell1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+        <span class="c1"># print(self.svars_coordinates)</span>
+        <span class="c1"># print(self.svars_history_indices)</span>
+
+
+
+<div class="viewcode-block" id="UserFEobject.initBCs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.initBCs">[docs]</a>    <span class="k">def</span> <span class="nf">initBCs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize and set boundary conditions (marks regions and set BC&#39;s)</span>
+<span class="sd">        :ivar symbolic_bcs: bcs defined in set_bcs()</span>
+<span class="sd">        :ivar DCbcs0: list of Dirichlet boundary conditions given by Dolfin module</span>
+<span class="sd">        :ivar DCbcs: list of Dirichlet boundary conditions given by Dolfin module has to be reinitialized \</span>
+<span class="sd">            because SWIG module does not work properly</span>
+<span class="sd">        :ivar NMbcs: list of Neumann boundary conditions</span>
+<span class="sd">        :ivar RBbcs: list of Robin boundary conditions</span>
+<span class="sd">        :ivar NMnbcs:</span>
+
+<span class="sd">        For each symbolic boundary condition the routine looks at the form 0f the condition given:</span>
+<span class="sd">        [region_id,[type,*****]] ***** indicates the code depends on the type of condition to continue</span>
+
+<span class="sd">        if type 6,7</span>
+<span class="sd">        [region_id,[type,bc_indices,bc_value]]</span>
+<span class="sd">        else:</span>
+<span class="sd">        [region_id,[type,bc_dof,bc_value]]</span>
+<span class="sd">        :ivar bc_dof: refers to the local degrees of freedom as defined by the FiniteElement of Dolfin to be inserted in FunctionSpace</span>
+<span class="sd">            If Mixed Finite Elements are used then len(bc_dof) != 1 and a sublist needs to be filed indicating the local dof to be constrained.</span>
+<span class="sd">        :type bc_dof: list</span>
+<span class="sd">        pass the list of values to function __get_BC_point_or_facet(region_id,sV,bc_value)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="c1">#reset at each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DCbcs0</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">DCbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="o">=</span><span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="o">=</span><span class="p">[];</span>
+<span class="c1">#         # get dofmap</span>
+<span class="c1">#         dofmap = self.V.dofmap()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">6</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
+                <span class="n">region_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">bc_indices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">bc_value</span><span class="o">=</span><span class="mf">0.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="n">region_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">bc_dof</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">bc_value</span><span class="o">=</span><span class="mf">0.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">num_sub_spaces</span><span class="p">()</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">;</span> <span class="n">bc_value</span><span class="o">=</span><span class="p">[</span><span class="n">bc_value</span><span class="p">]</span> 
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sV</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">bc_dof</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">BC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_BC_point_or_facet</span><span class="p">(</span><span class="n">region_id</span><span class="p">,</span><span class="n">sV</span><span class="p">,</span><span class="n">bc_value</span><span class="p">)</span>
+
+            <span class="c1"># Set Dirichlet Boundary Conditions</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>                                  
+                <span class="n">nBC</span><span class="o">=</span><span class="n">BoC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">BC</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">DCbcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nBC</span><span class="p">)</span>
+                <span class="c1"># has to repeat because copy SWIG object does not function</span>
+                <span class="n">BC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_BC_point_or_facet</span><span class="p">(</span><span class="n">region_id</span><span class="p">,</span><span class="n">sV</span><span class="p">,</span><span class="n">bc_value</span><span class="p">)</span>
+                <span class="n">nBC</span><span class="o">=</span><span class="n">BoC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">BC</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">DCbcs0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nBC</span><span class="p">)</span>
+                <span class="c1">#print(&quot;heloo!&quot;,self.DCbcs0)</span>
+            <span class="c1"># Set Neumann Boundary Conditions     </span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                <span class="n">NM</span><span class="o">=</span><span class="n">BoC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">BC</span><span class="p">)</span>
+                <span class="n">NM</span><span class="o">.</span><span class="n">ti</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NM</span><span class="p">)</span>
+            <span class="c1"># Set Robin Boundary Conditions     </span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
+                <span class="n">RB</span><span class="o">=</span><span class="n">BoC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">BC</span><span class="p">)</span>
+                <span class="n">RB</span><span class="o">.</span><span class="n">ks</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RB</span><span class="p">)</span>
+            <span class="c1"># Set Neumann boundary normal (pressure) Boundary Conditions     </span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">6</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
+                <span class="n">NMn</span><span class="o">=</span><span class="n">BoC</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">indices</span><span class="o">=</span><span class="n">bc_indices</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">p</span><span class="o">=</span><span class="n">Expression</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NMn</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="UserFEobject.incrementBCs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.incrementBCs">[docs]</a>    <span class="k">def</span> <span class="nf">incrementBCs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t_current</span><span class="p">,</span><span class="n">t_old</span><span class="p">,</span><span class="n">t_init</span><span class="p">,</span><span class="n">t_final</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Increment boundary conditions values</span>
+
+<span class="sd">        :param t_current: time at current increment</span>
+<span class="sd">        :type t_current: double</span>
+<span class="sd">        :param t_old: time at previous increment</span>
+<span class="sd">        :type t_old: double</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="n">DCbcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">DCbcs</span><span class="p">;</span> <span class="n">NMbcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="p">;</span> <span class="n">RBbcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="p">;</span> <span class="n">NMnbcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="p">;</span>
+        <span class="n">dt</span><span class="o">=</span><span class="n">t_current</span><span class="o">-</span><span class="n">t_old</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbolic_bcs</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="c1"># Update Dirichlet BC&#39;s      </span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">DCbcs</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># Proportional Dirichlet</span>
+                <span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvalue</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">target_value</span><span class="o">/</span><span class="p">(</span><span class="n">t_final</span><span class="o">-</span><span class="n">t_init</span><span class="p">)</span>
+                <span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvalue</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="c1"># Instantaneous Dirichlet</span>
+                <span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvalue</span><span class="p">))</span>
+                <span class="n">DCbcs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dvalue</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="c1"># Update Neumann BC&#39;s</span>
+        <span class="k">for</span> <span class="n">NM</span> <span class="ow">in</span> <span class="n">NMbcs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">NM</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">NM</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">NM</span><span class="o">.</span><span class="n">target_value</span><span class="o">*</span><span class="p">(</span><span class="n">t_current</span><span class="o">-</span><span class="n">t_init</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">t_final</span><span class="o">-</span><span class="n">t_init</span><span class="p">)</span>
+                <span class="c1">#NM.value=NM.value+dt*NM.target_value</span>
+                <span class="c1">#NM.value=dt*NM.target_value</span>
+                <span class="c1">#print(&quot;dsadasdadasda&quot;,NM.value)</span>
+                <span class="n">NM</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">NM</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                <span class="n">NM</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">NM</span><span class="o">.</span><span class="n">target_value</span>
+                <span class="n">NM</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+                <span class="n">NM</span><span class="o">.</span><span class="n">dvalue</span><span class="o">=</span><span class="mf">0.</span>
+            <span class="n">NM</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">ti</span><span class="o">.</span><span class="n">vector</span><span class="p">())</span>
+        <span class="c1"># Update Robin BC&#39;s</span>
+        <span class="k">for</span> <span class="n">RB</span> <span class="ow">in</span> <span class="n">RBbcs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">RB</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
+                <span class="n">RB</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">dvalue</span><span class="p">))</span>
+                <span class="n">RB</span><span class="o">.</span><span class="n">dvalue</span><span class="o">=</span><span class="mf">0.</span>
+            <span class="n">RB</span><span class="o">.</span><span class="n">BC</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">ks</span><span class="o">.</span><span class="n">vector</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">NMn</span> <span class="ow">in</span> <span class="n">NMnbcs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">NMn</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">6</span><span class="p">:</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">NMn</span><span class="o">.</span><span class="n">target_value</span><span class="o">*</span><span class="p">(</span><span class="n">t_current</span><span class="o">-</span><span class="n">t_init</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">t_final</span><span class="o">-</span><span class="n">t_init</span><span class="p">)</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">NMn</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">elif</span> <span class="n">NMn</span><span class="o">.</span><span class="n">type</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">NMn</span><span class="o">.</span><span class="n">target_value</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">NMn</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">NMn</span><span class="o">.</span><span class="n">dvalue</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="UserFEobject.setfi"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.setfi">[docs]</a>    <span class="k">def</span> <span class="nf">setfi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s volumic forces and tractor increment</span>
+
+<span class="sd">        :param dt: time increment</span>
+<span class="sd">        :type dt: double</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">dt</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndofs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span><span class="c1">#=Constant(0.) #TODO </span></div>
+
+<div class="viewcode-block" id="UserFEobject.setVarForm"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.setVarForm">[docs]</a>    <span class="k">def</span> <span class="nf">setVarForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set Jacobian and Residual (Voigt form) default version</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">FacetNormal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">ds</span><span class="o">=</span><span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;ds&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="n">subdomain_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">,</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">Jac</span> <span class="o">=</span> <span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">Res</span> <span class="o">=</span> <span class="o">-</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">NM</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="p">:</span>
+            <span class="n">Res</span><span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">ti</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">NMn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="p">:</span>
+            <span class="n">Res</span><span class="o">+=</span><span class="n">NMn</span><span class="o">.</span><span class="n">p</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="n">NMn</span><span class="o">.</span><span class="n">indices</span><span class="p">)))</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">NMn</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">RB</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="p">:</span>
+            <span class="n">Res</span><span class="o">+=</span> <span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">ks</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+
+        <span class="n">Jac</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">setVarFormAdditionalTerms_Jac</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">svars2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span><span class="p">))</span>
+        <span class="n">Res</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">setVarFormAdditionalTerms_Res</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">svars2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Jac</span><span class="p">,</span> <span class="n">Res</span></div>
+
+<div class="viewcode-block" id="UserFEobject.setVarFormTransient"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.setVarFormTransient">[docs]</a>    <span class="k">def</span> <span class="nf">setVarFormTransient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set Jacobian and Residual (Voigt form) default version for transient problems</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">FacetNormal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+        <span class="c1">#print(self.dt.values())</span>
+        <span class="n">ds</span><span class="o">=</span><span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;ds&quot;</span><span class="p">,</span> <span class="n">subdomain_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">)</span><span class="c1">#,metadata=self.metadata      )</span>
+
+        <span class="n">Jac</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dotv_coeffs</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">))</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">Jac</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span><span class="p">)</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">Res</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dotv_coeffs</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span> 
+
+        <span class="n">Res</span><span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+<span class="c1">#         for NM in self.NMbcs:</span>
+<span class="c1">#             Res+= dot(NM.ti,self.v)*ds(NM.region_id)</span>
+<span class="c1">#         for NMn in self.NMnbcs:</span>
+<span class="c1">#             Res+= NMn.p*dot(n,as_vector(np.take(self.v,NMn.indices)))*ds(NMn.region_id)</span>
+<span class="c1">#         for RB in self.RBbcs:</span>
+<span class="c1">#             Res+= dot(np.multiply(RB.ks,self.u),self.v)*ds(RB.region_id)</span>
+
+        <span class="k">for</span> <span class="n">NM</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="p">:</span>
+            <span class="n">Res</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">ti</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">NMn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="p">:</span>
+            <span class="n">Res</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">NMn</span><span class="o">.</span><span class="n">p</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="n">NMn</span><span class="o">.</span><span class="n">indices</span><span class="p">)))</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">NMn</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">RB</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="p">:</span>
+            <span class="n">Res</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">ks</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span> 
+
+        <span class="n">Jac</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">setVarFormAdditionalTerms_Jac</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">svars2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span><span class="p">))</span>
+        <span class="n">Res</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">setVarFormAdditionalTerms_Res</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">svars2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+
+
+        <span class="k">return</span> <span class="n">Jac</span><span class="p">,</span> <span class="n">Res</span></div>
+
+<div class="viewcode-block" id="UserFEobject.dotv_coeffs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.feproblem.UserFEobject.dotv_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">dotv_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get left hand side (lhs) time derivative coefficients</span>
+<span class="sd">        :return feform.dotv_coeffs(): list of coefficients of lhs time derivative</span>
+<span class="sd">        :type feform.dotv_coeffs(): method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">dotv_coeffs</span><span class="p">()</span></div></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.feproblem</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

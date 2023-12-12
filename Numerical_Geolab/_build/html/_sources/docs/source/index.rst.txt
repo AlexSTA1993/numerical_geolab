@@ -1,0 +1,78 @@
+.. Numerical Geolab documentation master file, created by
+   sphinx-quickstart on Fri Aug 24 17:40:35 2018.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+  
+Numerical Geolab's documentation
+================================
+.. image:: _images/CoQuake_Banner2.png
+   :alt: ERC-CoQuake project logo
+   :target: http://www.coquake.com
+   :align: center
+
+About
+-----
+
+*Numerical Geolab* codes and algorithms serve as a basic ingredient for the numerical developments of the *CoQuake* project.
+
+CoQuake project receives funding from the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant agreement No 757848 "Controlling earthQuakes").
+
+For more details visit: :xref:`CoQuake Project`
+
+Contact: :xref:`Ioannis Stefanou`
+
+The Finite Element module builts on : :xref:`FEniCS project` (open-source, under :xref:`LGPLv3`). 
+
+.. todo::
+   * Machine Learning (in progress...)
+   * Discrete Elements
+   * Large displacements/deformations
+   * Contact/Interfaces
+   * Fix diffusion in unit-tests
+
+Examples
+--------
+.. todo:: Add examples
+
+.. math::
+   1+1=2
+
+
+TODO
+----
+.. todolist::
+
+.. toctree::
+   :maxdepth: 1
+   
+Project structure
+-----------------
+.. image:: _images/classes.png
+   :alt: Structure of classes
+   :target: _images/classes.png
+   :align: center
+
+
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+Numerical Geolab Tutorials
+--------------------------
+
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+
+   Tutorial_Cauchy_elastoplasticity_VM
+   Tutorial_Cauchy_viscoplasticity_VM
+   Tutorial_Cauchy_THM_couplings_theory
+   Tutorial_Cauchy_THM_couplings_implementation
+   Tutorial Cauchy_THM_thermoelasticity
+   Tutorial Cauchy_THM_thermoplasticity
+   Tutorial Cauchy_THM_thermo_hydro_plasticity
+

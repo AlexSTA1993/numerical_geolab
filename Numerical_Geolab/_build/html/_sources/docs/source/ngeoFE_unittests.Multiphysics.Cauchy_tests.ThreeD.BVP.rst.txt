@@ -1,0 +1,86 @@
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP package
+===============================================================
+
+Submodules
+----------
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_THM\_ThermoHydroelasticity module
+-------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroelasticity
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_THM\_ThermoHydroplasticity module
+-------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_THM\_ThermoHydroplasticity\_1 module
+----------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_THM\_ThermoHydroplasticity\_2 module
+----------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_TM\_Thermoelasticity module
+-------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_TM_Thermoelasticity
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_TM\_Thermoelasticity\_0 module
+----------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_TM_Thermoelasticity_0
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_TM\_Thermoelasticity\_2 module
+----------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_TM_Thermoelasticity_2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_TM\_Thermoplasticity module
+-------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_TM_Thermoplasticity
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.BVP.CAUCHY\_TM\_Thermoplasticity\_0 module
+----------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_TM_Thermoplasticity_0
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP
+    :members:
+    :undoc-members:
+    :show-inheritance:

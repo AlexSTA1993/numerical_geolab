@@ -1,0 +1,2730 @@
+<?xml version="1.0"?>
+<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
+<Xdmf Version="3.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <Domain>
+    <Grid Name="TimeSeries" GridType="Collection" CollectionType="Temporal">
+      <Grid Name="mesh" GridType="Uniform">
+        <Topology NumberOfElements="200" TopologyType="Triangle" NodesPerElement="3">
+          <DataItem Dimensions="200 3" NumberType="UInt" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/Mesh/0/mesh/topology</DataItem>
+        </Topology>
+        <Geometry GeometryType="XY">
+          <DataItem Dimensions="202 2" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/Mesh/0/mesh/geometry</DataItem>
+        </Geometry>
+        <Time Value="0.01000001" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/0</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/1</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/2</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.011000010000000001" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/3</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/4</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/5</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.012000010000000002" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/6</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/7</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/8</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.013000010000000003" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/9</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/10</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/11</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.014000010000000004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/12</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/13</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/14</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015000010000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/15</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/16</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/17</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015500010000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/18</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/19</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/20</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015562510000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/21</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/22</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/23</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015625010000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/24</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/25</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/26</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015687510000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/27</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/28</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/29</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015718760000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/30</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/31</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/32</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015750010000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/33</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/34</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/35</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015781260000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/36</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/37</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/38</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015812510000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/39</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/40</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/41</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015843760000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/42</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/43</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/44</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015875010000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/45</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/46</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/47</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015906260000000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/48</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/49</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/50</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015921885000000004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/51</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/52</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/53</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015937510000000002" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/54</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/55</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/56</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015953135" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/57</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/58</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/59</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015968759999999999" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/60</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/61</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/62</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.015984384999999997" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/63</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/64</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/65</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016000009999999995" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/66</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/67</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/68</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016015634999999993" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/69</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/70</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/71</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016031259999999992" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/72</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/73</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/74</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01604688499999999" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/75</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/76</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/77</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016062509999999988" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/78</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/79</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/80</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016078134999999986" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/81</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/82</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/83</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016093759999999985" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/84</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/85</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/86</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016109384999999983" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/87</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/88</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/89</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016117197499999982" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/90</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/91</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/92</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016125009999999981" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/93</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/94</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/95</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01613282249999998" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/96</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/97</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/98</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01614063499999998" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/99</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/100</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/101</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016148447499999979" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/102</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/103</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/104</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016156259999999978" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/105</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/106</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/107</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016164072499999977" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/108</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/109</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/110</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016171884999999976" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/111</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/112</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/113</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016179697499999975" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/114</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/115</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/116</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016187509999999974" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/117</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/118</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/119</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016195322499999974" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/120</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/121</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/122</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016203134999999973" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/123</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/124</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/125</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016210947499999972" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/126</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/127</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/128</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016218759999999971" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/129</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/130</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/131</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01622657249999997" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/132</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/133</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/134</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016230478749999971" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/135</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/136</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/137</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016234384999999973" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/138</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/139</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/140</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016238291249999974" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/141</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/142</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/143</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016242197499999975" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/144</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/145</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/146</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016246103749999977" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/147</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/148</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/149</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016250009999999978" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/150</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/151</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/152</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016253916249999979" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/153</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/154</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/155</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016257822499999981" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/156</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/157</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/158</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016261728749999982" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/159</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/160</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/161</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016265634999999983" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/162</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/163</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/164</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016269541249999984" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/165</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/166</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/167</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016273447499999986" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/168</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/169</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/170</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016277353749999987" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/171</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/172</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/173</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016281259999999988" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/174</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/175</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/176</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01628516624999999" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/177</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/178</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/179</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016289072499999991" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/180</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/181</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/182</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016292978749999992" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/183</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/184</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/185</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016294931874999995" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/186</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/187</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/188</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016296884999999997" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/189</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/190</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/191</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016298838124999999" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/192</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/193</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/194</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016300791250000002" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/195</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/196</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/197</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016302744375000004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/198</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/199</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/200</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016304697500000007" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/201</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/202</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/203</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016306650625000009" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/204</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/205</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/206</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016308603750000011" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/207</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/208</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/209</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016310556875000014" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/210</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/211</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/212</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016312510000000016" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/213</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/214</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/215</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016314463125000019" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/216</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/217</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/218</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016316416250000021" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/219</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/220</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/221</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016318369375000023" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/222</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/223</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/224</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016320322500000026" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/225</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/226</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/227</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016322275625000028" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/228</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/229</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/230</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01632422875000003" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/231</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/232</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/233</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016326181875000033" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/234</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/235</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/236</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016327158437500034" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/237</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/238</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/239</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016328135000000035" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/240</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/241</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/242</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016329111562500036" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/243</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/244</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/245</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016330088125000038" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/246</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/247</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/248</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016331064687500039" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/249</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/250</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/251</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01633204125000004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/252</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/253</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/254</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016333017812500041" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/255</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/256</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/257</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016333994375000042" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/258</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/259</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/260</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016334970937500044" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/261</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/262</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/263</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016335947500000045" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/264</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/265</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/266</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016336924062500046" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/267</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/268</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/269</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016337900625000047" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/270</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/271</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/272</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016338877187500048" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/273</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/274</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/275</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01633985375000005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/276</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/277</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/278</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016340830312500051" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/279</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/280</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/281</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016341806875000052" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/282</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/283</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/284</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016342783437500053" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/285</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/286</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/287</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016343271718750052" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/288</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/289</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/290</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016343760000000051" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/291</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/292</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/293</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01634424828125005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/294</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/295</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/296</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016344736562500049" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/297</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/298</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/299</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016345224843750047" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/300</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/301</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/302</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016345713125000046" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/303</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/304</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/305</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016346201406250045" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/306</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/307</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/308</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016346689687500044" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/309</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/310</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/311</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016347177968750043" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/312</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/313</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/314</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016347666250000042" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/315</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/316</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/317</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016348154531250041" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/318</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/319</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/320</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01634864281250004" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/321</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/322</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/323</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016349131093750038" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/324</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/325</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/326</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016349619375000037" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/327</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/328</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/329</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016350107656250036" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/330</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/331</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/332</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016350595937500035" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/333</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/334</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/335</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016351084218750034" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/336</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/337</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/338</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016351572500000033" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/339</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/340</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/341</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016352060781250032" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/342</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/343</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/344</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016352304921875033" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/345</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/346</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/347</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016352549062500034" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/348</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/349</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/350</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016352793203125035" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/351</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/352</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/353</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016353037343750036" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/354</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/355</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/356</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016353281484375037" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/357</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/358</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/359</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016353525625000039" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/360</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/361</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/362</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01635376976562504" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/363</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/364</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/365</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016354013906250041" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/366</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/367</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/368</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016354258046875042" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/369</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/370</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/371</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016354502187500043" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/372</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/373</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/374</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016354746328125044" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/375</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/376</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/377</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016354990468750046" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/378</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/379</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/380</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016355234609375047" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/381</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/382</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/383</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016355478750000048" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/384</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/385</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/386</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016355722890625049" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/387</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/388</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/389</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01635596703125005" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/390</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/391</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/392</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016356211171875051" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/393</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/394</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/395</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016356455312500053" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/396</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/397</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/398</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016356699453125054" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/399</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/400</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/401</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016356821523437554" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/402</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/403</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/404</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016356943593750055" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/405</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/406</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/407</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357065664062555" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/408</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/409</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/410</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357187734375056" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/411</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/412</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/413</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357309804687557" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/414</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/415</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/416</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357431875000057" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/417</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/418</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/419</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357553945312558" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/420</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/421</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/422</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357676015625058" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/423</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/424</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/425</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016357798085937559" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/426</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/427</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/428</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01635792015625006" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/429</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/430</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/431</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01635804222656256" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/432</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/433</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/434</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358164296875061" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/435</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/436</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/437</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358286367187561" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/438</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/439</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/440</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358408437500062" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/441</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/442</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/443</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358530507812562" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/444</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/445</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/446</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358652578125063" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/447</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/448</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/449</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358774648437564" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/450</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/451</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/452</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016358896718750064" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/453</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/454</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/455</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359018789062565" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/456</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/457</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/458</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359079824218817" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/459</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/460</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/461</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359140859375069" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/462</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/463</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/464</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359201894531321" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/465</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/466</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/467</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359262929687573" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/468</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/469</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/470</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359323964843825" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/471</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/472</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/473</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359385000000077" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/474</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/475</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/476</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359446035156329" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/477</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/478</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/479</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359507070312581" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/480</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/481</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/482</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359568105468833" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/483</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/484</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/485</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359629140625085" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/486</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/487</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/488</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359690175781337" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/489</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/490</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/491</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359751210937589" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/492</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/493</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/494</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359812246093841" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/495</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/496</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/497</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359873281250093" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/498</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/499</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/500</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359934316406345" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/501</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/502</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/503</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016359995351562597" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/504</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/505</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/506</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360056386718849" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/507</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/508</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/509</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360117421875101" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/510</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/511</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/512</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360178457031353" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/513</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/514</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/515</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360208974609478" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/516</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/517</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/518</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360239492187602" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/519</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/520</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/521</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360270009765726" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/522</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/523</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/524</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01636030052734385" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/525</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/526</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/527</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360331044921975" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/528</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/529</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/530</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360361562500099" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/531</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/532</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/533</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360392080078223" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/534</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/535</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/536</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360422597656347" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/537</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/538</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/539</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360453115234472" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/540</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/541</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/542</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360483632812596" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/543</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/544</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/545</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01636051415039072" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/546</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/547</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/548</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360544667968845" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/549</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/550</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/551</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360575185546969" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/552</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/553</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/554</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360605703125093" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/555</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/556</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/557</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360636220703217" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/558</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/559</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/560</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360666738281342" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/561</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/562</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/563</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360697255859466" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/564</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/565</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/566</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01636072777343759" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/567</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/568</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/569</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360743032226652" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/570</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/571</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/572</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360758291015715" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/573</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/574</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/575</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360773549804777" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/576</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/577</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/578</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360788808593839" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/579</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/580</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/581</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360804067382901" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/582</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/583</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/584</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360819326171963" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/585</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/586</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/587</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360834584961025" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/588</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/589</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/590</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360849843750087" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/591</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/592</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/593</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01636086510253915" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/594</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/595</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/596</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360880361328212" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/597</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/598</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/599</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360895620117274" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/600</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/601</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/602</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360910878906336" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/603</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/604</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/605</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360926137695398" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/606</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/607</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/608</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.01636094139648446" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/609</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/610</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/611</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360956655273522" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/612</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/613</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/614</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360971914062584" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/615</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/616</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/617</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016360987172851647" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/618</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/619</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/620</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016361002431640709" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/621</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/622</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/623</DataItem>
+        </Attribute>
+      </Grid>
+      <Grid>
+        <xi:include xpointer="xpointer(//Grid[@Name=&quot;TimeSeries&quot;]/Grid[1]/*[self::Topology or self::Geometry])" />
+        <Time Value="0.016361017690429771" />
+        <Attribute Name="Gen_Diplacements" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/624</DataItem>
+        </Attribute>
+        <Attribute Name="Stresses" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 3" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/625</DataItem>
+        </Attribute>
+        <Attribute Name="State_Variables" AttributeType="Vector" Center="Node">
+          <DataItem Dimensions="202 38" Format="HDF">Cauchy_2D_Von_Mises_Imperfection_step_2_0.05.h5:/VisualisationVector/626</DataItem>
+        </Attribute>
+      </Grid>
+    </Grid>
+  </Domain>
+</Xdmf>

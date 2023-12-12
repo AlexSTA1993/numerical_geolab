@@ -1,0 +1,53 @@
+examples package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    examples.ELENI_2022
+
+Submodules
+----------
+
+examples.Alex\_Shearing\_ref\_Cauchy\_2D module
+-----------------------------------------------
+
+.. automodule:: examples.Alex_Shearing_ref_Cauchy_2D
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.CAUCHY\-TM\-1 module
+-----------------------------
+
+.. automodule:: examples.CAUCHY-TM-1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.Shearing\_2D\_ref module
+---------------------------------
+
+.. automodule:: examples.Shearing_2D_ref
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.Shearing\_2D\_ref1 module
+----------------------------------
+
+.. automodule:: examples.Shearing_2D_ref1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: examples
+    :members:
+    :undoc-members:
+    :show-inheritance:

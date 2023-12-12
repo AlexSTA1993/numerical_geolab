@@ -1,0 +1,38 @@
+ngeoFE\_unittests.Mechanics.OneD package
+========================================
+
+Submodules
+----------
+
+ngeoFE\_unittests.Mechanics.OneD.Cauchy1D module
+------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.OneD.Cauchy1D
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Mechanics.OneD.Cauchy1D\_new module
+-----------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.OneD.Cauchy1D_new
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Mechanics.OneD.Cauchy1D\_tests module
+-------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.OneD.Cauchy1D_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.OneD
+    :members:
+    :undoc-members:
+    :show-inheritance:

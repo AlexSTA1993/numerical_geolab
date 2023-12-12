@@ -1,0 +1,10 @@
+ngeoFE\_unittests.Mechanics.ThreeD.Tests package
+================================================
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Mechanics.ThreeD.Tests
+    :members:
+    :undoc-members:
+    :show-inheritance:

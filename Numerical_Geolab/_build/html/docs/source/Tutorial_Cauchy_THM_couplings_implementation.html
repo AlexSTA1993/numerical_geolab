@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>4. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Numerical implementation &#8212; Numerical Geolab 1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab-numerical-implementation">
+<span id="tutorial-cauchy-thm-implementation"></span><h1>4. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Numerical implementation<a class="headerlink" href="#application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab-numerical-implementation" title="Permalink to this headline">¶</a></h1>
+<p>In <a class="reference internal" href="Tutorial_Cauchy_THM_couplings_theory.html#tutorial-cauchy-thm-theory"><span class="std std-ref">the previous tutorial</span></a> we provided the theoretical preliminaries for the implementation of the residual
+and jacobian terms needed for the weak form formulation in the notation Numerical Geolab employs. Here,
+we are concerned with the implementation of the residual and jacobian terms into the python script defining the finite element formulation and the
+the corresponding finite element problem. Before we present the modifications needed in the residual and the Jacobian terms let’s
+consider the new unknowns that the THM couplings introduce to the model. These are the pressure <span class="math notranslate nohighlight">\(P\)</span> and temperature <span class="math notranslate nohighlight">\(T\)</span> fields.
+These two extra unknowns will be appended in the unknown displacement vector that described the mechanical component of the problem.</p>
+<hr class="docutils" />
+<p>The introduction of the energy and mass balance equations indicate that the variational form of the problem needs to be changed such that the time derivatives
+of the auxiliary transient vector of the pressure and temperature increment fields <span class="math notranslate nohighlight">\(\frac{\partial P}{\partial t},\;\frac{\partial T}{\partial t}\)</span> are taken into account.
+The introduction of the time derivative of the problem unknowns in our analyses requires the use of a <code class="xref py py-meth docutils literal notranslate"><span class="pre">transient</span> <span class="pre">variational</span> <span class="pre">formulation</span></code>,
+where part of the variational form for the THM coupled finite element problem is defined. The transient variational form implementation is described below:</p>
+<div class="highlight-python notranslate" id="code-block"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setVarFormTransient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Set Jacobian and Residual (Voigt form) default version for transient problems</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">n</span><span class="o">=</span><span class="n">FacetNormal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">ds</span><span class="o">=</span><span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;ds&quot;</span><span class="p">,</span> <span class="n">subdomain_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundaries</span><span class="p">)</span><span class="c1">#,metadata=self.metadata      )</span>
+
+<span class="n">Jac</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dotv_coeffs</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">))</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+<span class="n">Jac</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span><span class="p">)</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+<span class="n">Res</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dotv_coeffs</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+<span class="n">Res</span><span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">))</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">NM</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMbcs</span><span class="p">:</span>
+    <span class="n">Res</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">ti</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">NM</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">NMn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NMnbcs</span><span class="p">:</span>
+    <span class="n">Res</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">NMn</span><span class="o">.</span><span class="n">p</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">as_vector</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="n">NMn</span><span class="o">.</span><span class="n">indices</span><span class="p">)))</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">NMn</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">RB</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBbcs</span><span class="p">:</span>
+    <span class="n">Res</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">ks</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">ds</span><span class="p">(</span><span class="n">RB</span><span class="o">.</span><span class="n">region_id</span><span class="p">)</span>
+
+<span class="hll"><span class="n">Jac</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">setVarFormAdditionalTerms_Jac</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">svars2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span><span class="p">))</span>
+</span><span class="hll"><span class="n">Res</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">setVarFormAdditionalTerms_Res</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">svars2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+</span>
+<span class="k">return</span> <span class="n">Jac</span><span class="p">,</span> <span class="n">Res</span>
+</pre></div>
+</div>
+<p>In Numerical Geolab the <a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_notation">Voigt notation</a> in vector form for the stress and strain tensors is used. The generalized stress and strain vectors are then used to
+construct the incremental variational form (see <a class="reference internal" href="Linear_and_Bilinear_forms_in_Numerical Geolab.html#linear-and-bilinear-forms-in-numerical-geolab"><span class="std std-ref">here</span></a> for more details on the construction
+of the variational form). In the case of a multiphysics analysis the material that is to be used contains also the diffusion terms of the pressure and temperature fields into the material matrix.</p>
+<p>Making the connection with <a class="reference internal" href="Tutorial_Cauchy_THM_couplings_theory.html#tutorial-cauchy-thm-theory"><span class="std std-ref">the previous tutorial</span></a>, we can identify the following terms from the Residual formulation
+in order of appearance:</p>
+<div class="math notranslate nohighlight" id="equation-existing-res-terms">
+\begin{align*}
+ &amp;Res=F_{ext}-F_{int}  \\
+ &amp;F_{int}=F^{imp}_{int}+\color{red}{F^{add}_{int}}\\
+ &amp;F^{imp}_{int}=\left[+\int_{\Omega}\frac{\partial P}{\partial t}\tilde{P}d\Omega,\;
+                                      +\int_{\Omega}\frac{\partial T}{\partial t}\tilde{T}d\Omega,\;
+                                      +\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij},\;
+                                      +c_{th}\int_{\Omega}T_{,i}\tilde{T}_{,i}d\Omega,\;
+                      +c_{hy}\int_{\Omega}P_{,i}\tilde{P}_{,i}d\Omega \right],\\
+ &amp;F_{ext}=\int_S \Delta t_i\tilde{u}_idS+\int_{S}q^{th}_i\tilde{T}dS+\int_{S}q^{hy}_i\tilde{P}dS
+\end{align*}</div><p>where, <span class="math notranslate nohighlight">\(F^{imp}_{int}\)</span> is the already implemented components of the linear form of the internal power of the generalized forces together with the transient terms. The <span class="math notranslate nohighlight">\(\color{red}{F^{add}_{imp}}\)</span> needs also to be applied.
+We note that vector field of the displacements and the unknown pressure and temperature fields constitute a general vector field lying in a vectorspace of dimension equal to the number of unknowns.
+In order to apply the linear form of the transient terms we take advantage of the above form of the vectorspace using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">ngeoFE.feproblem.UserFEobject.dotv_coeffs()</span></code>, which is problem specific, and therefore,
+it is defined in an <span class="xref std std-ref">exemplary problem script</span>. The parts of the linear form that correspond to the divergence terms of the momentum, energy and mass balance
+equations are given by the inner product of the generalised vector of stresses appended by the fluid and heat flows and the generalised vector of strains appended by the gradients of pressure and temperature.</p>
+<p>The already implemented terms for the Jacobian formulation in order of appearance, are the following:</p>
+<div class="math notranslate nohighlight" id="equation-existing-jac-terms">
+\begin{align*}
+&amp;Jac^{imp}=\left[
+\frac{\partial}{\partial P}\int_{\Omega}\frac{\partial P}{\partial t}\tilde{P}d\Omega,\;
+\frac{\partial}{\partial T}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{T}d\Omega,\;
+\frac{\partial}{\partial \Delta U_i}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\tilde{\varepsilon}_{ij}d\Omega,\;
+c_{hy}\frac{\partial}{\partial P}\int_{\Omega}P_{,i}\tilde{P}_{,i}d\Omega,\;
+c_{th}\frac{\partial}{\partial T}\int_{\Omega}T_{,i}\tilde{T}_{,i}d\Omega\right]\\
+\end{align*}</div><p>The highlighted lines in the above <a class="reference internal" href="#code-block">code block</a> are calling the problem specific methods that will add the appropriate additional
+variational terms in the formulation of the <a class="reference internal" href="#additional-residual-terms1"><span class="std std-ref">residual</span></a> and the <a class="reference internal" href="#additional-jacobian-terms"><span class="std std-ref">jacobian</span></a> respectively.</p>
+<div class="section" id="numerical-implementation-of-the-additional-terms-in-the-finite-element-formulation">
+<h2>4.1. Numerical Implementation of the additional terms in the Finite Element formulation<a class="headerlink" href="#numerical-implementation-of-the-additional-terms-in-the-finite-element-formulation" title="Permalink to this headline">¶</a></h2>
+<p>For the Thermo- Hydro- Mechanical applications described in these series of tutorials the formulation of the Finite Element problem
+needs to be appended in order for the additional degrees of freedom and the additional residual and jacobian terms to be taken into account.
+We do so by sepcifying a child class of the <code class="xref py py-class docutils literal notranslate"><span class="pre">ngeoFE.fedefinitions.FEformulation()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">THM3D_FEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Defines a user FE formulation</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Number of stress/deformation components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">6</span><span class="o">+</span><span class="mi">3</span><span class="o">+</span><span class="mi">3</span>
+        <span class="c1"># Number of Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c1"># Number of auxiliary quantities at Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_aux</span><span class="o">=</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Here, we defined the number of total strain components (<span class="math notranslate nohighlight">\(\varepsilon_{11},\varepsilon_{22},\varepsilon_{33},\gamma_{23},\gamma_{13},\gamma_{12}\)</span>), where <span class="math notranslate nohighlight">\(\gamma_{12}=2\varepsilon_{12},...\)</span>
+are the engineering shear strains. Then we appended thin number by the number of spatial pressure (<span class="math notranslate nohighlight">\(q^{hy}_{11},q^{hy}_{22},q^{hy}_{33}\)</span>) and temperature derivatives (<span class="math notranslate nohighlight">\(q^{th}_{11},q^{th}_{22},q^{th}_{33}\)</span>)
+Since the values of pressure (<span class="math notranslate nohighlight">\(P\)</span>) and temperature (<span class="math notranslate nohighlight">\(T\)</span>) will be used inside the material routine in order to obtain the correct effective <span class="math notranslate nohighlight">\(\sigma_{ij}^\star\)</span>  and total stresses <span class="math notranslate nohighlight">\(\sigma_{ij}\)</span>,
+they also need to be provided at the Gauss points. We do so by defining two auxiliary Gauss point components, to be passed inside the material subroutine.
+This is done explicitly by the following method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">auxiliary_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set user&#39;s generalized deformation vector</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">auxgde</span><span class="o">=</span><span class="p">[</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">auxgde</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next, we need to provide the generalized vector of total strains and spatial derivatives of pressure and temperature, to be used in the <code class="xref py py-meth docutils literal notranslate"><span class="pre">variational</span> <span class="pre">form</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set user&#39;s generalized deformation vector</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">gde</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>              <span class="c1">#gamma_11</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>              <span class="c1">#gamma_22</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">2</span><span class="p">),</span>              <span class="c1">#gamma_22</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>   <span class="c1">#gamma_23</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>   <span class="c1">#gamma_13</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>   <span class="c1">#gamma_12</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#q_1 - pf</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>  <span class="c1">#q_2 - pf</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">2</span><span class="p">),</span>  <span class="c1">#q_3 - pf</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#q_1 - temp</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>  <span class="c1">#q_2 - temp</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="mi">2</span><span class="p">),</span>  <span class="c1">#q_3 - temp</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As explained previously, we need to also take into account in the variational formulation the time derivatives of the incremental pressure and temperature fields.
+Since we provide the incremental form of the system, the partial time derivative can be calculated in a finite difference approximation i.e. <span class="math notranslate nohighlight">\(\frac{\partial P}{\partial t}\approx\frac{\Delta P}{\Delta t}\)</span>
+This is done inside the transient variational formulation method by dividing the incremental values of the pressure and temperature fields with the time increment (dt). To do so, we need to provide a
+mapping vector that maps the pressure and temperature components of the solution vector to be divided by the time increment. This is done with the following method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dotv_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set left hand side derivative coefficients</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">as_vector</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>This vector is multiplied with the incremental solution vector, Du, so that only the pressure <span class="math notranslate nohighlight">\(\Delta P\)</span> and temperature <span class="math notranslate nohighlight">\(\Delta T\)</span> incremental components of Du, survive do be divided by the time increment dt.</p>
+<div class="section" id="numerical-implementation-of-the-additional-residual-terms">
+<h3>4.1.1. Numerical implementation of the additional residual terms:<a class="headerlink" href="#numerical-implementation-of-the-additional-residual-terms" title="Permalink to this headline">¶</a></h3>
+<p>After we successfully defined the auxiliary pressure and temperature fields, the form of the generalized strain vector and the mapping to be used for the differentiation of the incremental pressure and temperature fields
+with respect to time, we apply the additional residual terms that are not already present in the <a class="reference internal" href="#code-block"><span class="std std-ref">transient variational formulation</span></a>.</p>
+<div class="highlight-python notranslate" id="additional-residual-terms1"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setVarFormAdditionalTerms_Res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">Du</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">svars</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+    <span class="n">Res</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="n">lstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">55</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">bstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">56</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rhoC</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">57</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#HM terms</span>
+    <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">Du</span><span class="p">)</span>
+    <span class="n">eps_v</span><span class="o">=</span><span class="n">eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">virtual_pf</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">Res</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">eps_v</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#TM terms</span>
+    <span class="n">virtual_Temp</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">Res</span><span class="o">+=</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">41</span><span class="o">+</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">virtual_Temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#HT terms</span>
+    <span class="n">DTemp</span><span class="o">=</span><span class="n">Du</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">Res</span><span class="o">+=</span> <span class="o">+</span><span class="p">(</span><span class="n">lstar</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">DTemp</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Res</span>
+</pre></div>
+</div>
+<p>The additional residual terms correspond to the following terms of the generalized power of internal forces in order of appearance:</p>
+<div class="math notranslate nohighlight" id="equation-additional-residual-terms">
+\begin{align*}
+ &amp;F^{add}_{int}=\left[-\frac{1}{\rho C}\int_{\Omega}\sigma_{ij}\dot{\varepsilon}^p_{ij}\tilde{T}d\Omega,\;
+                                     +\frac{\lambda^\star}{\beta^\star}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{P}d\Omega,\;
+                                     -\frac{1}{\beta^\star}\int_\Omega\frac{\partial \varepsilon_v}{\partial t}\tilde{P}d\Omega\right]
+ \end{align*}</div></div>
+<div class="section" id="numerical-implementation-of-the-additional-jacobian-terms">
+<h3>4.1.2. Numerical implementation of the additional jacobian terms:<a class="headerlink" href="#numerical-implementation-of-the-additional-jacobian-terms" title="Permalink to this headline">¶</a></h3>
+<p>We follow the same procedure for the additional terms to be added to the jacobian of the variational formulation.</p>
+<div class="highlight-python notranslate" id="additional-jacobian-terms"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setVarFormAdditionalTerms_Jac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">Du</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">svars</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">dt</span><span class="p">,</span><span class="n">ddsdde</span><span class="p">):</span>
+    <span class="n">lstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">55</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">bstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">56</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rhoC</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">57</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">alfa</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">58</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Jac</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="c1">#HM terms</span>
+    <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="c1">#needs u (trial function, because it takes derivatives in terms of u and not Du for calculating the Jacobian.</span>
+    <span class="n">eps_vol</span><span class="o">=</span><span class="n">eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">virtual_pf</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">Jac</span><span class="o">+=+</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">eps_vol</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#MH terms</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#same as before</span>
+    <span class="n">virtual_eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">virtual_eps_vol</span><span class="o">=</span><span class="n">virtual_eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">virtual_eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">virtual_eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span><span class="n">virtual_eps_vol</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#HT terms</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">lstar</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#MT terms due to thermal expansion</span>
+    <span class="n">eps_temp</span><span class="o">=</span><span class="n">alfa</span><span class="o">*</span><span class="n">temperature</span><span class="o">*</span><span class="n">as_vector</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+    <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">ddsdde</span><span class="p">,</span><span class="n">eps_temp</span><span class="p">),</span><span class="n">virtual_eps</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#TM terms due to thermal dissipation</span>
+    <span class="n">virtual_temp</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">eps_plastic</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">):</span>
+        <span class="n">eps_plastic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">41</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">eps_plastic</span><span class="o">=</span><span class="n">as_vector</span><span class="p">(</span><span class="n">eps_plastic</span><span class="p">)</span>
+    <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">ddsdde</span><span class="p">,</span><span class="n">eps</span><span class="p">),</span><span class="n">eps_plastic</span><span class="p">)</span><span class="o">*</span><span class="n">virtual_temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="c1">#TM terms due to thermal expansion</span>
+    <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">ddsdde</span><span class="p">,</span><span class="n">eps_temp</span><span class="p">),</span><span class="n">eps_plastic</span><span class="p">)</span><span class="o">*</span><span class="n">virtual_temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Jac</span>
+</pre></div>
+</div>
+<p>The additional jacobian terms tp be added are in order of appearance:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+ Jac^{add}=&amp;\left[\frac{1}{\beta^\star}\frac{\partial}{\partial U_i}\int_\Omega\frac{\partial \varepsilon_v}{\partial t}\tilde{P}d\Omega,\;
+ -\frac{\partial}{\partial \Delta P}\int_{\Omega}\Delta P \delta_{ij}\tilde{\varepsilon}_{ij}d\Omega,\;
+ -\frac{\lambda^\star}{\beta^\star}\frac{\partial}{\partial T}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{P}d\Omega,\;\right.\\
+ &amp;-\frac{\partial}{\partial \Delta T}\int_{\Omega}\alpha \Delta T D^{ep}_{ijkl}\delta_{kl}\tilde{\varepsilon}_{ij}d\Omega,\;\\
+ &amp;\left.
+ -\frac{1}{\rho C}\frac{\partial}{\partial U_i}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega,\;
+ -\frac{1}{\rho C}\frac{\partial}{\partial \Delta T}\int_{\Omega}\alpha\Delta TD^{ep}_{ijkl}\delta_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega
+ %   -\frac{1}{\rho C}\frac{\partial}{\partial U_i}\int_{\Omega}\int_{\Omega}D^{ep}_{ijkl}\varepsilon^\star_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega
+                             \right]
+ \end{align*}</div></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Numerical Geolab</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Ioannis Stefanou.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="../../_sources/docs/source/Tutorial_Cauchy_THM_couplings_implementation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2.1. Viscoplastity Application 1: &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.2. Viscoplastity Application 2:" href="Viscoplasticity_Application_2.html" />
+    <link rel="prev" title="2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity" href="Tutorial_Cauchy_viscoplasticity_VM.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Viscoplasticity_Application_2.html" title="2.2. Viscoplastity Application 2:"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cauchy_viscoplasticity_VM.html" title="2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="Tutorial_Cauchy_viscoplasticity_VM.html" accesskey="U"><span class="section-number">2. </span>Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1. </span>Viscoplastity Application 1:</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="viscoplastity-application-1">
+<h1><span class="section-number">2.1. </span>Viscoplastity Application 1:<a class="headerlink" href="#viscoplastity-application-1" title="Permalink to this heading">¶</a></h1>
+<p>In this application we will compare the shear strain response of the viscoplastic layer under two different loading rate boundary conditions.
+We will treat the load increment as a parameter of the finite element problem and we will incorporate it into the analysis phase of the problem.
+The finite element formulation and the finite problem used are given below.</p>
+<p>The file for this tutorial can be found in:
+<a class="reference internal" href="ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.html#module-ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Von_Mises_Perzyna_App_1" title="ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Von_Mises_Perzyna_App_1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Von_Mises_Perzyna_App_1</span></code></a></p>
+<p>Below a short description of the input file is given. We emphasize, the parts where a different input is given with respect to the original file of elastoplasticity with strain rate hardening.</p>
+<section id="begining-of-file">
+<h2><span class="section-number">2.1.1. </span>Begining of file<a class="headerlink" href="#begining-of-file" title="Permalink to this heading">¶</a></h2>
+<p>The file begins as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">UserFEproblem</span><span class="p">,</span> <span class="n">General_FEproblem_properties</span>
+</span><span class="hll"><span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEformulation</span>
+</span><span class="hll"><span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+</span><span class="hll"><span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">plotting_params</span>
+</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span><span class="o">=</span><span class="s1">&#39;/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Mechanics/reference_data/&#39;</span>
+<span class="kn">import</span> <span class="nn">os</span> <span class="c1"># allows for easier handling of paths</span>
+<span class="kn">from</span> <span class="nn">_operator</span> <span class="kn">import</span> <span class="n">itemgetter</span> <span class="c1"># allows for transformation of lists to iterables, usefull for the definition of boundary conditions</span>
+</pre></div>
+</div>
+</section>
+<section id="finite-element-formulation">
+<h2><span class="section-number">2.1.2. </span>Finite element formulation<a class="headerlink" href="#finite-element-formulation" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">In order to continue we need to provide the form of the test function to be used together with the interpolation function (solution) to be used in the specific problem’s weak formulation.</div>
+</div>
+<p>We do this by specifying the number of vector components for the test function, the interpolation function used inside the element and the number Gauss points present in the element for the integral evaluation
+of the weak form.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cauchy2DFEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Defines a user FE formulation</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># Number of stress/deformation components</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">3</span>
+    <span class="c1"># Number of Gauss points</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set user&#39;s generalized deformation vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gde</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#gamma_11</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>  <span class="c1">#gamma_11</span>
+        <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">#gamma_12</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set desired element</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Defines a Lagrangian FE of degree 1 for the displacements</span>
+    <span class="n">element_disp</span><span class="o">=</span><span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span><span class="n">cell</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">element_disp</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">We note here that our problem is a plain strain 2D problem involving a classical Cauchy continuum. Thus only 3 of the 6 strain components <img class="math" src="_images/math/279f9a6a6f2cde8234ddf2d927a0ae4c243e8829.png" alt="(\gamma_{11},\gamma_{22},\gamma_{12})"/> used for the equilibrium equations are needed.
+We note also that we provide the Voigt notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <img class="math" src="_images/math/fdad0965b5afa54fad2214e646e16f3fa16a75c2.png" alt="(\gamma_{12}=2\epsilon_{12})"/>.</div>
+</div>
+<p>In code snippet above, we provide the finite element formulation for the problem at hand. The class is initialized with 3 strain components and 1 Gauss point. The python function:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="generalized_epsilon">
+<span class="sig-name descname"><span class="pre">generalized_epsilon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generalized_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="line-block">
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="create_element">
+<span class="sig-name descname"><span class="pre">create_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#create_element" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="line-block">
+<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FeniCs.</div>
+</div>
+<p>We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.</p>
+<section id="boundary-identification">
+<h3><span class="section-number">2.1.2.1. </span>Boundary identification<a class="headerlink" href="#boundary-identification" title="Permalink to this heading">¶</a></h3>
+<p>We proceed now by identifying the boundaries needed for the application of the boundary conditions at a later stage of the modeling procedure.
+We make use of the SubDomain() parent class inside dolfin:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SuDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SuDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_boundary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SuDomain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>We create four subclasses (children) of the class, each for each side of the rectangular domain, which inherit from it the spatial variable (x) and the boundary identification flag (on_boundary) and the method</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inside">
+<span class="sig-name descname"><span class="pre">inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_boundary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inside" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The subclasses are defined as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">left</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+ <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">on_boundary</span><span class="p">):</span>
+     <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>  <span class="ow">and</span> <span class="n">on_boundary</span>
+
+<span class="k">class</span> <span class="nc">right</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">on_boundary</span>
+
+<span class="k">class</span> <span class="nc">top</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="ow">and</span> <span class="n">on_boundary</span>
+
+<span class="k">class</span> <span class="nc">bottom</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">on_boundary</span>
+</pre></div>
+</div>
+<p>Inside each subclass we define the logical test for assigning the specific boundary node in one of the boundary regions, where the boundary conditions will be applied.
+The value x[i] indicates the spatial coordinate <img class="math" src="_images/math/b6e6cb367cb63f0c95f6695d9991e4f07f693e82.png" alt="x_i"/> of the problem at hand.</p>
+</section>
+<section id="monitoring-stress-and-state-variables-at-the-gauss-points">
+<h3><span class="section-number">2.1.2.2. </span>Monitoring stress and state variables at the Gauss points<a class="headerlink" href="#monitoring-stress-and-state-variables-at-the-gauss-points" title="Permalink to this heading">¶</a></h3>
+<p>In this application we will present a way to extract state variable quantities from the Gauss points of the Finite element model. This is done again by application of the SubDomain() class
+in order to define a region, in which the Gauss points are monitored. The following codeb defines a rectangular region near the free surface of the layer:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+
+   <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+      <span class="n">h</span><span class="o">=</span><span class="mf">1.0</span> <span class="c1">#layer&#39;s height</span>
+      <span class="n">w</span><span class="o">=</span><span class="mf">0.2</span> <span class="c1">#layer&#39;s width</span>
+      <span class="n">nh</span><span class="o">=</span><span class="mi">80</span> <span class="c1"># number of left aligned subsections of the Rectangle mesh boundary defined later.</span>
+      <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="n">nh</span><span class="o">.</span> <span class="ow">and</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">This region corresponds to a rectangle containing two trangular left aligned finite elements. We only applied one Gauss point inside each Finite element (reduced integration), to avoid shear locking, therefore, in the above specified rectangle only two</div>
+</div>
+<p>Gauss points are present.</p>
+</section>
+</section>
+<section id="finite-element-problem-description">
+<h2><span class="section-number">2.1.3. </span>Finite element problem description<a class="headerlink" href="#finite-element-problem-description" title="Permalink to this heading">¶</a></h2>
+<p>We proceed now with building the main Finite element model, corresponding to shearing in 2D of a Cauchy elastoplastic layer with a Von Mises yield criterion and strain hardening.
+The finite element model is built inside a child class that inherits its methods from the parentclass UserFEproblem(). We will provide here commentary for each method used inside the childclass Cauchy2DFEproblem(UserFEproblem).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cauchy2DFEproblem</span><span class="p">(</span><span class="n">UserFEproblem</span><span class="p">):</span>
+ <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"> Defines a user FE problem for given FE formulation</span>
+<span class="sd"> &quot;&quot;&quot;</span>
+ <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">FEformulation</span><span class="p">):</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example of 2D plane strain problem, Cauchy continuum&quot;</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span><span class="o">=</span><span class="mi">0</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="mf">1.</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">0.2</span>
+     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the class __init__() method, the finite element formulation defined above is provided as argument.The geometric dimensions of the problem are also specified
+Its height self.h=1. and its width self.w=0.2 . The initialization then proceeds to set up all the methods of the parentclass UserFEproblem(). The methods inside the class are
+defined by overriding the methods inside the parent class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set here all the parameters of the problem, except material properties</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">=</span><span class="n">General_FEproblem_properties</span><span class="p">()</span>
+    <span class="c1"># Number of state variables</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span><span class="o">=</span><span class="mi">38</span>
+</pre></div>
+</div>
+<p>This method is used to provide the number of state variables of the material. In this tutorial only the mechanical behavior is important
+and therefore, the state of material is described by the increment of stress, total strain, elastic strain, plastic strain, plastic strain multiplier
+and plastic strain rate. Notice that even though the problem is in 2D and three strain components (and consequently  three stress components) are needed for the description of equilibrium
+the state of the material contains the information also for the rest components of the general 3D problem. For each material used by the Numerical Geolab, the number of state variable
+components is given in Table (To be referenced).</p>
+<div class="line-block">
+<div class="line">Next we continue by generating the mesh for the problem at hand. Here, a 2D Cauchy layer is modeled as a rectangle of height 1 and width 0.2.</div>
+</div>
+<p>For this simple geometry the capabilities of dolfin can be used to define a rectangular mesh specifying the bottom left and upper right corners of the rectangular domain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set mesh and subdomains</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Generate mesh</span>
+    <span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span>
+    <span class="n">w</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span>
+    <span class="n">nx</span><span class="o">=</span><span class="mi">80</span>
+    <span class="n">ny</span><span class="o">=</span><span class="mi">1</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">RectangleMesh</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="o">-</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span><span class="n">Point</span><span class="p">(</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">),</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">,</span><span class="s2">&quot;left&quot;</span><span class="p">)</span><span class="c1">#&quot;crossed&quot;)</span>
+    <span class="c1">#print(mesh.topology().dim())</span>
+    <span class="n">cd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+    <span class="n">fd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">fd</span>
+</pre></div>
+</div>
+<p>For the domain at hand we specify a discretization with nx=80 elements along the x[0] component and ny=1 element along the x[1] component. The MeshFunction() method of dolfin is used to
+provide the mesh object, the interior domain and the boundary domains. The following model is the produced:</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="_images/Cauchy_simple_shear_solid.png"><img alt="alternate text" src="_images/Cauchy_simple_shear_solid.png" style="width: 400px; height: 200px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2.1.1 </span><span class="caption-text">Image of the rectangular mesh produced by RectangleMesh(). The domain was exported with the help of the third party software Paravew.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>We next assign values to the regions of the mesh defined by different material properties.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_subdomains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create subdomains by marking regions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subdomains</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+    <span class="n">subdomains</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
+    <span class="k">return</span> <span class="n">subdomains</span>
+</pre></div>
+</div>
+<p>In this tutorial all the domain is defined by the same material properties and therfore the value 0 will be assigned everywhere inside the mesh.
+This value is a number indicating which material parameters need to be taken into account in each mesh region (see the corresponding method set_material_params()).</p>
+<div class="line-block">
+<div class="line">IMPORTANT</div>
+</div>
+<blockquote>
+<div><p>We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create subdomains by marking regions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+    <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns Gauss region number 0 everywhere</span>
+    <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="n">Gauss_point_Querry</span><span class="p">()</span>
+    <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># marks the Gauss region be applying the number 1 at the selected nodes.</span>
+    <span class="k">return</span> <span class="n">GaussDomain</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software.</div>
+</div>
+<p>We note here that the Gauss point definition is done on the cells of the Finite Element mesh and not on the boundary facets. This is done because the Gauss points are on the
+interior of the domain and use of the nodal selection algorithm inside the Numerical Geolab module <a class="reference internal" href="ngeoFE.html#module-ngeoFE.feproblem" title="ngeoFE.feproblem"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE.feproblem</span></code></a>
+(see method <a class="reference internal" href="ngeoFE.html#ngeoFE.feproblem.UserFEobject.set_history_output_indices" title="ngeoFE.feproblem.UserFEobject.set_history_output_indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ngeoFE.feproblem.UserFEobject.set_history_output_indices()</span></code></a>)
+returns an empty set. The method <a class="reference internal" href="ngeoFE.html#ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices" title="ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices()</span></code></a> needs to be called -internally- instead.</p>
+<div class="line-block">
+<div class="line">We continue by marking the boundaries of the model based on the classes defined during the boundary identification phase (see section <a class="reference internal" href="Viscoplasticity_Application_3.html#boundary-identification"><span class="std std-ref">Boundary identification</span></a> above).</div>
+</div>
+<p>We do so by assigning the numbers 1 to 4 to the different regions of the model. To do this we use the method mark() from the SubDomain() class of dolfin.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">boundaries</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mark left and right boundary points</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">boundaries</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">left0</span><span class="o">=</span><span class="n">left</span><span class="p">()</span>
+    <span class="n">left0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">right0</span><span class="o">=</span><span class="n">right</span><span class="p">()</span>
+    <span class="n">right0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">top0</span><span class="o">=</span><span class="n">top</span><span class="p">()</span>
+    <span class="n">top0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">bottom0</span><span class="o">=</span><span class="n">bottom</span><span class="p">()</span>
+    <span class="n">bottom0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span>
+</pre></div>
+</div>
+<p>We are now able to identify the boundaries of the mesh and assign different boundary condition to each side of the boundary.
+The way we apply the boundary conditions can be seen in the method:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="set_bcs">
+<span class="sig-name descname"><span class="pre">set_bcs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#set_bcs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set boundary conditions for the user problem / could be replaced by external mesher, e.g. Abaqus, Gmsh...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bcs</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mf">0.1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">4</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">3</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="p">]</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bcs</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mf">0.1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">4</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mf">0.0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="mi">3</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mf">0.0</span><span class="p">]]</span>
+            <span class="p">]</span>
+    <span class="k">return</span> <span class="n">bcs</span>
+</pre></div>
+</div>
+<p>Inside this method the boundaries are assigned with the use of a nested list. Dirichlet, Neuman and Robin boundary conditions can be applied
+both incrementaly and instantaneously. The boundary conditions can be assigned to a boundary region or pointwise.</p>
+<div class="line-block">
+<div class="line">The nested list contains the following information:</div>
+</div>
+<div class="line-block">
+<div class="line">[region id, [type of bc, vector component ,value]]</div>
+</div>
+<p>In this example, the region id ranges from 1 to 4 indicating the left, right,top and bottom regions of the boundaries. The type of bc is set to 0,
+specifying incremental Dirichlet boundary conditions. The vector component shows which component of the 2D displacement vector is to be affected and value
+indicates the value of the boundary condition to be set at the specific boundary.</p>
+<p>Numerical Geolab offers the user the capability of extracting the output at the nodes and regions of the boundary at the converged increments
+of the numerical analysis. This capability is given to the user in order to obtain the specific nodal output of the solution (forces, displacements)
+instead of using the interpolated results provided in a separate .vtk file for postprocessing with a third party software
+(e.g. Paraview). The history output at the nodes can be given by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">history_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Used to get output of residual at selected node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hist</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+          <span class="p">[</span><span class="mi">2</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+          <span class="p">]</span>
+    <span class="k">return</span> <span class="n">hist</span>
+</pre></div>
+</div>
+<p>The node specification works the same way as in set_bcs(). In this example we choose the right edge of the boundary (2) in order to monitor the
+second component ([1]) of the force (1) and displacement (0) fields respectively.</p>
+<p>We assign next the components of the state variables that need to be monitored at the specific Gauss points</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">history_svars_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Used to get output of svars at selected Gauss point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hist_svars</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">21</span><span class="p">]]]]</span> <span class="c1">#Calculate elastoviscoplastic shear strain increment</span>
+    <span class="k">return</span> <span class="n">hist_svars</span>
+</pre></div>
+</div>
+<p>The Gauss point specification works the same way as in set_bcs() and history_output(). In this example in the region (1) defined by the
+method create_Gauss_point_querry_domain(), we choose to monitor the vector component 21, which translates
+to the elasto-visco-plastic multiplier <img class="math" src="_images/math/6cfbdb39e676f2aebeb85c58f175107405ea97f0.png" alt="\dot{\lambda}"/>. The mapping between VectorSpace and state variable components is given in the state variables material description
+(see reference needed).</p>
+<section id="material-specification">
+<h3><span class="section-number">2.1.3.1. </span>Material specification<a class="headerlink" href="#material-specification" title="Permalink to this heading">¶</a></h3>
+<p>Next, we define the analysis material that we have already assigned in the create_subdomains() method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create material objects and set material parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mats</span><span class="o">=</span><span class="p">[]</span>
+    <span class="c1"># load material #1</span>
+
+    <span class="n">env_lib</span><span class="o">=</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">env_lib</span>
+    <span class="n">umat_lib_path</span><span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">umat_lib_path</span>
+    <span class="n">umat_lib</span> <span class="o">=</span> <span class="n">umat_lib_path</span><span class="o">+</span><span class="s1">&#39;/CAUCHY3D-DP/libplast_Cauchy3D-DP.so&#39;</span>
+    <span class="n">umat_id</span><span class="o">=</span><span class="mi">2</span>       <span class="c1"># if many materials exist in the same library</span>
+    <span class="n">mat</span><span class="o">=</span><span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span><span class="n">umat_lib</span><span class="p">,</span><span class="n">umat_id</span><span class="p">)</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_material_1_properties</span><span class="p">(</span><span class="mf">2000.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">100.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">)</span>
+    <span class="c1">#</span>
+    <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mats</span>
+</pre></div>
+</div>
+<p>The ngeo_parameters.py module contains the relative path to the materials libraries, which specify the different materials available to the user.
+The variable umat_id=2 needs to be set for the 2D analyses performed here. It specifies the mapping of the updated vector components of the strain increment <img class="math" src="_images/math/279f9a6a6f2cde8234ddf2d927a0ae4c243e8829.png" alt="(\gamma_{11},\gamma_{22},\gamma_{12})"/></p>
+<blockquote>
+<div><p>and corresponding tensor components of the constitutive matrix, with their position in the 3D strain vector and 3D constitutive matrix provided at the material subroutine (material algorithm).</p>
+</div></blockquote>
+<p>This mapping returns back the correct components of the stress vector and constitutive matrix to pass into the
+residual calculation of the weak form in dolfin (equilibrium iterations). The material properties passed into the material algorithm, are set with the helper method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_material_1_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">EE</span><span class="p">,</span><span class="n">nu</span><span class="p">,</span><span class="n">cc</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">eta_vp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets material parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GG</span><span class="o">=</span><span class="n">EE</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">nu</span><span class="p">))</span>
+    <span class="n">KK</span><span class="o">=</span><span class="n">EE</span><span class="o">*</span><span class="n">GG</span><span class="o">/</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="n">GG</span><span class="o">-</span><span class="n">EE</span><span class="p">))</span>
+    <span class="n">props</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">19</span><span class="p">)</span>
+    <span class="n">props</span><span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">KK</span>
+    <span class="n">props</span><span class="p">[</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">GG</span>
+    <span class="n">props</span><span class="p">[</span><span class="mi">12</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">cc</span>
+    <span class="n">props</span><span class="p">[</span><span class="mi">15</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">H</span>
+    <span class="n">props</span><span class="p">[</span><span class="mi">19</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">eta_vp</span>
+    <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">props</span>
+</pre></div>
+</div>
+<p>We specify the material’s elastic parameters using the material young modulus EE and Poisson ratio nu.
+The material used in this application is elastic perfectly plastic with a viscous fuidity parameter (Perzyna viscoplasticity).
+We specify the material yield strength in simple shear cc and we set the isotropic hardening parameter during yield equal to H=0. The last parameter
+of the material is the viscous fluidity parameter, equivalent to <img class="math" src="_images/math/6102e4e108eb9d7fedd5f02de6fac7459c22e7f2.png" alt="\eta\cdot{}cc"/>.
+The parameters passed into the material subroutine are the 3D isotropic compression modulus KK and the shear modulus GG.
+Therefore, a transformation of the elastic constants is needed. The elastic constants (GG, KK) used together with the material hardening parameter, H,
+and their position in the material properties (numpy array props), can be found in Table (reference needed) and the material library files that accompany Numerical Geolab.</p>
+<div class="line-block">
+<div class="line">Once the analysis material(s) have been set we are able to exit the class definition for Cauchy2DFEproblem(UserFEproblem).</div>
+</div>
+<section id="analysis-excecution-and-postprocessing">
+<h4><span class="section-number">2.1.3.1.1. </span>Analysis excecution and postprocessing<a class="headerlink" href="#analysis-excecution-and-postprocessing" title="Permalink to this heading">¶</a></h4>
+<p>Our model is now set and ready to run. In this application we will test the effect of the shearing rate in the post yielding behavior
+of the material. We will create two models with the same characteristics derived by the Cauchy2DFEproblem(UserFEproblem). We will then modify the analysis time
+for the two models to simulate the change in the shearing rate. In order to fascilitate the analysis we will add a set of methods to the
+Cauchy2DFEproblem(UserFEproblem) class. These methods will provide the parameters of the solution procedure including the analysis
+total time and a set of plotting and postprocessing tools.</p>
+</section>
+</section>
+<section id="controling-the-analysis-time">
+<h3><span class="section-number">2.1.3.2. </span>Controling the analysis time<a class="headerlink" href="#controling-the-analysis-time" title="Permalink to this heading">¶</a></h3>
+<p>The following code block provides the solver parameters inclusing the step total analysis time, the maximum time increment, the tolerance of the converged increment
+and the maximum number of increments.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="k">def</span> <span class="nf">give_me_solver_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+</span><span class="hll">   <span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span> <span class="o">=</span> <span class="n">scale_t</span>
+</span><span class="hll">   <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">incmodulo</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class="hll">   <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span>
+</span><span class="hll">   <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="mf">1.</span><span class="o">*</span><span class="n">scale_t</span>
+</span>   <span class="n">ninc</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="p">)</span>
+   <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nincmax</span><span class="o">=</span><span class="mi">1000000</span>
+   <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">convergence_tol</span><span class="o">=</span><span class="mi">10</span><span class="o">**-</span><span class="mi">6</span>
+   <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">removezerolines</span><span class="o">=</span><span class="kc">False</span>
+</pre></div>
+</div>
+<p>The parameter py:param:<cite>scale_t</cite> controls the overall time increment and total time of the analysis. We specify it as an attribute of the calss so that it can be called by the other analysis procedure method.
+To avoid confusion with the problem description we choose not to incorporate it as an argument to be passed at the level of the problem
+definition. Next, the main part of the analysis follows. This method specifies the boundary conditions to be applied at each step of the analysis and the total time of eaxh analysis step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="k">def</span> <span class="nf">run_analysis_procedure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">reference_data_path</span><span class="p">):</span>
+     <span class="n">saveto</span><span class="o">=</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;./Cauchy_2D_Von_Mises_test_step_0_vp.xdmf&quot;</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="mi">0</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">()</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">symbolic_bcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;initial&quot;</span><span class="p">)</span>
+<span class="hll">     <span class="n">converged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span>     <span class="n">scale_t_program</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span><span class="p">]</span>
+     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;shearing1&quot;</span><span class="p">)</span>
+
+     <span class="n">nsteps</span><span class="o">=</span><span class="mi">5</span> <span class="c1">#number of subsequent shearing steps.</span>
+     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span><span class="p">):</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+         <span class="n">scale_t</span> <span class="o">=</span> <span class="n">scale_t_program</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nincmax</span><span class="o">=</span><span class="mi">1000000</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="n">scale_t</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">+</span><span class="mf">1.</span><span class="o">*</span><span class="n">scale_t</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">symbolic_bcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">(),</span> <span class="n">key</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># Provide the list of boundary conditions</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">initBCs</span><span class="p">()</span> <span class="c1">#The new boundary conditions need to be initialised</span>
+         <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;Cauchy_2D_Von_Mises_test_step_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;_vp&#39;</span>
+         <span class="n">saveto</span><span class="o">=</span> <span class="n">reference_data_path</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s2">&quot;.xdmf&quot;</span>
+         <span class="n">converged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+     <span class="k">return</span> <span class="n">converged</span>
+</pre></div>
+</div>
+<p>We note that in the above code the internal loop indicates that that analysis consists of five different steps.
+The maximum number of increments for each step is set to ninc=100000.</p>
+</section>
+<section id="postprocessing-the-results">
+<h3><span class="section-number">2.1.3.3. </span>Postprocessing the results<a class="headerlink" href="#postprocessing-the-results" title="Permalink to this heading">¶</a></h3>
+<p>Next, we  focus on extracting the results from the history matrices stored during the analysis.
+The methods of history_unpack() and svars_history_unpack() help us unpack the nesed lists of the boundary nodal quantities
+and the state variables at the quadrature points respectively. In this examples the structure of the nodal history list and
+that of the history list at the quadrature points is the same. The history list is a nested list, whose elements have the following structure:</p>
+<p><a href="#id1"><span class="problematic" id="id2">|</span></a>[[time, [force node 1, force node 2], [displacement node 1, displacement node2]],
+<a href="#id3"><span class="problematic" id="id4">|</span></a>…
+<a href="#id5"><span class="problematic" id="id6">|</span></a>,[[time, [force node 1, force node 2], [displacement node 1, displacement node2]]]</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">history_unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">list1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
+            <span class="k">continue</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">])))))</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">For the sate variables the structure is the following:</div>
+</div>
+<div class="line-block">
+<div class="line">[[time, [state variable at Gauss point element 1, state variable at Gauss point element 2]],</div>
+<div class="line">…</div>
+<div class="line">,[[time, [state variable at Gauss point element 1, state variable at Gauss point element 2]]]</div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">svars_history_unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">list1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+            <span class="k">continue</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))))</span>
+</pre></div>
+</div>
+<p>The extraction functions that return the numpy arrays of the nodal and state variable quantities at the monitored regions are the following:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="extract_force_disp">
+<span class="sig-name descname"><span class="pre">extract_force_disp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#extract_force_disp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="extract_svars_gauss_point">
+<span class="sig-name descname"><span class="pre">extract_svars_gauss_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#extract_svars_gauss_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The first method extracts the nodal displacement at the end nodes, and the stress tensor at the boundary of the domain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">extract_force_disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">analysis_history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_history</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">history_unpack</span><span class="p">(</span><span class="n">analysis_history</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_force</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_disp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The second method extracts the state variable component from the gauss points in question.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">extract_svars_gauss_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">analysis_svars_history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_svars_history</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">svars_history_unpack</span><span class="p">(</span><span class="n">analysis_svars_history</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="application-of-analysis-procedure-and-postprocessing-of-numerical-results">
+<h3><span class="section-number">2.1.3.4. </span>Application of analysis procedure and postprocessing of numerical results<a class="headerlink" href="#application-of-analysis-procedure-and-postprocessing-of-numerical-results" title="Permalink to this heading">¶</a></h3>
+<p>The following code block performs the analyses of the two numerical models and the postprocessing of the results.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#model 1 run analysis procedure</span>
+<span class="n">my_FEproblem1</span><span class="o">=</span><span class="n">Cauchy2DFEproblem</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="p">)</span>
+<span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">give_me_solver_params</span><span class="p">(</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">10e-3</span><span class="p">)</span>
+<span class="n">converged1</span><span class="o">=</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">run_analysis_procedure</span><span class="p">(</span><span class="n">reference_data_path</span><span class="p">)</span>
+
+<span class="c1">#model 2 run analysis procedure</span>
+<span class="n">my_FEproblem2</span><span class="o">=</span><span class="n">Cauchy2DFEproblem</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="p">)</span>
+<span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">give_me_solver_params</span><span class="p">(</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">10e-4</span><span class="p">)</span>
+<span class="n">converged2</span><span class="o">=</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">run_analysis_procedure</span><span class="p">(</span><span class="n">reference_data_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After the analyses have finished we perform extraction of the results</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_force_disp</span><span class="p">()</span>
+<span class="n">values_time1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_time</span>
+<span class="n">values_force1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_force</span>
+<span class="n">values_disp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_disp</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">extract_force_disp</span><span class="p">()</span>
+<span class="n">values_time2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">array_time</span>
+<span class="n">values_force2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">array_force</span>
+<span class="n">values_disp2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">array_disp</span>
+</pre></div>
+</div>
+<p>The values of plastic strain rate, the material parameters at the yield strength at the Gauss points are also retrived via the method
+<a class="reference internal" href="Viscoplasticity_Application_3.html#extract_svars_gauss_point" title="extract_svars_gauss_point"><code class="xref py py-meth docutils literal notranslate"><span class="pre">extract_svars_gauss_point()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_force_disp</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_svars_gauss_point</span><span class="p">()</span>
+<span class="n">gamma_dot_vp_1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_dtime</span><span class="p">)</span>
+<span class="n">cc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+<span class="n">etavp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span><span class="o">/</span><span class="n">cc</span>
+<span class="n">tau_yield_anal_1</span><span class="o">=</span><span class="n">cc</span><span class="o">+</span><span class="n">etavp</span><span class="o">*</span><span class="n">cc</span><span class="o">*</span><span class="n">gamma_dot_vp_1</span> <span class="c1">#evolution of elastovisoplastic strength during shearing</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">extract_force_disp</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">extract_svars_gauss_point</span><span class="p">()</span>
+<span class="n">gamma_dot_vp_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">array_dtime</span><span class="p">)</span>
+<span class="n">cc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+<span class="n">etavp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem2</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span><span class="o">/</span><span class="n">cc</span>
+<span class="n">tau_yield_anal_2</span><span class="o">=</span><span class="n">cc</span><span class="o">+</span><span class="n">etavp</span><span class="o">*</span><span class="n">cc</span><span class="o">*</span><span class="n">gamma_dot_vp_2</span> <span class="c1">#evolution of elastoviscoplastic strength during shearing</span>
+</pre></div>
+</div>
+</section>
+<section id="plotting-the-analysis-values">
+<h3><span class="section-number">2.1.3.5. </span>Plotting the analysis values<a class="headerlink" href="#plotting-the-analysis-values" title="Permalink to this heading">¶</a></h3>
+<p>We will plot the shear stress displacement values at the free surface of the layer for the two cases os slow and fast shear. To do so we take
+advantage of the plotting capabilities of Numerical Geolab available in <a class="reference internal" href="ngeoFE_unittests.html#module-ngeoFE_unittests.plotting_params" title="ngeoFE_unittests.plotting_params"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE_unittests.plotting_params</span></code></a>.</p>
+<div class="line-block">
+<div class="line">The comparative results of stress displacement for the two models of uniform shear are shown in Figure</div>
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="_images/Cauchy_2D_Perzyna_elastoplastic_App1.svg"><img alt="alternate text" height="200px" src="_images/Cauchy_2D_Perzyna_elastoplastic_App1.svg" width="400px" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2.1.2 </span><span class="caption-text">Shear stress displacement diagram at the free end of the layer.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</td>
+<td><figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="_images/Cauchy_simple_shear_end_of_analysis.png"><img alt="alternate text" src="_images/Cauchy_simple_shear_end_of_analysis.png" style="width: 400px; height: 200px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2.1.3 </span><span class="caption-text">2D elasto visco-plastic Cauchy layer under uniform shear (image produced with the help of third party software Paraview).</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2.1. Viscoplastity Application 1:</a><ul>
+<li><a class="reference internal" href="#begining-of-file">2.1.1. Begining of file</a></li>
+<li><a class="reference internal" href="#finite-element-formulation">2.1.2. Finite element formulation</a><ul>
+<li><a class="reference internal" href="#boundary-identification">2.1.2.1. Boundary identification</a></li>
+<li><a class="reference internal" href="#monitoring-stress-and-state-variables-at-the-gauss-points">2.1.2.2. Monitoring stress and state variables at the Gauss points</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#finite-element-problem-description">2.1.3. Finite element problem description</a><ul>
+<li><a class="reference internal" href="#material-specification">2.1.3.1. Material specification</a><ul>
+<li><a class="reference internal" href="#analysis-excecution-and-postprocessing">2.1.3.1.1. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#controling-the-analysis-time">2.1.3.2. Controling the analysis time</a></li>
+<li><a class="reference internal" href="#postprocessing-the-results">2.1.3.3. Postprocessing the results</a></li>
+<li><a class="reference internal" href="#application-of-analysis-procedure-and-postprocessing-of-numerical-results">2.1.3.4. Application of analysis procedure and postprocessing of numerical results</a></li>
+<li><a class="reference internal" href="#plotting-the-analysis-values">2.1.3.5. Plotting the analysis values</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Tutorial_Cauchy_viscoplasticity_VM.html"
+                          title="previous chapter"><span class="section-number">2. </span>Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Viscoplasticity_Application_2.html"
+                          title="next chapter"><span class="section-number">2.2. </span>Viscoplastity Application 2:</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Viscoplasticity_Application_2.html" title="2.2. Viscoplastity Application 2:"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cauchy_viscoplasticity_VM.html" title="2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="Tutorial_Cauchy_viscoplasticity_VM.html" ><span class="section-number">2. </span>Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1. </span>Viscoplastity Application 1:</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

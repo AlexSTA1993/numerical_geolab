@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.1. Viscoplastity Application 1:" href="Viscoplasticity_Application_1.html" />
+    <link rel="prev" title="1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material" href="Tutorial_Cauchy_elastoplasticity_VM.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Viscoplasticity_Application_1.html" title="2.1. Viscoplastity Application 1:"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cauchy_elastoplasticity_VM.html" title="1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="simple-shear-of-a-2d-cacuhy-layer-with-von-mises-yield-criterion-and-perzyna-viscoplasticity">
+<h1><span class="section-number">2. </span>Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity<a class="headerlink" href="#simple-shear-of-a-2d-cacuhy-layer-with-von-mises-yield-criterion-and-perzyna-viscoplasticity" title="Permalink to this heading">¶</a></h1>
+<p>In this series of tutorials, we will validate the Cauchy, Perzyna viscoplasticity law available in Numerical Geolab. We will study three applications in order to evaluate the
+accuracy of the underlying material law and the capabilities of Numerical Geolab in applying different types of boundary conditions and materials
+Finally, we will showcase the flexibility of Numerical Geolab in running parametric analyses by simple modifications in the python script.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">The three applications we will study are the following:</div>
+</div>
+<ul class="simple">
+<li><p>Application 1: Response comparizon in simple shear of a perfectly plastic, strain rate hardening, <img class="math" src="_images/math/e99d3a00de2ae801391f250f5fddbe0a026d8c69.png" alt="\eta^{vp}&gt;0"/>, 2D Cauchy layer under slow and fast shear strain rate.</p></li>
+<li><p>Application 2: Shear relaxation of a 2D Cauchy layer, here we will apply an instantatenous bpoundary condition.</p></li>
+<li><p>Application 3: Strain localization analysis for a strain softening, H&lt;0, strain-rate hardening, <img class="math" src="_images/math/e99d3a00de2ae801391f250f5fddbe0a026d8c69.png" alt="\eta^{vp}&gt;0"/>, material.</p></li>
+</ul>
+<div class="line-block">
+<div class="line">Each application is separately described in the documentation:</div>
+</div>
+</div></blockquote>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Viscoplasticity_Application_1.html">2.1. Viscoplastity Application 1:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_1.html#begining-of-file">2.1.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_1.html#finite-element-formulation">2.1.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_1.html#finite-element-problem-description">2.1.3. Finite element problem description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Viscoplasticity_Application_2.html">2.2. Viscoplastity Application 2:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_2.html#begining-of-file">2.2.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_2.html#finite-element-formulation">2.2.2. Finite element formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Viscoplasticity_Application_3.html">2.3. Viscoplastity Application 3:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#begining-of-file">2.3.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#finite-element-formulation">2.3.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#analysis-excecution-and-postprocessing">2.3.3. Analysis excecution and postprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#postprocessing-the-results">2.3.4. Postprocessing the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#application-of-analysis-procedure-and-postprocessing-of-numerical-results">2.3.5. Application of analysis procedure and postprocessing of numerical results</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Tutorial_Cauchy_elastoplasticity_VM.html"
+                          title="previous chapter"><span class="section-number">1. </span>Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Viscoplasticity_Application_1.html"
+                          title="next chapter"><span class="section-number">2.1. </span>Viscoplastity Application 1:</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Viscoplasticity_Application_1.html" title="2.1. Viscoplastity Application 1:"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cauchy_elastoplasticity_VM.html" title="1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

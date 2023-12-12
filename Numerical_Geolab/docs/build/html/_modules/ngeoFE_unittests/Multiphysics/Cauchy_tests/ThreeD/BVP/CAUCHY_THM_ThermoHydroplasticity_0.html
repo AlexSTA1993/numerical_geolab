@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0 &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../../_static/jquery.js"></script>
+    <script src="../../../../../../_static/underscore.js"></script>
+    <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Jul 29, 2019</span>
+
+<span class="sd">@author: Alexandros STATHAS</span>
+<span class="sd">BVP Thermo-Hydro-plasticity with a Cauchy continuum and a Von-Mises yield criterion. </span>
+<span class="sd">It performs a 3D shear test in elasto-plasticity. The specimen lies under 1D shear,</span>
+<span class="sd">under adiabatic - undrained conditions.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.font_manager</span> <span class="kn">import</span> <span class="n">FontProperties</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+
+<span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">UserFEproblem</span><span class="p">,</span> <span class="n">General_FEproblem_properties</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEformulation</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.materials</span> <span class="kn">import</span> <span class="n">UserMaterial</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">ffc.quadrature.deprecation</span> <span class="kn">import</span> <span class="n">QuadratureRepresentationDeprecationWarning</span>
+<span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+<span class="kn">from</span> <span class="nn">numpy.core.tests.test_getlimits</span> <span class="kn">import</span> <span class="n">assert_ma_equal</span>
+<span class="kn">from</span> <span class="nn">_operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="c1">#from dolfin.cpp.mesh import MeshFunction</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">QuadratureRepresentationDeprecationWarning</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+
+<div class="viewcode-block" id="THM3D_FEformulation"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation">[docs]</a><span class="k">class</span> <span class="nc">THM3D_FEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Defines a user FE formulation</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="THM3D_FEformulation.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Number of stress/deformation components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">6</span><span class="o">+</span><span class="mi">3</span><span class="o">+</span><span class="mi">3</span>
+        <span class="c1"># Number of Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c1"># Number of auxiliary quantities at Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_aux</span><span class="o">=</span><span class="mi">2</span></div>
+        
+<div class="viewcode-block" id="THM3D_FEformulation.generalized_epsilon"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.generalized_epsilon">[docs]</a>    <span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Set user&#39;s generalized deformation vector</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">gde</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>              <span class="c1">#gamma_11</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>              <span class="c1">#gamma_22</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">2</span><span class="p">),</span>              <span class="c1">#gamma_22</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>   <span class="c1">#gamma_23</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>   <span class="c1">#gamma_13</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>   <span class="c1">#gamma_12</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#q_1 - pf</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>  <span class="c1">#q_2 - pf</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="mi">2</span><span class="p">),</span>  <span class="c1">#q_3 - pf</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">#q_1 - temp</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="mi">1</span><span class="p">),</span>  <span class="c1">#q_2 - temp</span>
+            <span class="n">Dx</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="mi">2</span><span class="p">),</span>  <span class="c1">#q_3 - temp</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">gde</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEformulation.auxiliary_fields"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.auxiliary_fields">[docs]</a>    <span class="k">def</span> <span class="nf">auxiliary_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Set user&#39;s generalized deformation vector</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">auxgde</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">auxgde</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEformulation.setVarFormAdditionalTerms_Res"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.setVarFormAdditionalTerms_Res">[docs]</a>    <span class="k">def</span> <span class="nf">setVarFormAdditionalTerms_Res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">Du</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">svars</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="n">Res</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">lstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">55</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">bstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">56</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rhoC</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">57</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#HM terms</span>
+        <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">Du</span><span class="p">)</span>
+        <span class="n">eps_v</span><span class="o">=</span><span class="n">eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">virtual_pf</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        
+        <span class="n">Res</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">eps_v</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span> 
+        
+        <span class="c1">#TM terms</span>
+        <span class="n">virtual_Temp</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+            <span class="n">Res</span><span class="o">+=</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">41</span><span class="o">+</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">virtual_Temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+          
+        <span class="c1">#HT terms</span>
+        <span class="n">DTemp</span><span class="o">=</span><span class="n">Du</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">Res</span><span class="o">+=</span> <span class="o">+</span><span class="p">(</span><span class="n">lstar</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">DTemp</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">Res</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEformulation.setVarFormAdditionalTerms_Jac"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.setVarFormAdditionalTerms_Jac">[docs]</a>    <span class="k">def</span> <span class="nf">setVarFormAdditionalTerms_Jac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">Du</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">svars</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">dt</span><span class="p">,</span><span class="n">ddsdde</span><span class="p">):</span>
+        <span class="n">lstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">55</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">bstar</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">56</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rhoC</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">57</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">alfa</span><span class="o">=</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">58</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Jac</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="c1">#HM terms</span>
+        <span class="n">eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="c1">#needs u (trial function, because it takes derivatives in terms of u and not Du for calculating the Jacobian.</span>
+        <span class="n">eps_vol</span><span class="o">=</span><span class="n">eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">virtual_pf</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">Jac</span><span class="o">+=+</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">eps_vol</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+ 
+        <span class="c1">#MH terms</span>
+        <span class="n">pf</span><span class="o">=</span><span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#same as before</span>
+        <span class="n">virtual_eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">virtual_eps_vol</span><span class="o">=</span><span class="n">virtual_eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">virtual_eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">virtual_eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span><span class="n">virtual_eps_vol</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+         
+        <span class="c1">#HT terms</span>
+        <span class="n">temperature</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">lstar</span><span class="o">/</span><span class="n">bstar</span><span class="p">)</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span><span class="n">virtual_pf</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        
+        <span class="c1">#TH terms </span>
+        <span class="n">eps_temp</span><span class="o">=</span><span class="n">alfa</span><span class="o">*</span><span class="n">temperature</span><span class="o">*</span><span class="n">as_vector</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+         
+        <span class="c1">#MT terms</span>
+        <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">ddsdde</span><span class="p">,</span><span class="n">eps_temp</span><span class="p">),</span><span class="n">virtual_eps</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span> 
+        
+        <span class="c1">#TM terms due to thermal expansion and plastic deformation</span>
+        <span class="n">virtual_temp</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">eps_eff</span><span class="o">=</span><span class="n">eps</span><span class="o">+</span><span class="n">eps_temp</span>
+        <span class="n">eps_plastic</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">):</span>
+            <span class="n">eps_plastic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">svars</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">41</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">eps_plastic</span><span class="o">=</span><span class="n">as_vector</span><span class="p">(</span><span class="n">eps_plastic</span><span class="p">)</span>
+        <span class="n">Jac</span><span class="o">+=-</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">ddsdde</span><span class="p">,</span><span class="n">eps_eff</span><span class="p">),</span><span class="n">eps_plastic</span><span class="p">)</span><span class="o">*</span><span class="n">virtual_temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="c1">#TM terms due to fluid pressure and plastic deforamtion, i.e. thermal pressurization </span>
+        <span class="n">eps_plastic_vol</span><span class="o">=</span><span class="n">eps_plastic</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">eps_plastic</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">eps_plastic</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">Jac</span><span class="o">+=+</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="n">pf</span><span class="o">*</span><span class="n">eps_plastic_vol</span><span class="o">*</span><span class="n">virtual_temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+         
+        <span class="c1">#TM 2</span>
+        <span class="n">Jac</span><span class="o">+=</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="p">)</span><span class="o">*</span><span class="n">inner</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">ddsdde</span><span class="p">,</span><span class="n">eps_temp</span><span class="p">),</span><span class="n">eps_plastic</span><span class="p">)</span><span class="o">*</span><span class="n">virtual_temp</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Jac</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEformulation.create_element"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.create_element">[docs]</a>    <span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cell</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set desired element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c1"># Defines a Lagrangian FE of degree 1 for the displacements</span>
+        <span class="n">element</span><span class="o">=</span><span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Lagrange&quot;</span><span class="p">,</span><span class="n">cell</span><span class="p">,</span><span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">element</span></div>
+
+<div class="viewcode-block" id="THM3D_FEformulation.dotv_coeffs"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEformulation.dotv_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">dotv_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;   </span>
+<span class="sd">        Set left hand side derivative coefficients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">as_vector</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">])</span></div></div>
+
+<div class="viewcode-block" id="THM3D_FEproblem"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem">[docs]</a><span class="k">class</span> <span class="nc">THM3D_FEproblem</span><span class="p">(</span><span class="n">UserFEproblem</span><span class="p">):</span>
+<div class="viewcode-block" id="THM3D_FEproblem.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">FEformulation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example of 1D plane strain problem, Cauchy continuum&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Normal_loading_total</span><span class="o">=-</span><span class="mf">200.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pressure_loading</span><span class="o">=</span><span class="mf">66.66</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Normal_loading_eff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Normal_loading_total</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Pressure_loading</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.set_general_properties"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.set_general_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set here all the parameters of the problem, except material properties </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">=</span><span class="n">General_FEproblem_properties</span><span class="p">()</span>
+        <span class="c1"># Number of state variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genprops</span><span class="o">.</span><span class="n">p_nsvars</span><span class="o">=</span><span class="mi">62</span></div>
+        
+<div class="viewcode-block" id="THM3D_FEproblem.create_mesh"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.create_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set mesh and subdomains</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h1</span><span class="o">=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h2</span><span class="o">=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h3</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="o">=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nz</span><span class="o">=</span><span class="mi">1</span>
+        <span class="n">mesh</span><span class="o">=</span><span class="n">BoxMesh</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h2</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h3</span><span class="p">),</span><span class="n">Point</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h1</span><span class="p">,</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h2</span><span class="p">,</span><span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h3</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nz</span><span class="p">)</span>        
+      
+        <span class="n">cd</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">fd</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.create_subdomains"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.create_subdomains">[docs]</a>    <span class="k">def</span> <span class="nf">create_subdomains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create subdomains by marking regions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subdomains</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">subdomains</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
+        <span class="k">return</span> <span class="n">subdomains</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.Gauss_point_Querry"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.Gauss_point_Querry">[docs]</a>    <span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="THM3D_FEproblem.Gauss_point_Querry.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.Gauss_point_Querry.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="THM3D_FEproblem.Gauss_point_Querry.inside"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.Gauss_point_Querry.inside">[docs]</a>        <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span> <span class="ow">and</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span> <span class="ow">and</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span></div></div>
+
+    
+<div class="viewcode-block" id="THM3D_FEproblem.create_Gauss_point_querry_domain"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.create_Gauss_point_querry_domain">[docs]</a>    <span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create subdomains by marking regions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+        <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
+        <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gauss_point_Querry</span><span class="p">()</span>
+        <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GaussDomain</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.Boundary"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.Boundary">[docs]</a>    <span class="k">class</span> <span class="nc">Boundary</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="THM3D_FEproblem.Boundary.__init__"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.Boundary.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xyz</span><span class="p">,</span><span class="n">param</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="o">=</span><span class="n">param</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+<div class="viewcode-block" id="THM3D_FEproblem.Boundary.inside"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.Boundary.inside">[docs]</a>        <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+            <span class="n">tol</span> <span class="o">=</span> <span class="n">DOLFIN_EPS</span>
+            <span class="k">return</span> <span class="n">on_boundary</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">)</span>        </div></div>
+
+<div class="viewcode-block" id="THM3D_FEproblem.mark_boundaries"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.mark_boundaries">[docs]</a>    <span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mark left and right boundary points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">top0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h3</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">top0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bottom0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h3</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">bottom0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">left0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h1</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">left0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">right0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h1</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">right0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="c1">#         </span>
+        <span class="n">back0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">h2</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">back0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">front0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h2</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="n">front0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+
+
+    
+<div class="viewcode-block" id="THM3D_FEproblem.set_bcs"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.set_bcs">[docs]</a>    <span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set boundary conditions for the user problem / could be replaced by external mesher, e.g. Abaqus, Gmsh...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span>               
+                <span class="c1">#top</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>    
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mf">0.</span> <span class="p">]],</span> <span class="c1">#undrained</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span> <span class="c1">#adiabatic</span>
+                <span class="c1">#bottom</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>    
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">]],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mf">0.</span> <span class="p">]],</span> <span class="c1">#undrained</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span> <span class="c1">#adiabatic</span>
+            <span class="p">]</span>        
+            <span class="k">return</span> <span class="n">bcs</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.history_output"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.history_output">[docs]</a>    <span class="k">def</span> <span class="nf">history_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to get output of residual at selected node </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hist</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">0</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">2</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">2</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">3</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">3</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">4</span><span class="p">]]],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">,[</span><span class="mi">4</span><span class="p">]]]</span>
+              <span class="p">]</span>
+        <span class="k">return</span> <span class="n">hist</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.history_svars_output"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.history_svars_output">[docs]</a>    <span class="k">def</span> <span class="nf">history_svars_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to get output of svars at selected Gauss point </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hist_svars</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">0</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">2</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">3</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">4</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">5</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">40</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">41</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">42</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">43</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">44</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">45</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">58</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">59</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">12</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">13</span><span class="p">]]],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">14</span><span class="p">]]]]</span> 
+        <span class="k">return</span> <span class="n">hist_svars</span>    </div>
+
+    
+<div class="viewcode-block" id="THM3D_FEproblem.set_materials"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.set_materials">[docs]</a>    <span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create material objects and set material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mats</span><span class="o">=</span><span class="p">[]</span>
+        <span class="c1"># load material #1</span>
+        <span class="n">env_lib</span><span class="o">=</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">env_lib</span> 
+        <span class="n">umat_lib</span><span class="o">=</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">umat_lib_path</span><span class="o">+</span><span class="s1">&#39;CAUCHY3D-DP-PR-TEMP/libplast_Cauchy3D-DP-PR-TEMP.so&#39;</span>
+        <span class="n">umat_id</span><span class="o">=</span><span class="mi">3</span> <span class="c1"># if many materials exist in the same library</span>
+        <span class="n">mat</span><span class="o">=</span><span class="n">UserMaterial</span><span class="p">(</span><span class="n">env_lib</span><span class="p">,</span><span class="n">umat_lib</span><span class="p">,</span><span class="n">umat_id</span><span class="p">)</span>
+        <span class="n">mat</span><span class="o">.</span><span class="n">props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_material_1_properties</span><span class="p">()</span>
+        <span class="n">mats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mats</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.set_material_1_properties"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.set_material_1_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_material_1_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets material parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">EE</span><span class="o">=</span><span class="mf">2000.</span><span class="p">;</span><span class="n">nu</span><span class="o">=</span><span class="mf">0.</span> <span class="p">;</span><span class="n">cc</span><span class="o">=</span><span class="mf">0.1</span> <span class="p">;</span><span class="n">tanfi</span><span class="o">=</span><span class="mf">0.</span><span class="p">;</span><span class="n">tanpsi</span><span class="o">=</span><span class="mf">0.</span><span class="p">;</span><span class="n">Hsfi</span><span class="o">=</span><span class="mf">0.</span><span class="p">;</span><span class="n">Hscc</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">GG</span><span class="o">=</span><span class="n">EE</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">nu</span><span class="p">))</span>
+        <span class="n">KK</span><span class="o">=</span><span class="n">EE</span><span class="o">*</span><span class="n">GG</span><span class="o">/</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="n">GG</span><span class="o">-</span><span class="n">EE</span><span class="p">))</span>
+        <span class="n">permeability</span><span class="o">=</span><span class="mf">1.</span><span class="p">;</span><span class="n">fluid_viscosity</span><span class="o">=</span><span class="mf">1.</span><span class="p">;</span><span class="n">lstar</span><span class="o">=</span><span class="mf">10.</span><span class="o">**</span><span class="mi">8</span><span class="p">;</span><span class="n">bstar</span><span class="o">=</span><span class="mf">10.</span><span class="o">**</span><span class="mi">8</span><span class="p">;</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="c1">#2.5*10.**-2.</span>
+        <span class="n">conductivity</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mf">1.</span><span class="p">;</span><span class="n">rhoC</span><span class="o">=</span><span class="mf">1.</span> <span class="c1">#density * specific heat capacity</span>
+        <span class="n">props</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">KK</span><span class="p">,</span><span class="n">GG</span><span class="p">,</span><span class="n">permeability</span><span class="p">,</span><span class="n">fluid_viscosity</span><span class="p">,</span><span class="n">bstar</span><span class="p">,</span><span class="n">conductivity</span><span class="p">,</span><span class="n">rhoC</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">lstar</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="n">tanfi</span><span class="p">,</span><span class="n">cc</span><span class="p">,</span><span class="n">tanpsi</span><span class="p">,</span><span class="n">Hsfi</span><span class="p">,</span><span class="n">Hscc</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+        <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">props</span></div>
+
+
+<div class="viewcode-block" id="THM3D_FEproblem.give_me_solver_params"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.give_me_solver_params">[docs]</a>    <span class="k">def</span> <span class="nf">give_me_solver_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span> <span class="o">=</span> <span class="n">scale_t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">incmodulo</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="o">=</span><span class="mf">0.1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="mf">1.</span>
+            <span class="n">ninc</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">dtmax</span><span class="p">)</span>   
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">nincmax</span><span class="o">=</span><span class="mi">1000000</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">convergence_tol</span><span class="o">=</span><span class="mi">10</span><span class="o">**-</span><span class="mi">6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">removezerolines</span><span class="o">=</span><span class="kc">False</span></div>
+            
+<div class="viewcode-block" id="THM3D_FEproblem.run_analysis_procedure"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.run_analysis_procedure">[docs]</a>    <span class="k">def</span> <span class="nf">run_analysis_procedure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">reference_data_path</span><span class="p">):</span>
+        <span class="n">saveto</span><span class="o">=</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;THM-RESULTS/THERMO_HYDRO_PLASTIC/test3D_THM3D_initial_0.xdmf&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shearing&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">set_bcs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">symbolic_bcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bcs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">converged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span><span class="n">summary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">saveto</span><span class="o">=</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;THM-RESULTS/THERMO_HYDRO_PLASTIC/test3D_THM3D_shearing_1.xdmf&quot;</span>
+        <span class="k">return</span> <span class="n">converged</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.history_unpack"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.history_unpack">[docs]</a>    <span class="k">def</span> <span class="nf">history_unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">list1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
+            
+                <span class="k">continue</span>
+        
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">2</span><span class="p">])))))</span> 
+        <span class="k">return</span> </div>
+ 
+<div class="viewcode-block" id="THM3D_FEproblem.svars_history_unpack"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.svars_history_unpack">[docs]</a>    <span class="k">def</span> <span class="nf">svars_history_unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">list1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">list1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+                <span class="k">continue</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">[</span><span class="mi">1</span><span class="p">])))))</span></div>
+
+    
+<div class="viewcode-block" id="THM3D_FEproblem.extract_generalized_force_disp"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.extract_generalized_force_disp">[docs]</a>    <span class="k">def</span> <span class="nf">extract_generalized_force_disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">analysis_history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_unpack</span><span class="p">(</span><span class="n">analysis_history</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_time</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="p">[:,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="p">[:,:]</span>
+
+        <span class="k">return</span></div>
+        
+<div class="viewcode-block" id="THM3D_FEproblem.extract_elastoplastic_matrix"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.extract_elastoplastic_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">extract_elastoplastic_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_dforce</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_force</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gen_ddisp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_disp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EH</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_dforce</span><span class="p">[:],</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gen_ddisp</span><span class="p">[:])</span>
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="THM3D_FEproblem.extract_svars_gauss_point"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0.THM3D_FEproblem.extract_svars_gauss_point">[docs]</a>    <span class="k">def</span> <span class="nf">extract_svars_gauss_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">analysis_svars_history</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">problem_svars_history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_history_unpack</span><span class="p">(</span><span class="n">analysis_svars_history</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_dtime</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array_gp_svars_comp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroplasticity_0</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

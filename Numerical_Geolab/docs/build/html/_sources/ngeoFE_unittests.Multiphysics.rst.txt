@@ -1,0 +1,29 @@
+ngeoFE\_unittests.Multiphysics package
+======================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    ngeoFE_unittests.Multiphysics.Cauchy_tests
+
+Submodules
+----------
+
+ngeoFE\_unittests.Multiphysics.ngeo\_parameters module
+------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.ngeo_parameters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics
+    :members:
+    :undoc-members:
+    :show-inheritance:

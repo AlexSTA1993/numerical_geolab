@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2.1. CAUCHY3D-DP &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Linear and Bilinear forms in Numerical Geolab" href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" />
+    <link rel="prev" title="2. Material description" href="material_description_state_variables.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" title="1. Linear and Bilinear forms in Numerical Geolab"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="material_description_state_variables.html" title="2. Material description"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="material_description_state_variables.html" accesskey="U"><span class="section-number">2. </span>Material description</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1. </span>CAUCHY3D-DP</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cauchy3d-dp">
+<h1><span class="section-number">2.1. </span>CAUCHY3D-DP<a class="headerlink" href="#cauchy3d-dp" title="Permalink to this heading">¶</a></h1>
+<section id="elastoplastic-description">
+<h2><span class="section-number">2.1.1. </span>Elastoplastic description<a class="headerlink" href="#elastoplastic-description" title="Permalink to this heading">¶</a></h2>
+<p>In the undeformed configuration under the assumption of small displacements, the constitutive law of an isotorpic linear elastic material
+is given by the following relation in indicial notation (i=1,…,3, and  summation over repeated indices is taken into account):</p>
+<div class="math">
+<p><img src="_images/math/bb407c8266910fde412f4b04fa1c80dc3b89fcda.png" alt="\begin{align}
+\begin{aligned}
+&amp;\sigma_{ij}=K\varepsilon^e_v\delta_{ij}+Ge^e_{ij},\\
+&amp;\varepsilon_{v}=\varepsilon_{kk},\; e_{ij}=\varepsilon_{ij}-\varepsilon_v\delta_{ij},\\
+\end{aligned}
+\end{align}"/></p>
+</div><p>where <img class="math" src="_images/math/5681d060a648bdc7a2853b22c486bf99a89a7d06.png" alt="\sigma_{ij},\;\varepsilon_{ij}"/>, are the second order stress and strain tensors respectively and <img class="math" src="_images/math/6c25980ce3b7a2635b43348da83d3a1c7f67da5b.png" alt="K,G"/> are the material moduli corresponding to triaxial compression and shear.
+From the decomposition of the stress and strain second order tensors into shperical and deviatoric part we obtain the following relations:</p>
+<div class="math">
+<p><img src="_images/math/58ef7aa2ece99d36fa8953955faa1e4c79bd35fa.png" alt="\begin{align}
+\begin{aligned}
+&amp;\sigma_{ij}=p\delta_{ij}+s_{ij},\\
+&amp;p=\frac{\sigma_{kk}}{3},\;s_{ij}=\sigma_{ij}-p\delta_{ij}\\
+&amp;p=3 K \varepsilon^e_{v}\\
+&amp;s_{ij} = G \varepsilon^e_{ij}
+\end{aligned}
+\end{align}"/></p>
+</div><p>The elastic constitutive description in Voigt formulation is given as follows:</p>
+<div class="math">
+<p><img src="_images/math/d545231749b0c16cb4719658e0a0b84b10968b09.png" alt="\begin{align}
+\begin{bmatrix}
+\sigma_{11}\\
+\sigma_{22}\\
+\sigma_{33}\\
+\sigma_{23}\\
+\sigma_{13}\\
+\sigma_{12}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\frac{4G}{3}.+K &amp; -\frac{2G}{3}.+K &amp;-\frac{2G}{3}.+K &amp;0 &amp;0 &amp;0\\
+-\frac{2G}{3}.+K        &amp; \frac{4G}{3}.+K  &amp;-\frac{2G}{3}.+K &amp;0 &amp;0 &amp;0\\
+-\frac{2G}{3}.+K        &amp; -\frac{2G}{3}.+K &amp;\frac{4G}{3}.+K  &amp;0 &amp;0 &amp;0\\
+                                0       &amp;       0                       &amp;0                                       &amp;G &amp;0 &amp;0\\
+                                0       &amp;       0                       &amp;0                                       &amp;0 &amp;G &amp;0\\
+                                0       &amp;       0                       &amp;0                                       &amp;0 &amp;0 &amp;G
+\end{bmatrix}
+\begin{bmatrix}
+\varepsilon_{11}\\
+\varepsilon_{22}\\
+\varepsilon_{33}\\
+\gamma_{23}\\
+\gamma_{13}\\
+\gamma_{12}
+\end{bmatrix},
+\end{align}"/></p>
+</div><p>where <img class="math" src="_images/math/ee8e27d25d64b4f86d1c8ef706085167073bab11.png" alt="\gamma_{ij}=\varepsilon_{ij},\;i=j"/> and <img class="math" src="_images/math/160845a894b1dece91a73c91298c21a5feb49ecc.png" alt="\gamma_{ij}=\frac{1}{2}\left(\varepsilon_{ij}+\varepsilon_{ji}\right),\;i\neq j"/>. The yield criterion is given by the following relation:</p>
+<div class="math">
+<p><img src="_images/math/451f80dd0f4db252a21930ec1641cf981d64f283.png" alt="\begin{align}
+\begin{aligned}
+        &amp;F(\sigma_{ij},e^p_q)=q-\tan \phi p - c(1+h_c e^p_q),\\
+        &amp;q=\sqrt{\frac{1}{2}s_{ij}s_{ij}}\\
+        &amp;\varepsilon_{ij}=\dot{\lambda}\frac{\partial G}{\partial \sigma_{ij}},\\
+        &amp;\varepsilon^p_q=\sqrt{2e^p_{ij}e^p_{ij}},\\
+        &amp;\varepsilon^p_v=\dot{\lambda}\frac{\partial G}{\partial p},\\
+        &amp;e^p_{ij} =\dot{\lambda}\left(\delta_{mi}\delta_{nj}-\frac{1}{3}\delta_{ij}\delta_{mn}\right)\frac{\partial F}{\partial s_{mn}}.
+\end{aligned}
+\end{align}"/></p>
+</div><p>The relationship between the plastic strain rate and the applied stresses satisfying the yield criterion involes the plastic multiplier <img class="math" src="_images/math/f5b5b5d8cd51cb9e5a09efd007b3ef32325e8aee.png" alt="\lambda"/>.
+In this relation G is the plastic potential function given by:</p>
+<div class="math">
+<p><img src="_images/math/24763c1120604b00b887cb787e20cac7c0624b6e.png" alt="\begin{align}
+\begin{aligned}
+        &amp;G(\sigma_{ij},e^p_q)=q-\tan \psi p - c(1+h_c e^p_q).
+\end{aligned}
+\end{align}"/></p>
+</div><p>When associative plasticity is used we have that <img class="math" src="_images/math/2a2816e872e79d9072939328324bbb9e0e7c039d.png" alt="F=G"/> and the Saint-Venant’s coaxiality assumption (normality rule) ensues.</p>
+<p>In the case of elasto-viscoplasticity the viscoplastic multiplier is given by <img class="math" src="_images/math/ff79999b95914ace190b5a3fdd13825e9010900f.png" alt="\dot{\lambda}=\left(\frac{&lt;G&gt;}{\eta^{vp}}\right)^N"/> with <img class="math" src="_images/math/37a846e8fb023c1694e3a5669787c9e4393716e1.png" alt="N=1"/>.
+Finally, we note that <img class="math" src="_images/math/214040a2d455635fc78769e6f7626ff8f0c81843.png" alt="&lt;G&gt;=G"/> when <img class="math" src="_images/math/98b42805f3241f8c063c62375a6e0dbb6e5b35c6.png" alt="G&gt;0"/> and zero otherwise. For an associative material <img class="math" src="_images/math/c98ca8ad0b13fc603566ba38b5bc2454be44cb73.png" alt="(F=G)"/> according to <a class="reference internal" href="#pon2002" id="id1"><span>[PON2002]</span></a> the viscoplastic potential is then given by:</p>
+<div class="math">
+<p><img src="_images/math/195a4efb625be69fb57b041fb503a5b8dde9f75d.png" alt="\begin{align}
+\Omega(\sigma_{ij},e^p_q)=q-\tan\phi p - c(1+h_ce^p_q)-\eta^{vp}\dot{\lambda}=0.
+\end{align}"/></p>
+</div><p>The consistency condition then reads:</p>
+<div class="math">
+<p><img src="_images/math/7139ecb2a086a40749b005edb32d8d12057b1904.png" alt="\Delta {\Omega} = \frac{\partial F}{\partial s_{ij}} \Delta s_{ij}+\frac{\partial F}{\partial p} \Delta p+\frac{\partial F}{\partial e^p_q}\Delta e^p_q+\frac{\partial \Omega}{\partial \dot{\lambda}}\Delta\dot{\lambda}=0"/></p>
+</div><p>where</p>
+<div class="math">
+<p><img src="_images/math/58c798972e5529f9f83d5ae31d183a7930849918.png" alt="\begin{align}
+\begin{aligned}
+&amp;\Delta p=3 K \left(\Delta \varepsilon_{v}-\Delta \varepsilon^p_{v}\right)= 3 K \left(\Delta \varepsilon_{v}-\Delta \lambda \frac{\partial G}{\partial p}\right)\\
+&amp;\Delta s_{ij} = G \left(\Delta e_{ij}-\Delta e^p_{ij}\right)=G \left(\Delta e_{ij}-\Delta \lambda \left(\delta_{mi}\delta_{nj}-\frac{1}{3}\delta_{ij}\delta_{mn}\right)\frac{\partial G}{\partial s_{mn}}\right)\\
+&amp;\Delta e^p_q = \Delta {\lambda}\sqrt{\left(\delta_{mi}\delta_{nj}-\frac{1}{3}\delta_{ij}\delta_{mn}\right)\frac{\partial G}{\partial s_{mn}}\left(\delta_{pi}\delta_{qj}-\frac{1}{3}\delta_{ij}\delta_{pq}\right)\frac{\partial G}{\partial s_{pq}}}\\
+&amp;\Delta\dot{\lambda} = \frac{\Delta &lt;F&gt;}{\eta^{vp}}
+\end{aligned}
+\end{align}"/></p>
+</div><p>solving for <img class="math" src="_images/math/4ab223dc063eb74b8284a89c8662be5cb3ca133f.png" alt="\Delta \lambda"/> we obtain:</p>
+<div class="math">
+<p><img src="_images/math/19b9ebd3e0195a8e100d2aca983e61b021cd6def.png" alt="\begin{align}
+\begin{aligned}
+\Delta \lambda =\frac{2G\frac{\partial F}{\partial \sigma_{ij}}\Delta e_{ij}+\frac{\partial F}{\partial p}K\Delta \varepsilon_v}{2G\left(\delta_{mi}\delta_{nj}-\frac{1}{3}\delta_{ij}\delta_{mn}\right)\frac{\partial F}{\partial s_{ij}}\frac{\partial G}{\partial s_{mn}}+K\frac{\partial F}{\partial p}\frac{\partial G}{\partial p}}+\frac{\eta^{vp}\Delta \dot{\lambda}}{2G\left(\delta_{mi}\delta_{nj}-\frac{1}{3}\delta_{ij}\delta_{mn}\right)\frac{\partial F}{\partial s_{ij}}\frac{\partial G}{\partial s_{mn}}+K\frac{\partial F}{\partial p}\frac{\partial G}{\partial p}}
+\end{aligned}
+\end{align}"/></p>
+</div><p>The incremental elastoplastic constitutive description in Voigt formulation is given by solving numerically for <img class="math" src="_images/math/7cc3f6603bc8f2b2dfefd5bcecbf5a2c28a0a4ab.png" alt="\Delta\lambda"/> that satisfies the consistency condition and the incremental stress strain relation.
+Then the material algorithm has converged to a new state <img class="math" src="_images/math/97e58d8ab354511a1222196c6ca6c81208cfd64a.png" alt="\sigma^{t+dt}_{ij},\varepsilon^{t+dt}_{ij},\varepsilon^{e,t+dt}_{ij},\varepsilon^{p,t+dt}_{ij}, F,\Delta{\lambda},\Delta\varepsilon^{p,t+dt}_{ij}"/>.</p>
+</section>
+<section id="material-properties">
+<h2><span class="section-number">2.1.2. </span>Material properties<a class="headerlink" href="#material-properties" title="Permalink to this heading">¶</a></h2>
+<p>For the three dimensional Cauchy Drucker-Prager material the following material properties need to be specified:</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-number">Table 2.1.1 </span><span class="caption-text">CAUCHY3D-DP: material properties</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Properties</p></th>
+<th class="head"><p>Material Property</p></th>
+<th class="head"><p>Compatible units</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><img class="math" src="_images/math/beefb85fc48a27ffbf8e9f5e734139542073823a.png" alt="K"/></p></td>
+<td><p><img class="math" src="_images/math/8ed882e31ea1e112ec99e10984a4af333ab33339.png" alt="\text{[Pa]}"/></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><img class="math" src="_images/math/f9608d4467deb0d88ac79cfd59dee58649521180.png" alt="G"/></p></td>
+<td><p><img class="math" src="_images/math/8ed882e31ea1e112ec99e10984a4af333ab33339.png" alt="\text{[Pa]}"/></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p><img class="math" src="_images/math/8d163805fa2effae95d2df514489a5e6e780d3a9.png" alt="\tan{\phi}"/></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p><img class="math" src="_images/math/0efb63185bad60424d57728f5613374289ed18d3.png" alt="c"/></p></td>
+<td><p><img class="math" src="_images/math/8ed882e31ea1e112ec99e10984a4af333ab33339.png" alt="\text{[Pa]}"/></p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p><img class="math" src="_images/math/e71fbdea9476a2d33fad0467b25eda400c1a2b97.png" alt="\tan{\psi}"/></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p><img class="math" src="_images/math/8d324dd3a2a700bb3054df35bb8f32f0c7de7d96.png" alt="h_{\phi}"/></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p><img class="math" src="_images/math/e122b150e49befed818d892708fd58a5b1c832ea.png" alt="h_c"/></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p><img class="math" src="_images/math/3d62ba6ff616c3284270350d4630962a0ec36f1e.png" alt="\eta^{vp}"/></p></td>
+<td><p><img class="math" src="_images/math/873166d1cc49660a06e20590a6fcbff407f3f682.png" alt="\text{[Pa s]}"/></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mapping-of-the-accessible-state-variables">
+<h2><span class="section-number">2.1.3. </span>Mapping of the accessible state variables<a class="headerlink" href="#mapping-of-the-accessible-state-variables" title="Permalink to this heading">¶</a></h2>
+<p>The number of state variables and their meaning are defined in the following table.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-number">Table 2.1.2 </span><span class="caption-text">CAUCHY3D-DP: Mapping of the available state variables</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20.6%" />
+<col style="width: 20.6%" />
+<col style="width: 20.6%" />
+<col style="width: 8.8%" />
+<col style="width: 20.6%" />
+<col style="width: 8.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>List of state variables:</p></th>
+<th class="head"><p>VARIABLE NAME</p></th>
+<th class="head"><p>SYMBOL</p></th>
+<th class="head"></th>
+<th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SV1</p></td>
+<td><p>STRESS_1</p></td>
+<td><p><img class="math" src="_images/math/9d0c69822519f83485ce6058f7c8083144616ced.png" alt="\sigma_{11}"/></p></td>
+<td></td>
+<td><p>Number of stress components:</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>SV2</p></td>
+<td><p>STRESS_2</p></td>
+<td><p><img class="math" src="_images/math/a75744cf3ee3b9bcf129be8ef72e5c3d4c61e4e6.png" alt="\sigma_{22}"/></p></td>
+<td></td>
+<td><p>Number of failure surfaces:</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>SV3</p></td>
+<td><p>STRESS_3</p></td>
+<td><p><img class="math" src="_images/math/8b467792be5b487c1e274ef2cc168c8706b66ec1.png" alt="\sigma_{33}"/></p></td>
+<td></td>
+<td><p>Number of hardening parameters:</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>SV4</p></td>
+<td><p>STRESS_4</p></td>
+<td><p><img class="math" src="_images/math/7536f9f5a0693198cb9088d59460c345563ac142.png" alt="\sigma_{23}"/></p></td>
+<td></td>
+<td><p>Number of user output variables:</p></td>
+<td><p>27</p></td>
+</tr>
+<tr class="row-even"><td><p>SV5</p></td>
+<td><p>STRESS_5</p></td>
+<td><p><img class="math" src="_images/math/080d322582c97452a4b3357e771b7f2760035ccc.png" alt="\sigma_{13}"/></p></td>
+<td></td>
+<td><p>Number of reserved variables:</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p>SV6</p></td>
+<td><p>STRESS_6</p></td>
+<td><p><img class="math" src="_images/math/094646f918cd2b75b7feae112f76e76cf7039895.png" alt="\sigma_{12}"/></p></td>
+<td></td>
+<td><p>Total number of state variables:</p></td>
+<td><p>37</p></td>
+</tr>
+<tr class="row-even"><td><p>SV7</p></td>
+<td><p>E_TOTAL_1</p></td>
+<td><p><img class="math" src="_images/math/a473893fdf057bf5929aae3edfe1c449b313ffea.png" alt="\varepsilon_{11}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV8</p></td>
+<td><p>E_TOTAL_2</p></td>
+<td><p><img class="math" src="_images/math/31dfb229f2ff8ede7f3a232fa51ccc111dfdec98.png" alt="\varepsilon_{22}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV9</p></td>
+<td><p>E_TOTAL_3</p></td>
+<td><p><img class="math" src="_images/math/6e4b506cd345e9cb8cd5f97d873622e8f0612f5a.png" alt="\varepsilon_{33}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV10</p></td>
+<td><p>E_TOTAL_4</p></td>
+<td><p><img class="math" src="_images/math/06bbd5687357018cefba3640eed587c159045089.png" alt="\varepsilon_{23}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV11</p></td>
+<td><p>E_TOTAL_5</p></td>
+<td><p><img class="math" src="_images/math/87427c74fa373f4c210b539e64885876842fcf2c.png" alt="\varepsilon_{13}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV12</p></td>
+<td><p>E_TOTAL_6</p></td>
+<td><p><img class="math" src="_images/math/79e6e00be5799a55bf198ba0b3107ecae862ecb1.png" alt="\varepsilon_{12}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV13</p></td>
+<td><p>E_PL_1</p></td>
+<td><p><img class="math" src="_images/math/d176061886c33366f6d9cfa3c9922f90e7da2198.png" alt="\varepsilon_{11}^{p}"/> or <img class="math" src="_images/math/976ad1f7cbfe2a738bd737126fc411bebf864b76.png" alt="\varepsilon_{11}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV14</p></td>
+<td><p>E_PL_2</p></td>
+<td><p><img class="math" src="_images/math/5d6baf3ada3bafa809a441c9e722da18d2ceac20.png" alt="\varepsilon_{22}^{p}"/> or <img class="math" src="_images/math/f3510a5cb7c66a8f0cb2f85d601214d32b225870.png" alt="\varepsilon_{22}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV15</p></td>
+<td><p>E_PL_3</p></td>
+<td><p><img class="math" src="_images/math/4dfa8b6a3817b86b442fa41951411b338701ef15.png" alt="\varepsilon_{33}^{p}"/> or <img class="math" src="_images/math/ae789e3780c0f6de1b82d0b02b1059727bdbc6e3.png" alt="\varepsilon_{33}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV16</p></td>
+<td><p>E_PL_4</p></td>
+<td><p><img class="math" src="_images/math/3c191550e2afb6a31aee6c2c88e9da4210a7fa52.png" alt="\gamma_{23}^{p}"/> or <img class="math" src="_images/math/43bbba472ba49d4f65ea79871c050c2635016f44.png" alt="\gamma_{23}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV17</p></td>
+<td><p>E_PL_5</p></td>
+<td><p><img class="math" src="_images/math/5ed21043a771c98237cc00dfef23a3ad849ae0c1.png" alt="\gamma_{13}^{p}"/> or <img class="math" src="_images/math/05492496bba377df7ed2c43d4892ddb6237a5a3e.png" alt="\gamma_{13}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV18</p></td>
+<td><p>E_PL_6</p></td>
+<td><p><img class="math" src="_images/math/308aecf3880941bb02d0fd92488d3712f5337020.png" alt="\gamma_{12}^{p}"/> or <img class="math" src="_images/math/baa0f3708f939b73458a56449c30538468448033.png" alt="\gamma_{12}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV19</p></td>
+<td><p>NA</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV20</p></td>
+<td><p>FSURF_1</p></td>
+<td><p><img class="math" src="_images/math/d836fbdaef64a194681844b1d831fa0b428dd6ad.png" alt="F(\sigma_{ij},q,c,\eta^{vp})"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV21</p></td>
+<td><p>LAMDA_1</p></td>
+<td><p><img class="math" src="_images/math/6cfbdb39e676f2aebeb85c58f175107405ea97f0.png" alt="\dot{\lambda}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV22</p></td>
+<td><p>D_E_PL_1</p></td>
+<td><p><img class="math" src="_images/math/568e6dcbe09313f349bdb2acc2f25c98676446ad.png" alt="\Delta{\varepsilon}_{11}^{p}"/> or <img class="math" src="_images/math/60d3b40c92184e60179daaec167f3646b7390cfa.png" alt="\Delta{\varepsilon}_{11}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV23</p></td>
+<td><p>D_E_PL_2</p></td>
+<td><p><img class="math" src="_images/math/12ebbd36bf504d5063d409ac57b0b8d57e7c66a5.png" alt="\Delta{\varepsilon}_{22}^{p}"/> or <img class="math" src="_images/math/94d892bed972a5d7b180db9593f2e25bf54d428c.png" alt="\Delta{\varepsilon}_{22}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV24</p></td>
+<td><p>D_E_PL_3</p></td>
+<td><p><img class="math" src="_images/math/781354a17aef785ee0d85003a706702a043c7777.png" alt="\Delta{\varepsilon}_{33}^{p}"/> or <img class="math" src="_images/math/4bac4ca3e9c85309436b1a21b23f56f5280a791f.png" alt="\Delta{\varepsilon}_{33}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV25</p></td>
+<td><p>D_E_PL_4</p></td>
+<td><p><img class="math" src="_images/math/eac5abdf8136e5bb102dc79164803282bec48583.png" alt="\Delta{\varepsilon}_{23}^{p}"/> or <img class="math" src="_images/math/62c5f31e16f209dfdceda0a80de88c1ce5993641.png" alt="\Delta{\varepsilon}_{23}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV26</p></td>
+<td><p>D_E_PL_5</p></td>
+<td><p><img class="math" src="_images/math/280b40599aa022ca87a04bb9d7db7494d1e230f5.png" alt="\Delta{\varepsilon}_{13}^{p}"/> or <img class="math" src="_images/math/3dffde1e8409267e08622783d27edbd8a443a989.png" alt="\Delta{\varepsilon}_{13}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV27</p></td>
+<td><p>D_E_PL_6</p></td>
+<td><p><img class="math" src="_images/math/33ab571744b12cdddc2191f78647efdb2b96b674.png" alt="\Delta{\varepsilon}_{12}^{p}"/> or <img class="math" src="_images/math/7bf8db545e2e5bb67a833e3d6ea764e09e385807.png" alt="\Delta{\varepsilon}_{12}^{vp}"/></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV28</p></td>
+<td><p>RESERVED_1</p></td>
+<td><p>USER VARIABLE 1</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV29</p></td>
+<td><p>RESERVED_2</p></td>
+<td><p>USER VARIABLE 2</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV30</p></td>
+<td><p>RESERVED_3</p></td>
+<td><p>USER VARIABLE 3</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV31</p></td>
+<td><p>RESERVED_4</p></td>
+<td><p>USER VARIABLE 4</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV32</p></td>
+<td><p>RESERVED_5</p></td>
+<td><p>USER VARIABLE 5</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV33</p></td>
+<td><p>RESERVED_6</p></td>
+<td><p>USER VARIABLE 6</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV34</p></td>
+<td><p>RESERVED_7</p></td>
+<td><p>USER VARIABLE 7</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV35</p></td>
+<td><p>RESERVED_8</p></td>
+<td><p>USER VARIABLE 8</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>SV36</p></td>
+<td><p>RESERVED_9</p></td>
+<td><p>USER VARIABLE 9</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SV37</p></td>
+<td><p>RESERVED_10</p></td>
+<td><p>USER VARIABLE 10</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>End of list</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div role="list" class="citation-list">
+<div class="citation" id="pon2002" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">PON2002</a><span class="fn-bracket">]</span></span>
+<p>Ponthot, J. P. (2002). Unified stress update algorithms for the numerical simulation of large deformation elasto-plastic and elasto-viscoplastic processes. International Journal of Plasticity, 18(1), 91-126.</p>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2.1. CAUCHY3D-DP</a><ul>
+<li><a class="reference internal" href="#elastoplastic-description">2.1.1. Elastoplastic description</a></li>
+<li><a class="reference internal" href="#material-properties">2.1.2. Material properties</a></li>
+<li><a class="reference internal" href="#mapping-of-the-accessible-state-variables">2.1.3. Mapping of the accessible state variables</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="material_description_state_variables.html"
+                          title="previous chapter"><span class="section-number">2. </span>Material description</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html"
+                          title="next chapter"><span class="section-number">1. </span>Linear and Bilinear forms in Numerical Geolab</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" title="1. Linear and Bilinear forms in Numerical Geolab"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="material_description_state_variables.html" title="2. Material description"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="material_description_state_variables.html" ><span class="section-number">2. </span>Material description</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1. </span>CAUCHY3D-DP</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,240 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>3. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background &#8212; Numerical Geolab 1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab-theoretical-background">
+<span id="tutorial-cauchy-thm-theory"></span><h1>3. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background<a class="headerlink" href="#application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab-theoretical-background" title="Permalink to this headline">¶</a></h1>
+<p>The ease of creating the variational form with FEniCS for the solution of the underlying system
+of partial differential equations allows us to implement a large variety of models describing
+different physical systems and their internal processes. One such system is the fault system.
+The fault system consists of a thin zone of small thickness :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>~`1 mm, which accumulates the majority
+pf slip during an earthquke, which we call the fault gouge. The fault gouge is surrounded by a damaged
+(bresciated) zone, whose thickness extends to the order of km.</p>
+<p>During an earthquake the fault gouge lies under intense shear. This has as a result the production of excessive
+heat inside the layer due to yielding of the material. The material of the fault gouge consists of a
+solid skeleton and the pore water fluid. As heat is produced, the difference between the expansivities of the solid and the fluid phase
+(water expands more than the solid skeleton) leads to pore fluid pressure increase inside the fault gouge that reduces the effective confining
+stress of the fault gouge material (see also <a class="reference internal" href="#t-p1"><span class="std std-ref">Figure 1</span></a>). This phenomenon is also called thermal pressurization. For a geomaterial the decrease in confining stress leads to a decrease in the yielding strength of the
+material and therefore, to frictional softening.</p>
+<div class="figure align-center" id="id5">
+<span id="t-p1"></span><a class="reference internal image-reference" href="../../_images/T_P_1.svg"><img alt="alternate text" height="200px" src="../../_images/T_P_1.svg" width="400px" /></a>
+<p class="caption"><span class="caption-text">Schematic representation of the phenomenon of thermal pressurization.</span></p>
+</div>
+<p>Frictional softening due to thermal pressurization is one of the main mechanisms that provoke earthquakes (cite references).
+Its evolution is crucial when we are interested in the nucleation of an earthquake and the energy balance during an earthquake phenomenon.
+We can model thermal pressurization with the introduction of THM couplings inside the fault gouge domain. Doing so, we couple the
+mechanical behavior of the fault gouge with the energy and mass balance equations.</p>
+<div class="section" id="strong-form-of-the-system-of-coupled-thm-equations">
+<h2>3.1. Strong form of the system of coupled THM equations<a class="headerlink" href="#strong-form-of-the-system-of-coupled-thm-equations" title="Permalink to this headline">¶</a></h2>
+<p>For a Cauchy continuum, the strong form of the momentum, energy and mass balance equations, for an increment in deformation is given as follows:</p>
+<div class="math notranslate nohighlight" id="equation-tp-system-pdes">
+\begin{align*}
+&amp;\Delta\sigma_{ij,j}+\Delta f_i=0,\; F(\sigma_{ij}, P)=J_2(\sigma_{ij})+\color{orange}{(\sigma_{ii}+P)\tan\phi}\color{Black}{-cc\; G(\sigma_{ij}, P)=J_2(\sigma_{ij})+(\sigma_{ii}+P)\tan\psi-cc} \\
+&amp;\color{Black}{\frac{\partial T}{\partial t}=c_{th}\frac{\partial^2 T}{\partial x^2}}+\color{Red}{\frac{1}{\rho C}\sigma_{ij}\dot{\varepsilon}^p_{ij}}\\
+&amp;\color{Black}{\frac{\partial P}{\partial t}=c_{hy}\frac{\partial^2 P}{\partial x^2}}+\color{violet}{\Lambda\frac{\partial T}{\partial t}}+\color{OliveGreen}{\frac{1}{\beta^\star}\frac{\partial \varepsilon_v}{\partial t}}
+\end{align*}</div><div class="line-block">
+<div class="line">where <span class="math notranslate nohighlight">\(\Delta f_i\)</span> is the incremental vector field of volumic forces acting on the structure under consideration. We also provide the form of the Drucker Prager yielding criterion for the description of the elastoplastic behavior of the granular material (<span class="math notranslate nohighlight">\(F(\sigma_{ij},P)\)</span>).
+Here <span class="math notranslate nohighlight">\(J_2(\sigma_{ij})\)</span> is the second invariant of the stress tensor and <span class="math notranslate nohighlight">\(\tan\phi\)</span> is the friction angle of the granular geomaterial.
+ In numerical Geolab the positive stresses are the ones that provoke tension in the structure (<span class="math notranslate nohighlight">\(\sigma_{ij}&gt;0\)</span> in tension). The parameters
+ <span class="math notranslate nohighlight">\(c_{th},\;c_{hy}\)</span> [<span class="math notranslate nohighlight">\(\text{mm}^2\text{/s}\)</span>]  are the thermal and hydraulic diffusivity of the fault gouge material respectively. The parameter
+ <span class="math notranslate nohighlight">\(\Lambda=\frac{\lambda^\star}{\beta^\star}\)</span> is the ratio of the mixture’s thermal expansivity (<span class="math notranslate nohighlight">\(\lambda^\star\)</span>) and its hydraulic compressibility (<span class="math notranslate nohighlight">\(\beta^\star\)</span>), and controls
+ the pore fluid pressure increase per unit of temperature increase [<span class="math notranslate nohighlight">\(\text{MPa/}^\text{o}\text{C}\)</span>]. To the terms contributing to the pore fluid pressure increase,
+ we need to take into account the pore fluid pressure decrease due to the expansion of the fault gouge material. The material of the fault gouge can increase its volume due to
+ temperature expansion and the plastic flow prescribed by the plastic potential <span class="math notranslate nohighlight">\(G(\sigma_{ij},\ P)\)</span>. For a mature fault gouge, i.e.
+ a granular geomaterial that has reached its critical state, the dilatancy angle <span class="math notranslate nohighlight">\(\psi\)</span> is equal to zero. Thus only the thermal expansion is taken into account.</div>
+</div>
+</div>
+<div class="section" id="weak-form-of-the-system-of-coupled-thm-equations">
+<h2>3.2. Weak form of the system of coupled THM equations<a class="headerlink" href="#weak-form-of-the-system-of-coupled-thm-equations" title="Permalink to this headline">¶</a></h2>
+<p>As is the case with the examples describing the mechanical behavior of a structure, in order to perform an analysis with FEniCS we need to
+provide the weak form of the above non-linear system of coupled partial differential equations <a class="reference internal" href="#equation-tp-system-pdes">(1)</a>. Following the Galerkin procedure,
+applying a test vector field respecting the problem’s initial and boundary conditions, with the help of the <code class="xref py py-class docutils literal notranslate"><span class="pre">TestFunction()</span></code> class in FEniCs,
+performing <a class="reference external" href="https://en.wikipedia.org/wiki/Integration_by_parts">integration by parts</a> and applying the <a class="reference external" href="https://en.wikipedia.org/wiki/Divergence_theorem">Divergence Theorem</a> theorem:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+&amp;\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij}=\int_S \Delta t_i\tilde{u}_idS\\
+&amp;\int_{\Omega}\frac{\partial T}{\partial t}\tilde{T}d\Omega+c_{th}\int_{\Omega}T_{,i}\tilde{T}_{,i}d\Omega-\frac{1}{\rho C}\int_{\Omega}\sigma_{ij}\dot{\varepsilon}^p_{ij}\tilde{T}d\Omega=\int_{S}q^{th}_i\tilde{T}dS\\
+&amp;\int_{\Omega}\frac{\partial P}{\partial t}\tilde{P}d\Omega+c_{hy}\int_{\Omega}P_{,i}\tilde{P}_{,i}d\Omega-\frac{\lambda^\star}{\beta^\star}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{P}d\Omega+\frac{1}{\beta^\star}\int_\Omega\frac{\partial \varepsilon_v}{\partial t}\tilde{P}d\Omega=\int_{S}q^{hy}_i\tilde{P}dS\\
+\end{align*}</div><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The unknowns of the weak problem are the incremental displacement components <span class="math notranslate nohighlight">\(\Delta U_i\)</span>, temperature <span class="math notranslate nohighlight">\(\Delta T\)</span> and pressure <span class="math notranslate nohighlight">\(\Delta P\)</span> fields. In our case, due to the nonlinearity in the mechanical
+component of the problem (elastic perfectly plastic material), we will solve numericaly the above nonlinear system, by applying a Newton-Raphson iterative procedure. To do so we need to
+define the residual of the algebraic system to be solved and the direction, where it decreases the fastest (we aim for quadratic convergence if possible). The residual definition is given by:</p>
+<div class="math notranslate nohighlight" id="equation-res">
+\begin{align*}
+&amp;Res=F_{ext}-F_{int}
+\end{align*}</div><p>where:</p>
+<div class="math notranslate nohighlight" id="equation-fext-fint">
+\begin{align*}
+&amp;F_{ext}=\int_S \Delta t_i\tilde{u}_idS+\int_{S}q^{th}_i\tilde{T}dS+\int_{S}q^{hy}_i\tilde{P}dS\\
+&amp;\begin{aligned}
+F_{int}=&amp;\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij}\\
+        &amp;+\int_{\Omega}\frac{\partial T}{\partial t}\tilde{T}d\Omega+c_{th}\int_{\Omega}T_{,i}\tilde{T}_{,i}d\Omega-\frac{1}{\rho C}\int_{\Omega}\sigma_{ij}\dot{\varepsilon}^p_{ij}\tilde{T}d\Omega\\
+        &amp;+\int_{\Omega}\frac{\partial P}{\partial t}\tilde{P}d\Omega+c_{hy}\int_{\Omega}P_{,i}\tilde{P}_{,i}d\Omega-\frac{\lambda^\star}{\beta^\star}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{P}d\Omega+\frac{1}{\beta^\star}\int_\Omega\frac{\partial \varepsilon_v}{\partial t}\tilde{P}d\Omega
+\end{aligned}
+\end{align*}</div><p>The above quantities indicating the internal and external power of the generalized forces are known as linear forms <a class="footnote-reference" href="#id4" id="id3">[1]</a>, In order to minimize the residual <span class="math notranslate nohighlight">\(Res\)</span> we need to move to the direction oposite to its maximization which is the opposite of
+the gradient vector direction, <span class="math notranslate nohighlight">\(-\nabla{Res}\)</span>. The gradient vector is defined by the diferentiation of the linear form with respect to all
+independent unknowns of the problem namely the incremental displacement components, the temperature and pore fluid pressure fields <span class="math notranslate nohighlight">\(\Delta U_i,T,P\)</span> respectively.
+In what follows, we will assume that the vector of the external forces is independent of the solution of the nonlinear problem (i.e. no follower loads are applied), therefore:</p>
+<div class="math notranslate nohighlight" id="equation-jac-1">
+\begin{align*}
+Jac=-\nabla Res=\nabla F_{int}
+\end{align*}</div><p>For the above formulation the Jacobian of the system is given as follows:</p>
+<div class="math notranslate nohighlight" id="equation-jac-2">
+\begin{align*}
+\nabla F_{int}&amp;=\frac{\partial F_{int}}{\partial \Delta U_i}\pmb{\Delta \hat{U}_i}+\frac{\partial F_{int}}{\partial T}\pmb{\hat{T}}+\frac{\partial F_{int}}{\partial P}\pmb{\hat{P}}
+\end{align*}</div><p>The bold quantities <span class="math notranslate nohighlight">\(\pmb{\hat{\left(\cdot{}\right)}}\)</span> indicate the unit vectors directions along the orthonormal system of the unknowns.
+For ease of notation we apply the operator <span class="math notranslate nohighlight">\(\frac{\partial}{\partial X}\left(\cdot{}\right)\)</span>, indicating differentiation of the linear form
+by each of the unknown quantities. We look first at the power of the internal mechanical forces. Each component of the above mixed (tensor, vector) field is given by:</p>
+<div class="math notranslate nohighlight" id="equation-jac-terms-mech">
+\begin{align*}
+&amp;\frac{\partial}{\partial \Delta X}\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij}d\Omega=\frac{\partial}{\partial \Delta U_i}\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij}d\Omega+\frac{\partial}{\partial \Delta T}\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij}d\Omega+\frac{\partial}{\partial \Delta P}\int_{\Omega}\Delta \sigma_{ij}\tilde{\varepsilon}_{ij}d\Omega
+\end{align*}</div><p>At this point we need to emphasize that the quantities <span class="math notranslate nohighlight">\(\Delta \sigma_{ij}\)</span> and <span class="math notranslate nohighlight">\(\tilde{\varepsilon}_{ij}\)</span> defined in the above are the total incremental stress and strain for which the momentum balance is defined. Therefore, these quantities need to be analysed to their corresponding mechanical, thermal and
+hydraulic components before the solution of the problem is sought with Numerical Geolab. The following decomposition holds for the total incremental stress and strain:</p>
+<div class="math notranslate nohighlight" id="equation-material-def">
+\begin{align*}
+&amp;\Delta\sigma_{ij}=\Delta \sigma^\star_{ij}-\Delta P\delta_{ij}
+&amp;\varepsilon_{ij}=\varepsilon^\star_{ij}+\alpha\Delta T\delta_{ij},\;\varepsilon^\star_{ij}=\varepsilon^{\star,e}_{ij}+\varepsilon^{\star,p}_{ij}
+\end{align*}</div><p>where, <span class="math notranslate nohighlight">\(\Delta \sigma^\star_{ij},\;\)</span>varepsilon^star_{ij}` are the effective stresses and strains developed by the mechanical deformation of the material.
+and <span class="math notranslate nohighlight">\(\delta_{ij}\)</span> is the kronecker delta. We note also that the effective strain can be decoposed to an elastic (<span class="math notranslate nohighlight">\(\varepsilon^{\star,e}_{ij}\)</span>) and a plastic (<span class="math notranslate nohighlight">\(\varepsilon^{\star,p}_{ij}\)</span>) component.</p>
+<div class="section" id="jacobian-terms-of-the-momentum-balance-equation">
+<h3>3.2.1. Jacobian terms of the momentum balance equation<a class="headerlink" href="#jacobian-terms-of-the-momentum-balance-equation" title="Permalink to this headline">¶</a></h3>
+<p>Replacing <a class="reference internal" href="#equation-material-def">(7)</a> into <a class="reference internal" href="#equation-jac-terms-mech">(6)</a> the coresponding Jacobian terms are then given by:</p>
+<div class="math notranslate nohighlight">
+\begin{align*}
+\frac{\partial}{\partial \Delta U_i}\int_{\Omega}\left(D^{ep}_{ijkl}\left(\varepsilon_{kl}-\alpha\Delta T\delta_{kl}\right)-\delta_{ij}\Delta P\right)\tilde{\varepsilon}_{ij}d\Omega=&amp;\frac{\partial}{\partial \Delta U_i}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+                                                                                                                                                                                       &amp;-\frac{\partial}{\partial \Delta U_i}\int_{\Omega}\alpha \Delta T D^{ep}_{ijkl}\delta_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+                                                                                                                                                                                       &amp;-\frac{\partial}{\partial \Delta U_i}\int_{\Omega}\Delta P \delta_{ij}\tilde{\varepsilon}_{ij}d\Omega\\
+\frac{\partial}{\partial \Delta T}\int_{\Omega}\left(D^{ep}_{ijkl}\left(\varepsilon_{kl}-\alpha\Delta T\delta_{kl}\right)-\delta_{ij}\Delta P\right)\tilde{\varepsilon}_{ij}d\Omega=&amp;\frac{\partial}{\partial \Delta T}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+                                                                                                                                                                                       &amp;-\frac{\partial}{\partial \Delta T}\int_{\Omega}\alpha \Delta T D^{ep}_{ijkl}\delta_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+                                                                                                                                                                                       &amp;-\frac{\partial}{\partial \Delta T}\int_{\Omega}\Delta P \delta_{ij}\tilde{\varepsilon}_{ij}d\Omega\\
+   \frac{\partial}{\partial \Delta P}\int_{\Omega}\left(D^{ep}_{ijkl}\left(\varepsilon_{kl}-\alpha\Delta T\delta_{kl}\right)-\delta_{ij}\Delta P\right)\tilde{\varepsilon}_{ij}d\Omega=&amp;\frac{\partial}{\partial \Delta P}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+                                                                                                                                                                                       &amp;-\frac{\partial}{\partial \Delta P}\int_{\Omega}\alpha \Delta T D^{ep}_{ijkl}\delta_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+                                                                                                                                                                                       &amp;-\frac{\partial}{\partial \Delta P}\int_{\Omega}\Delta P \delta_{ij}\tilde{\varepsilon}_{ij}d\Omega
+\end{align*}</div><p>Since the generalised fields are independent of each other only the terms of the solution that are differentiated with themselves survive, and we obtain:</p>
+<div class="math notranslate nohighlight" id="equation-jac-terms-mech-final">
+\begin{align*}
+\frac{\partial}{\partial \Delta U_i}\int_{\Omega}\left(D^{ep}_{ijkl}\left(\varepsilon_{kl}-\alpha\Delta T\delta_{kl}\right)-\delta_{ij}\Delta P\right)\tilde{\varepsilon}_{ij}d\Omega=&amp;\frac{\partial}{\partial \Delta U_i}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+\frac{\partial}{\partial \Delta T}\int_{\Omega}\left(D^{ep}_{ijkl}\left(\varepsilon_{kl}-\alpha\Delta T\delta_{kl}\right)-\delta_{ij}\Delta P\right)\tilde{\varepsilon}_{ij}d\Omega=&amp;-\frac{\partial}{\partial \Delta T}\int_{\Omega}\alpha \Delta T D^{ep}_{ijkl}\delta_{kl}\tilde{\varepsilon}_{ij}d\Omega\\
+\frac{\partial}{\partial \Delta P}\int_{\Omega}\left(D^{ep}_{ijkl}\left(\varepsilon_{kl}-\alpha\Delta T\delta_{kl}\right)-\delta_{ij}\Delta P\right)\tilde{\varepsilon}_{ij}d\Omega=&amp;-\frac{\partial}{\partial \Delta P}\int_{\Omega}\Delta P \delta_{ij}\tilde{\varepsilon}_{ij}d\Omega
+\end{align*}</div><p>The same procedure needs to be followed for the terms in the linear forms of corresponding to the internal power of the generalised forces of the energy and mass balance components of the problem.</p>
+</div>
+<div class="section" id="jacobian-terms-of-the-energy-balance-equation">
+<h3>3.2.2. Jacobian terms of the energy balance equation<a class="headerlink" href="#jacobian-terms-of-the-energy-balance-equation" title="Permalink to this headline">¶</a></h3>
+<p>The Jacobian terms for the energy balance equation are given by differential of the power of internal generalized forces:</p>
+<div class="math notranslate nohighlight" id="equation-jac-terms-energy-final-1">
+\begin{align*}
+\frac{\partial}{\partial X}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{T}d\Omega &amp;=\frac{\partial}{\partial T}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{T}d\Omega,\\
+c_{th}\frac{\partial}{\partial X}\int_{\Omega}T_{,i}\tilde{T}_{,i}d\Omega &amp;=c_{th}\frac{\partial}{\partial T}\int_{\Omega}T_{,i}\tilde{T}_{,i}d\Omega,\\
+-\frac{1}{\rho C}\frac{\partial}{\partial X}\int_{\Omega}\sigma_{ij}\dot{\varepsilon}^p_{ij}\tilde{T}d\Omega &amp;=-\frac{1}{\rho C}\frac{\partial}{\partial X}\int_{\Omega}D^{ep}_{ijkl}\varepsilon^\star_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega,\\
+\end{align*}</div><p>where:</p>
+<div class="math notranslate nohighlight" id="equation-jac-terms-energy-final-2">
+\begin{align*}
+-\frac{1}{\rho C}\frac{\partial}{\partial X}\int_{\Omega}D^{ep}_{ijkl}\varepsilon^\star_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega &amp;=-\frac{1}{\rho C}\frac{\partial}{\partial U_i}\int_{\Omega}D^{ep}_{ijkl}\varepsilon_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega-\frac{1}{\rho C}\frac{\partial}{\partial \Delta T}\int_{\Omega}\alpha\Delta TD^{ep}_{ijkl}\delta_{kl}\dot{\varepsilon}^{\star,p}_{ij}\tilde{T}d\Omega .
+\end{align*}</div></div>
+<div class="section" id="jacobian-terms-of-the-mass-balance-equation">
+<h3>3.2.3. Jacobian terms of the mass balance equation<a class="headerlink" href="#jacobian-terms-of-the-mass-balance-equation" title="Permalink to this headline">¶</a></h3>
+<p>The Jacobian terms for the mass balance equation are given by differential of the power of internal generalized forces:</p>
+<div class="math notranslate nohighlight" id="equation-jac-terms-energy-final">
+\begin{align*}
+\frac{\partial}{\partial X}\int_{\Omega}\frac{\partial P}{\partial t}\tilde{P}d\Omega &amp;= \frac{\partial}{\partial P}\int_{\Omega}\frac{\partial P}{\partial t}\tilde{P}d\Omega\\
+c_{hy}\frac{\partial}{\partial X}\int_{\Omega}P_{,i}\tilde{P}_{,i}d\Omega &amp;= c_{hy}\frac{\partial}{\partial P}\int_{\Omega}P_{,i}\tilde{P}_{,i}d\Omega\\
+-\frac{\lambda^\star}{\beta^\star}\frac{\partial}{\partial X}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{P}d\Omega &amp;=-\frac{\lambda^\star}{\beta^\star}\frac{\partial}{\partial T}\int_{\Omega}\frac{\partial T}{\partial t}\tilde{P}d\Omega\\
+\frac{1}{\beta^\star}\frac{\partial}{\partial X}\int_\Omega\frac{\partial \varepsilon_v}{\partial t}\tilde{P}d\Omega &amp;= \frac{1}{\beta^\star}\frac{\partial}{\partial U_i}\int_\Omega\frac{\partial \varepsilon_v}{\partial t}\tilde{P}d\Omega
+\end{align*}</div><table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td>We use the term power of the generalized forces to refer to the linear form defined by the mechanical component of the momentum balance weak formulation
+(where the terms internal and external power are strictly defined) and the corresponding linear forms of the energy and mass balance components of the coupled problem.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Numerical Geolab</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Ioannis Stefanou.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="../../_sources/docs/source/Tutorial_Cauchy_THM_couplings_theory.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

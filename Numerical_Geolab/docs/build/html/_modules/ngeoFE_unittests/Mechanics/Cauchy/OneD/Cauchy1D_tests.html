@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 5, 2018</span>
+
+<span class="sd">@author: Alexandros Stathas</span>
+
+<span class="sd">Contains unit tests of ngeoFE applied to Cauchy continua in 1D linear elasticity</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D</span> <span class="kn">import</span> <span class="n">Cauchy1DFEformulation</span><span class="p">,</span>\
+    <span class="n">Cauchy1DFEproblem</span>
+
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+<span class="c1"># ngeo_parameters.reference_data_path=&#39;/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Mechanics/reference_data/&#39;</span>
+
+<span class="n">reference_data_path</span> <span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span>    
+
+<div class="viewcode-block" id="Test"><a class="viewcode-back" href="../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests.Test">[docs]</a><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="Test.setUpClass"><a class="viewcode-back" href="../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests.Test.setUpClass">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Run FE analysis example</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">notfirsttime</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="o">=</span><span class="n">Cauchy1DFEformulation</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem</span><span class="o">=</span><span class="n">Cauchy1DFEproblem</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem</span><span class="o">.</span><span class="n">give_me_solver_params</span><span class="p">()</span>
+        <span class="n">saveto</span><span class="o">=</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;./test1D.xdmf&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">converged</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">saveto</span><span class="p">,</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">converged</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem</span><span class="o">.</span><span class="n">plot_me</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="Test.test_execution"><a class="viewcode-back" href="../../../../../ngeoFE_unittests.Mechanics.Cauchy.OneD.html#ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests.Test.test_execution">[docs]</a>    <span class="k">def</span> <span class="nf">test_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests execution and convergence</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converged</span><span class="p">,</span> <span class="s2">&quot;Convergence failed&quot;</span><span class="p">)</span></div></div>
+                
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Mechanics.Cauchy.OneD.Cauchy1D_tests</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

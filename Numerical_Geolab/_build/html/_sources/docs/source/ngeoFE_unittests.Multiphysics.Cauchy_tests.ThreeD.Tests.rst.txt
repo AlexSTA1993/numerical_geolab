@@ -1,0 +1,78 @@
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests package
+=================================================================
+
+Submodules
+----------
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_ThermoHydorelasticity\_tests module
+-------------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydorelasticity_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermo\_Hudro\_plasticity\_tests module
+-----------------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hudro_plasticity_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermo\_Hudro\_plasticity\_tests\_1 module
+--------------------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hudro_plasticity_tests_1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermo\_Hudro\_plasticity\_tests\_2 module
+--------------------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hudro_plasticity_tests_2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermoelasticity\_tests module
+--------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermoelasticity\_tests\_0 module
+-----------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermoelasticity\_tests\_2 module
+-----------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ngeoFE\_unittests.Multiphysics.Cauchy\_tests.ThreeD.Tests.Cauchy3D\_Thermoplasticity\_tests module
+--------------------------------------------------------------------------------------------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests
+    :members:
+    :undoc-members:
+    :show-inheritance:

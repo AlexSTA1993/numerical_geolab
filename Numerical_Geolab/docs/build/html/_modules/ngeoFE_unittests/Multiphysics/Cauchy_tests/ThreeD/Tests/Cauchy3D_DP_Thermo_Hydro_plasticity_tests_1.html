@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1 &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/sphinxdoc.css" />
+    <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../../_static/jquery.js"></script>
+    <script src="../../../../../../_static/underscore.js"></script>
+    <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Mai 30, 2022</span>
+
+<span class="sd">@author: Alexandros Stathas</span>
+
+<span class="sd">Contains unit tests of ngeoFE applied to Cauchy continua in 3D Thermo-Hydroplasticity with a </span>
+<span class="sd">Drucker Prager yield criterion. Check softening behavior due to pore fluid pressure increase due to thermal</span>
+<span class="sd">pressurization. The unit cube is under 1D compression.</span>
+
+<span class="sd">Checks:</span>
+<span class="sd">-Convergence</span>
+<span class="sd">-Generalised force displacement values</span>
+<span class="sd">-Analytical vs numerical total stress</span>
+<span class="sd">-Final temperature and pore fluid pressure values</span>
+<span class="sd">-Rate of temperature and pore fluid pressure increase</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_DP_THM_ThermoHydroplasticity_1</span> <span class="kn">import</span> <span class="n">THM3D_FEformulation</span><span class="p">,</span><span class="n">THM3D_FEproblem</span>
+
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">ngeo_parameters</span>
+<span class="kn">from</span> <span class="nn">ngeoFE_unittests</span> <span class="kn">import</span> <span class="n">plotting_params</span> 
+
+<span class="n">reference_data_path</span> <span class="o">=</span> <span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span>    
+
+<span class="c1"># Check if the environment variable or command-line argument is set to activate plots</span>
+<span class="n">activate_plots</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="s1">&#39;RUN_TESTS_WITH_PLOTS&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;RUN_TESTS_WITH_PLOTS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+    <span class="n">activate_plots</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;with_plots&#39;</span><span class="p">:</span>
+    <span class="n">activate_plots</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="product_sij_sji"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.product_sij_sji">[docs]</a><span class="k">def</span> <span class="nf">product_sij_sji</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sji</span><span class="p">):</span>
+    <span class="n">J2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="nb">sum</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="nb">sum</span><span class="o">+=</span><span class="n">sij</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">sji</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">J2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="nb">sum</span>
+    <span class="k">return</span> <span class="n">J2</span></div>
+    
+<div class="viewcode-block" id="calculate_J2"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.calculate_J2">[docs]</a><span class="k">def</span> <span class="nf">calculate_J2</span><span class="p">(</span><span class="n">sigma11</span><span class="p">,</span><span class="n">sigma22</span><span class="p">,</span><span class="n">sigma33</span><span class="p">,</span><span class="n">sigma23</span><span class="p">,</span><span class="n">sigma13</span><span class="p">,</span><span class="n">sigma12</span><span class="p">):</span>
+    <span class="n">p_tot</span><span class="o">=</span><span class="p">(</span><span class="n">sigma11</span><span class="o">+</span><span class="n">sigma22</span><span class="o">+</span><span class="n">sigma33</span><span class="p">)</span><span class="o">/</span><span class="mf">3.</span>
+    <span class="n">s11</span><span class="o">=</span><span class="n">sigma11</span><span class="o">-</span><span class="n">p_tot</span>
+    <span class="n">s22</span><span class="o">=</span><span class="n">sigma22</span><span class="o">-</span><span class="n">p_tot</span>
+    <span class="n">s33</span><span class="o">=</span><span class="n">sigma33</span><span class="o">-</span><span class="n">p_tot</span>
+    <span class="n">s23</span><span class="o">=</span><span class="n">sigma23</span>
+    <span class="n">s13</span><span class="o">=</span><span class="n">sigma13</span>
+    <span class="n">s12</span><span class="o">=</span><span class="n">sigma12</span>
+        
+    <span class="n">sij</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">s11</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">s11</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">s12</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=-</span><span class="n">s12</span>
+
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">s22</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">s13</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=-</span><span class="n">s13</span>
+
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">s33</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">s23</span>
+    <span class="n">sij</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=-</span><span class="n">s23</span>
+    
+    <span class="n">sji</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sij</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">sji</span><span class="p">[:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="n">J2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">product_sij_sji</span><span class="p">(</span><span class="n">sij</span><span class="p">,</span><span class="n">sji</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">J2</span></div>
+
+
+<div class="viewcode-block" id="calculate_dissipation"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.calculate_dissipation">[docs]</a><span class="k">def</span> <span class="nf">calculate_dissipation</span><span class="p">(</span><span class="n">sigma11</span><span class="p">,</span><span class="n">sigma22</span><span class="p">,</span><span class="n">sigma33</span><span class="p">,</span><span class="n">sigma23</span><span class="p">,</span><span class="n">sigma31</span><span class="p">,</span><span class="n">sigma12</span><span class="p">,</span><span class="n">epsilon11</span><span class="p">,</span><span class="n">epsilon22</span><span class="p">,</span><span class="n">epsilon33</span><span class="p">,</span><span class="n">gamma32</span><span class="p">,</span><span class="n">gamma31</span><span class="p">,</span><span class="n">gamma12</span><span class="p">):</span>    
+    <span class="n">epsilon12</span><span class="o">=</span><span class="n">gamma12</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">epsilon31</span><span class="o">=</span><span class="n">gamma31</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">epsilon32</span><span class="o">=</span><span class="n">gamma32</span><span class="o">/</span><span class="mf">2.</span>
+
+    <span class="n">epsilon21</span><span class="o">=</span><span class="n">gamma12</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">epsilon13</span><span class="o">=</span><span class="n">gamma31</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">epsilon23</span><span class="o">=</span><span class="n">gamma32</span><span class="o">/</span><span class="mf">2.</span>
+
+    
+    <span class="n">W11</span><span class="o">=</span><span class="n">sigma11</span><span class="o">*</span><span class="n">epsilon11</span>
+    <span class="n">W22</span><span class="o">=</span><span class="n">sigma22</span><span class="o">*</span><span class="n">epsilon22</span>
+    <span class="n">W33</span><span class="o">=</span><span class="n">sigma33</span><span class="o">*</span><span class="n">epsilon33</span>
+
+    <span class="n">W12</span><span class="o">=</span><span class="n">sigma12</span><span class="o">*</span><span class="n">epsilon12</span><span class="o">+</span><span class="n">sigma12</span><span class="o">*</span><span class="n">epsilon21</span>
+    <span class="n">W13</span><span class="o">=</span><span class="n">sigma31</span><span class="o">*</span><span class="n">epsilon31</span><span class="o">+</span><span class="n">sigma31</span><span class="o">*</span><span class="n">epsilon13</span>
+    <span class="n">W23</span><span class="o">=</span><span class="n">sigma23</span><span class="o">*</span><span class="n">epsilon23</span><span class="o">+</span><span class="n">sigma23</span><span class="o">*</span><span class="n">epsilon32</span>
+    
+    <span class="n">dissipation</span><span class="o">=</span> <span class="n">W11</span><span class="o">+</span><span class="n">W22</span><span class="o">+</span><span class="n">W33</span><span class="o">+</span><span class="n">W12</span><span class="o">+</span><span class="n">W13</span><span class="o">+</span><span class="n">W23</span>
+    <span class="k">return</span> <span class="n">dissipation</span></div>
+
+<div class="viewcode-block" id="Test"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test">[docs]</a><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="Test.setUpClass"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.setUpClass">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Run FE analysis example</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">notfirsttime</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="o">=</span><span class="n">THM3D_FEformulation</span><span class="p">()</span>
+        
+        <span class="c1">#first slow loading procedurde</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">=</span><span class="n">THM3D_FEproblem</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEformulation</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">give_me_solver_params</span><span class="p">(</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">converged1</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">run_analysis_procedure</span><span class="p">(</span><span class="n">reference_data_path</span><span class="p">)</span>       </div>
+        <span class="c1"># if cls.converged==True: cls.my_FEproblem.plot_me()</span>
+        
+<div class="viewcode-block" id="Test.test_execution"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_execution">[docs]</a>    <span class="k">def</span> <span class="nf">test_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests execution and convergence</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converged1</span><span class="p">,</span> <span class="s2">&quot;Convergence failed&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Test.test_generalized_force_displacement_values"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_generalized_force_displacement_values">[docs]</a>    <span class="k">def</span> <span class="nf">test_generalized_force_displacement_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Thermo_Hydro_plasticity.out</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_generalized_force_disp</span><span class="p">()</span>
+        <span class="n">values_time1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_time</span>
+        <span class="n">values_gen_force1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gen_force</span>
+        <span class="n">values_gen_disp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gen_disp</span>
+        
+        <span class="n">values1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">values_time1</span><span class="p">,</span> <span class="n">values_gen_disp1</span><span class="p">,</span> <span class="n">values_gen_force1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># with open(reference_data_path+&quot;Cauchy3D_THM_Triaxial_Thermo_Hydro_plasticity.out&quot;, &quot;wb&quot;) as fp:   #Pickling</span>
+        <span class="c1">#     pickle.dump(values1,fp)        </span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">reference_data_path</span><span class="o">+</span><span class="s2">&quot;Cauchy3D_THM_Triaxial_Thermo_Hydro_plasticity.out&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>   <span class="c1">#Pickling</span>
+            <span class="n">values_ref</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>        
+        <span class="n">values_diff</span><span class="o">=</span><span class="n">values_ref</span><span class="o">-</span><span class="n">values1</span>
+    
+        <span class="n">equal</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">values_diff</span><span class="p">))</span><span class="o">&lt;=</span><span class="mf">1.e-13</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">equal</span><span class="p">,</span> <span class="s2">&quot;Not identical time, displacements, forces: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">values_diff</span><span class="p">))))</span>
+        <span class="c1">#asserts that data are correct</span>
+        <span class="c1">#if data are correct then plot diagram</span>
+        <span class="k">if</span> <span class="n">equal</span> <span class="ow">and</span> <span class="n">activate_plots</span><span class="p">:</span>
+            <span class="n">sigma11</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sigma22</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">4</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sigma33</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">8</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sigma23</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">12</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sigma13</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">16</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sigma12</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">20</span><span class="p">:</span><span class="mi">24</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1">#            </span>
+            <span class="n">J2_1</span><span class="o">=</span><span class="n">calculate_J2</span><span class="p">(</span><span class="n">sigma11</span><span class="p">,</span><span class="n">sigma22</span><span class="p">,</span><span class="n">sigma33</span><span class="p">,</span><span class="n">sigma23</span><span class="p">,</span><span class="n">sigma13</span><span class="p">,</span><span class="n">sigma12</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+            <span class="n">p_eff</span><span class="o">=</span><span class="p">(</span><span class="n">sigma11</span><span class="o">+</span><span class="n">sigma22</span><span class="o">+</span><span class="n">sigma33</span><span class="p">)</span><span class="o">/</span><span class="mf">3.</span><span class="o">-</span><span class="n">p</span>
+
+            <span class="n">x1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">x1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            
+            <span class="n">x2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">x2</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y2</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">Pressure_loading</span><span class="p">)</span>
+            
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">color1</span><span class="p">,</span> <span class="n">color2</span> <span class="o">=</span> <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot_axes</span><span class="p">(</span><span class="s1">&#39;$t$ [s]&#39;</span><span class="p">,</span> <span class="n">y1_txt</span><span class="o">=</span><span class="s1">&#39;$T\; $[$^o$  C]&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">y2_txt</span><span class="o">=</span><span class="s1">&#39;$P$ [MPa]&#39;</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+            
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="n">color1</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="n">color2</span><span class="p">,</span> <span class="n">label_string</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">show_plot</span><span class="p">()</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">plot_legends</span><span class="p">(</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;Cauchy_3D_Triaxial_Thermo_Hydro_plasticity_T_P&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+    
+            <span class="n">x1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">+</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">+</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">x1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color1</span> <span class="o">=</span> <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot_axes</span><span class="p">(</span><span class="s1">&#39;$t$ [s]&#39;</span><span class="p">,</span> <span class="n">y1_txt</span><span class="o">=</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">varepsilon_v$&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">y2_txt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="n">color1</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">label_string</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">show_plot</span><span class="p">()</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">plot_legends</span><span class="p">(</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;Cauchy_3D_Triaxial_Thermo_Hydro_plasticity_evol&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+
+            <span class="n">x1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">J2_1</span><span class="p">)</span>
+            <span class="n">x1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">x2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">p_eff</span><span class="p">)</span>
+            <span class="n">x2</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y2</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">color1</span><span class="p">,</span> <span class="n">color2</span> <span class="o">=</span> <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot_axes</span><span class="p">(</span><span class="s1">&#39;$t$ [s]&#39;</span><span class="p">,</span><span class="n">y1_txt</span><span class="o">=</span> <span class="s1">&#39;$J_2$ [MPa]&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">y2_txt</span><span class="o">=</span><span class="s1">&#39;$P^\prime$ [MPa]&#39;</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+            
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="n">color1</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="n">color2</span><span class="p">,</span> <span class="n">label_string</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">show_plot</span><span class="p">()</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">plot_legends</span><span class="p">(</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;Cauchy_3D_Thermo_Hydro_plasticity_Triaxial_J_2_P_eff&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Test.test_final_stress_T_P"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_final_stress_T_P">[docs]</a>    <span class="k">def</span> <span class="nf">test_final_stress_T_P</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">K</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">G</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_svars_gauss_point</span><span class="p">()</span>
+        <span class="n">svars</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gp_svars_comp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma11</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma22</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">6</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma33</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">12</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon11</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">84</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon22</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">90</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon33</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">96</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon11_pl</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">102</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon22_pl</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">108</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon33_pl</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">114</span><span class="p">]</span>
+        <span class="n">a</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">G</span><span class="o">/</span><span class="mi">3</span><span class="o">+</span><span class="n">K</span>
+        <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="o">*</span><span class="n">G</span><span class="o">/</span><span class="mi">3</span><span class="o">+</span><span class="n">K</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon11_e</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon11</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon11_pl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon22_e</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon22</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon22_pl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon33_e</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon33</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon33_pl</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_calc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">Normal_loading_eff</span><span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon11_e</span><span class="o">+</span><span class="n">b</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon22_e</span><span class="o">+</span><span class="n">a</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon33_e</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_generalized_force_disp</span><span class="p">()</span>
+        <span class="n">values_gen_disp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gen_disp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">=</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">=</span><span class="n">values_gen_disp1</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_tot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma_calc</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_generalized_force_disp</span><span class="p">()</span>
+        <span class="n">values_gen_force1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gen_force</span>       
+        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma_tot_num</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">values_gen_force1</span><span class="p">[:,</span><span class="mi">8</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    
+        <span class="n">values_diff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma_tot</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma_tot_num</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+        <span class="n">equal</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">values_diff</span><span class="p">))</span><span class="o">&lt;=</span><span class="mf">1.e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">equal</span><span class="p">,</span> <span class="s2">&quot;Not identical total stress an vs num: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">values_diff</span><span class="p">)))</span>    </div>
+    
+    
+<div class="viewcode-block" id="Test.test_DT_dissipation_equiality"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_DT_dissipation_equiality">[docs]</a>    <span class="k">def</span> <span class="nf">test_DT_dissipation_equiality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_svars_gauss_point</span><span class="p">()</span>
+        <span class="n">svars</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gp_svars_comp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma11</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma22</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">6</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma33</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">12</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma32</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">18</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma31</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">24</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma12</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">30</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon11</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">36</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon22</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">42</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon33</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">48</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma32</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">54</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma31</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">60</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma12</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">66</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dP</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">72</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dT</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">78</span><span class="p">]</span>
+    
+        <span class="n">vfunc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">calculate_dissipation</span><span class="p">)</span>
+        <span class="n">dissipation</span><span class="o">=</span><span class="n">vfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma11</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma22</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma33</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma32</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma31</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma12</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon11</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon22</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon33</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma32</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma31</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma12</span><span class="p">)</span>
+        <span class="n">rhoC</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">dT_calc</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">rhoC</span><span class="o">*</span><span class="n">dissipation</span>
+        <span class="n">values_diff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dT</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">dT_calc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">equal</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">values_diff</span><span class="p">))</span><span class="o">&lt;=</span><span class="mf">1.e-8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">equal</span><span class="p">,</span> <span class="s2">&quot;Not identical temperature increment: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">values_diff</span><span class="p">)))</span>    </div>
+    
+<div class="viewcode-block" id="Test.test_DT_DP_equality"><a class="viewcode-back" href="../../../../../../ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.html#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_DT_DP_equality">[docs]</a>    <span class="k">def</span> <span class="nf">test_DT_DP_equality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_generalized_force_disp</span><span class="p">()</span>
+        <span class="n">values_time1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_time</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">extract_svars_gauss_point</span><span class="p">()</span>
+        <span class="n">svars</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">array_gp_svars_comp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dP</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">72</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dT</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">78</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon11</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">84</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon22</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">90</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon33</span><span class="o">=</span><span class="n">svars</span><span class="p">[:,</span><span class="mi">96</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">evol_dt</span><span class="o">=-</span><span class="mf">0.2</span><span class="o">/</span><span class="mf">10.</span> <span class="c1">#10 number of increments</span>
+        
+        <span class="n">lstar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+        <span class="n">bstar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">my_FEproblem1</span><span class="o">.</span><span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    
+        <span class="n">values_diff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dP</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span><span class="o">-</span><span class="n">lstar</span><span class="o">/</span><span class="n">bstar</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dT</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">evol_dt</span><span class="o">/</span><span class="n">bstar</span>
+                
+        <span class="n">equal</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">values_diff</span><span class="p">))</span><span class="o">&lt;=</span><span class="mf">1.e-8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">equal</span><span class="p">,</span> <span class="s2">&quot;Not identical temperature increment: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">values_diff</span><span class="p">)))</span>    
+        <span class="k">if</span> <span class="n">equal</span> <span class="ow">and</span> <span class="n">activate_plots</span><span class="p">:</span>
+            <span class="n">x1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dT</span><span class="p">)</span>
+            <span class="n">x1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y1</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        
+            <span class="n">x2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">values_time1</span><span class="p">[:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">y2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dP</span><span class="p">)</span>
+            <span class="n">x2</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y2</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        
+            
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">color1</span><span class="p">,</span> <span class="n">color2</span> <span class="o">=</span> <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot_axes</span><span class="p">(</span><span class="s1">&#39;$t$ [s]&#39;</span><span class="p">,</span><span class="n">y1_txt</span><span class="o">=</span> <span class="s1">&#39;$\Delta T\; $[$^o$  C]&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">y2_txt</span><span class="o">=</span><span class="s1">&#39;$\Delta P$ [MPa]&#39;</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+    
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">object_plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="n">color1</span><span class="o">=</span><span class="n">color1</span><span class="p">,</span><span class="n">color2</span><span class="o">=</span><span class="n">color2</span><span class="p">,</span> <span class="n">label_string</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+           
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">show_plot</span><span class="p">()</span>
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">plot_legends</span><span class="p">(</span><span class="n">ngeo_parameters</span><span class="o">.</span><span class="n">reference_data_path</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;Cauchy_3D_Triaxial_Thermo_Hydro_plasticity_DT_DP&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+        
+            <span class="n">plotting_params</span><span class="o">.</span><span class="n">show_plot</span><span class="p">()</span></div></div>
+
+    
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

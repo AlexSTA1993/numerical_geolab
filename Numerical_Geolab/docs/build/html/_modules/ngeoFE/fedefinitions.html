@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE.fedefinitions &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.fedefinitions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE.fedefinitions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Aug 2, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># from dolfin.cpp.common import set_log_level</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="FEformulation"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation">[docs]</a><span class="k">class</span> <span class="nc">FEformulation</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines general properties of the FE problem</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FEformulation.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Number of stress/deformation components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c1"># Number of Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c1"># Number of auxiliary quantities at gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_aux</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndofs</span></div>
+
+<div class="viewcode-block" id="FEformulation.generalized_epsilon"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.generalized_epsilon">[docs]</a>    <span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s generalized deformation vector</span>
+
+<span class="sd">        :param v: test function</span>
+<span class="sd">        :type v: TestFunction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FEformulation.auxiliary_fields"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.auxiliary_fields">[docs]</a>    <span class="k">def</span> <span class="nf">auxiliary_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s generalized deformation vector</span>
+
+<span class="sd">        :param v: test function</span>
+<span class="sd">        :type v: TestFunction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FEformulation.create_element"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.create_element">[docs]</a>    <span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cell</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set desired element</span>
+
+<span class="sd">        :param cell: mesh cell type </span>
+<span class="sd">        :type cell: Cell</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FEformulation.dotv_coeffs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.dotv_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">dotv_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;    </span>
+<span class="sd">        Set left hand side derivative coefficients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span> </div>
+
+<div class="viewcode-block" id="FEformulation.setVarFormAdditionalTerms_Jac"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.setVarFormAdditionalTerms_Jac">[docs]</a>    <span class="k">def</span> <span class="nf">setVarFormAdditionalTerms_Jac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">Du</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">svars</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">dt</span><span class="p">,</span><span class="n">dsde</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s additional terms at variational form for Jacobian</span>
+
+<span class="sd">        :param u: trial function</span>
+<span class="sd">        :type u: TrialFunction</span>
+<span class="sd">        :param Du: increment of trial function</span>
+<span class="sd">        :type Du: Function</span>
+<span class="sd">        :param v: test of test function</span>
+<span class="sd">        :type v: TestFunction</span>
+<span class="sd">        :param svars: function of state variables</span>
+<span class="sd">        :type v: svars2</span>
+<span class="sd">        :param dt: time increment</span>
+<span class="sd">        :type dt: double</span>
+<span class="sd">        :param dt: time increment</span>
+<span class="sd">        :type dt: double</span>
+
+<span class="sd">        WARNING: the derivatives for calculating the Jacobian are made with the Trial function u and not with the Function Du.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Jac</span><span class="o">=</span><span class="mi">0</span> 
+        <span class="k">return</span> <span class="n">Jac</span></div>
+
+<div class="viewcode-block" id="FEformulation.setVarFormAdditionalTerms_Res"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEformulation.setVarFormAdditionalTerms_Res">[docs]</a>    <span class="k">def</span> <span class="nf">setVarFormAdditionalTerms_Res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">Du</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">svars</span><span class="p">,</span><span class="n">metadata</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set user&#39;s additional terms at variational form for Residual</span>
+
+<span class="sd">        :param u: trial function</span>
+<span class="sd">        :type u: TrialFunction</span>
+<span class="sd">        :param Du: increment of trial function</span>
+<span class="sd">        :type Du: Function</span>
+<span class="sd">        :param v: test of test function</span>
+<span class="sd">        :type v: TestFunction</span>
+<span class="sd">        :param svars: function of state variables</span>
+<span class="sd">        :type v: svars2</span>
+<span class="sd">        :param dt: time increment</span>
+<span class="sd">        :type dt: double</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Res</span><span class="o">=</span><span class="mi">0</span> 
+        <span class="k">return</span> <span class="n">Res</span></div></div>
+
+<div class="viewcode-block" id="FEobject"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject">[docs]</a><span class="k">class</span> <span class="nc">FEobject</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates the FE object to be solved with solvers</span>
+
+<span class="sd">    :param mesh: dolfin mesh</span>
+<span class="sd">    :type mesh: Mesh</span>
+<span class="sd">    :param feform: finite element variational formulation</span>
+<span class="sd">    :type feform: FEformulation</span>
+<span class="sd">    :param p_nsvars: number of components of state variables vector</span>
+<span class="sd">    :type p_nsvars: integer</span>
+<span class="sd">    :param subdomains: list of dolfin subdomains</span>
+<span class="sd">    :type subdomains: SubDomain</span>
+<span class="sd">    :param comm: parallel communicator</span>
+<span class="sd">    :type comm: d.MPI.comm_world</span>
+<span class="sd">    :param pbc: periodic boundary conditions for supermaterial</span>
+<span class="sd">    :type pbc: SuperFEMaterialPeriodicBoundary </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FEobject.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">,</span><span class="n">feform</span><span class="p">,</span><span class="n">p_nsvars</span><span class="p">,</span><span class="n">subdomains</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">pbc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">keep_previous</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            self.p_nstr (int): Number of components of the generalized stress vector\n</span>
+<span class="sd">            self.p_nsvars (int): Number of components of state variables\n</span>
+<span class="sd">            self.feform (FeFormulation):attribute of the finite element variational formulation (in problems of pure eleasticity it corresponds to the kinematical description of the strains)\n</span>
+<span class="sd">            self.ns (FeFormulation.ns):attribute of number of Gauss points\n</span>
+<span class="sd">            self.mesh (UserFeProblem.create_mesh()):attribute of the mesh\n</span>
+<span class="sd">            self.cell (mesh.ufl_cell().cellname()):indicates the topological dimension of the element used e.g &quot;interval&quot;,&quot;triangle&quot;,&quot;tetrahedron&quot;\n</span>
+<span class="sd">            self.element (self.feform.create_element(self.cell): creates the element with given topology, dimension, interpolation functions and integration order\n</span>
+<span class="sd">            self.V (FunctionSpace(mesh, self.element, constrained_domain=self.pbc)): Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.\n </span>
+<span class="sd">            It takes into account local connections of the elements at common nodes and assigns the interpolation coefficients to be defined in the solution. The optional parameter constrained_domain is used for problems with periodic boundary conditions.\n </span>
+<span class="sd">            In this case the degrees of freedom at opposite edges of the boundary are set to be common.\n</span>
+<span class="sd">            self.V0 (FunctionSpace(mesh, self.element)): FunctionSpace used for an initial non-periodic field.\n</span>
+<span class="sd">            self.v (TestFunction(self.V)): Test function of the variational formulation. \n</span>
+<span class="sd">            self.p_aux (self.feform.p_aux): Get number of auxilary fields defined on the variational formulation of the element.\n           </span>
+<span class="sd">            self.u (TrialFunction(self.V)): Define trial functions (unknown generalized displacements) \n         </span>
+<span class="sd">            self.f (Function(self.V)): Define external generalized volumic forces and tractor \n</span>
+<span class="sd">            self.u0 (Function(self.V0)): Define initial non-periodic generalized displacements \n</span>
+<span class="sd">            self.Du (Function(self.V)): Define incremental solution \n</span>
+<span class="sd">            self.du (Function(self.V)): Define iterative solution \n</span>
+<span class="sd">            self.usol (Function(self.V, name=&quot;Gen_Diplacements&quot;)): Define total solution. \n</span>
+<span class="sd">            self.usol.interpolate(Constant(np.zeros(self.ndofs))):Initialize total solution to zero. \n</span>
+<span class="sd">             __Ve (VectorElement(&quot;Quadrature&quot;, self.cell, degree=self.ns,dim=self.feform.p_nstr,quad_scheme=&#39;default&#39;)): Define a Vector Element whose interpolation function just adds the values of the corresponding stress component at the Gauss points.\n</span>
+<span class="sd">             For the material definition and subsequent analysis Voight-notation was used taking the components of the stress tensor as vectorial components.  \n</span>
+<span class="sd">            self.Vstress = FunctionSpace(mesh,__Ve): Create the appropriate FunctionSpace. Due to the elements used (&quot;Quadrature&quot;) the global interpolation function is Dirac discontinuous over each  Gauss point and each element such that the value of the prescribed integral\n</span>
+<span class="sd">            in the value of the integrand itself. Therefore each element is characterized by number (ns) of different stress vectors -one per Gauss point- which add together for the numerical evaluation of the solution integral in the V FunctionSpace.\n</span>
+<span class="sd">            __Ve (VectorElement(&quot;Quadrature&quot;, self.cell, degree=self.ns,dim=self.p_aux,quad_scheme=&#39;default&#39;)): Same as before for the evaluation of the auxillary fields.\n</span>
+<span class="sd">            self.Vaux  (FunctionSpace(mesh,__Ve)): same as before</span>
+<span class="sd">            __Ve (VectorElement(&quot;Quadrature&quot;, self.cell, degree=self.ns,dim=p_nsvars,quad_scheme=&#39;default&#39;)): Same as before for the evaluation of the state variables at the Gauss points as the material algorithm calculates the material state response\n</span>
+<span class="sd">            on the Gauss points and numerical integration is performed using the values at the Gauss points. State variables are needed for the calculation of the internal force vector as well as the Jacobian matrix.\n</span>
+<span class="sd">            self.Vsvars (FunctionSpace(mesh,__Ve)): Same as before.\n</span>
+<span class="sd">            __Ve = VectorElement(&quot;Quadrature&quot;, self.cell, degree=self.ns,dim=self.feform.p_nstr*self.feform.p_nstr,quad_scheme=&#39;default&#39;) The material tangent modulus concerning the generalised stress train response of the material.\n</span>
+<span class="sd">            self.Vdsde (FunctionSpace(mesh,__Ve)): same as before.\n</span>
+
+<span class="sd">            self.sigma2 (Function(self.Vstress)): Function of the current stress state living in the Vstress FunctionSpace.  \n</span>
+<span class="sd">            self.deGP2 (Function(self.Vstress)): Function of the current strain state living in the Vstress FunctionSpace.\n</span>
+<span class="sd">            self.aux_deGP2 (Function(self.Vaux)): Function of the auxilary fields spatial directional derivatives as they were defined in FeFormulation,\n</span>
+<span class="sd">            living in the Vaux FunctionSpace.\n</span>
+<span class="sd">            self.dsde2 (Function(self.Vdsde)): Function of the material tangent modulus living in the Vdsde FunctionSpace.\n</span>
+<span class="sd">            \n</span>
+<span class="sd">            For some problems we need to keep the previous state (e.g. SuperMaterials)\n</span>
+<span class="sd">            self.keep_previous (logical): Logical flag indicating wether the previous converged state needs to be kept. Important in problems of multiple scales were the Finite-element/material problem at the Gauss points might not converge for all Gauss points in the super element\n</span>
+<span class="sd">            In this case we need to prevent the converged Gauss points from updating their state as they would normally do.\n</span>
+<span class="sd">            self.sigma2_prev (Function(self.Vstress)): previous stress vector of last total converged increment. \n</span>
+<span class="sd">            self.svars2_prev (Function(self.Vsvars)): previous state variables vector of last total converged increment. \n</span>
+<span class="sd">            self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment. \n</span>
+<span class="sd">            self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem. \n</span>
+
+<span class="sd">            self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)\n</span>
+<span class="sd">            Values used for integration at the Gauss points: {&quot;quadrature_degree&quot;:self.ns,&quot;quadrature_scheme&quot;:&quot;default&quot;}\n</span>
+
+<span class="sd">            self.comm=comm\n</span>
+
+<span class="sd">            self.history_indices_ti (int): Indicates the degrees of freedom for which we wish to separately save their force output (e.g traction on a boundary node).  </span>
+<span class="sd">            self.history_indices_ui (int): Indicates the degrees of freedom for which we wish to separately save their solution output (e.g displacement on a boundary node)</span>
+<span class="sd">            self.problem_history (list): List gathering the history output of the selected dofs.\n</span>
+
+<span class="sd">            self.domainidGP (self.__init_domains(mesh,subdomains,self.ns)): List of the problems Gauss points for every subdomain defined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FEniCS parameters</span>
+        <span class="c1">#set_log_level(INFO)</span>
+        <span class="n">set_log_level</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;form_compiler&quot;</span><span class="p">][</span><span class="s2">&quot;optimize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1">#         parameters[&quot;form_compiler&quot;][&quot;cpp_optimize_flags&quot;] = &quot;-O3&quot; # optimization flags for the C++ compiler</span>
+        <span class="c1"># compatibility with current version only for 3D</span>
+        <span class="k">if</span> <span class="n">mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">()</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;tetrahedron&quot;</span> <span class="ow">or</span> <span class="n">mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">()</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;hexahedron&quot;</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;form_compiler&quot;</span><span class="p">][</span><span class="s2">&quot;representation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;quadrature&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;form_compiler&quot;</span><span class="p">][</span><span class="s2">&quot;representation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;quadrature&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="n">feform</span><span class="o">.</span><span class="n">p_nstr</span> <span class="c1">#: No of components of the generalized stress vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_nsvars</span><span class="o">=</span><span class="n">p_nsvars</span> <span class="c1">#: No of components of state variables</span>
+        <span class="c1"># Set generalized vector function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">=</span><span class="n">feform</span> <span class="c1">#attribute of the kinematical formulation</span>
+        <span class="c1"># Set number of Gauss points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="n">feform</span><span class="o">.</span><span class="n">ns</span> <span class="c1">#:attribute of number of Gauss points</span>
+        <span class="c1"># Set mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span> <span class="c1">#:attribute of the mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">=</span><span class="n">mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">()</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span>  <span class="c1">#:indicates the topological dimension of the element used e.g &quot;interval&quot;,&quot;triangle&quot;,&quot;tetrahedron&quot;</span>
+        <span class="c1"># Create element </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">create_element</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span> <span class="c1">#:creates the element with given topology, dimension, interpolation functions and integration order</span>
+        <span class="c1"># Assign the element to the mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">=</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">,</span> <span class="n">constrained_domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pbc</span><span class="p">)</span> <span class="c1">#:Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.\ </span>
+        <span class="c1">#:It takes into account local connections of the elements at common nodes and assigns the interpolation coefficients to be defined in the solution. </span>
+        <span class="c1">#: Keep a non-periodic space for the u0 (initial displacements)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V0</span><span class="o">=</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">)</span> <span class="c1">#:FunctionSpace used for an initial non-periodic field.\n</span>
+        <span class="c1"># Define test functions (virtual velocities)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">=</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span> <span class="c1">#:Test function of the variational formulation. \n</span>
+        <span class="c1"># Get number of degrees of freedom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ndofs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Get number of auxiliary fields</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="p">,</span> <span class="s1">&#39;p_aux&#39;</span><span class="p">)</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">p_aux</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndofs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_aux</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">p_aux</span>
+        <span class="c1"># Define trial functions (unknown generalized displacements)           </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">=</span><span class="n">TrialFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>          
+        <span class="c1"># Define external generalized volumic forces and tractor </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+<span class="c1">#         self.tn=[]</span>
+        <span class="c1"># Define initial non-periodic generalized displacements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u0</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V0</span><span class="p">)</span>
+        <span class="c1"># Define solution increments and solution vectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Du</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">du</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">usol</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Gen_Diplacements&quot;</span><span class="p">)</span>
+        <span class="c1"># Initialize solution to zero </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">usol</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndofs</span><span class="p">)))</span>
+        <span class="c1">#</span>
+        <span class="n">__Ve</span> <span class="o">=</span> <span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Quadrature&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">,</span><span class="n">quad_scheme</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span> <span class="c1">#P_NSTR components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vstress</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">__Ve</span><span class="p">)</span>
+        <span class="n">__Ve</span> <span class="o">=</span> <span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Quadrature&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p_aux</span><span class="p">,</span><span class="n">quad_scheme</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span> <span class="c1">#P_AUX components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vaux</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">__Ve</span><span class="p">)</span>
+        <span class="n">__Ve</span> <span class="o">=</span> <span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Quadrature&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="n">p_nsvars</span><span class="p">,</span><span class="n">quad_scheme</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span> <span class="c1">#P_NSVARS components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">__Ve</span><span class="p">)</span>
+        <span class="n">__Ve</span> <span class="o">=</span> <span class="n">VectorElement</span><span class="p">(</span><span class="s2">&quot;Quadrature&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">,</span><span class="n">quad_scheme</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span> <span class="c1">#P_NSTR**2 components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vdsde</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">__Ve</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma2</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vstress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deGP2</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vstress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aux_deGP2</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vaux</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars2</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dsde2</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vdsde</span><span class="p">)</span>
+        <span class="c1"># for problems we need to keep the previous state (e.g. SuperMaterials)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_previous</span><span class="o">=</span><span class="n">keep_previous</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_previous</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma2_prev</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vstress</span><span class="p">)</span> <span class="c1">#:previous stress matrixof last total converged increment</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">svars2_prev</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vsvars</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dsde2_prev</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Vdsde</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">usol_prev</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;quadrature_degree&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">,</span><span class="s2">&quot;quadrature_scheme&quot;</span><span class="p">:</span><span class="s2">&quot;default&quot;</span><span class="p">}</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">=</span><span class="n">comm</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_indices_ti</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_indices_ui</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_history</span><span class="o">=</span><span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">svars_history_indices</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_svars_history</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="c1">#         #</span>
+<span class="c1">#         if self.dotv_coeffs()!=None:           </span>
+<span class="c1">#             self.dt=Expression(&quot;dt&quot;,dt=0.,degree=1)</span>
+<span class="c1">#             self.Jac, self.Res = self.setVarFormTransient()</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             self.Jac, self.Res = self.setVarForm()            </span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">domainidGP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__init_domains</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">subdomains</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FEobject.set_dt"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.set_dt">[docs]</a>    <span class="k">def</span> <span class="nf">set_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets new dt to be consider in setVarForm_x</span>
+
+<span class="sd">        :param dt: time increment</span>
+<span class="sd">        :type dt: double</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="nf">__init_domains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">,</span><span class="n">subdomains</span><span class="p">,</span><span class="n">ns</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes subdomains for setting diffderent material properties (hidden)</span>
+
+<span class="sd">        :param mesh: dolfin mesh</span>
+<span class="sd">        :type mesh: Mesh</span>
+<span class="sd">        :param subdomains: list of dolfin subdomains</span>
+<span class="sd">        :type subdomains: SubDomain</span>
+<span class="sd">        :param ns: polynomial degree for determining the number of Gauss points  </span>
+<span class="sd">        :type ns: integer</span>
+<span class="sd">        :return domainidGP: list containing the material id in each Gauss point </span>
+<span class="sd">        :rtype: domainidGP.astype(&quot;int&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Load domain ids to scalar functionspace</span>
+        <span class="n">domainid</span>  <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s1">&#39;DG&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1">#: Load domain ids to scalar functionspace</span>
+        <span class="c1">#temp = np.asarray(subdomains.array(), dtype=np.int32)</span>
+        <span class="c1">#domainid.vector()[:] = np.choose(temp, np.arange(len(props)))</span>
+        <span class="n">domainid</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">subdomains</span><span class="o">.</span><span class="n">array</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="c1"># Space for id of domain and assignement of domain id at GPs</span>
+        <span class="n">Ve</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;Quadrature&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="n">ns</span><span class="p">,</span><span class="n">quad_scheme</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span> <span class="c1">#:Create the finite element with discontinuous interpolation functions whose nodes are at the Gauss points. </span>
+        <span class="n">Vdomain</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">Ve</span><span class="p">)</span> <span class="c1">#: Apply the Quadrature element to the whole of the domain</span>
+        <span class="n">domain2</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="n">Vdomain</span><span class="p">)</span> <span class="c1">#: A function that specifies the material of the particular Gauss point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local_project</span><span class="p">(</span><span class="n">domainid</span><span class="p">,</span> <span class="n">Vdomain</span><span class="p">,</span> <span class="n">domain2</span><span class="p">)</span> <span class="c1">#: Projection of the material ids defined at the nodes of each element to its Gauss points.</span>
+        <span class="n">domainidGP</span><span class="o">=</span><span class="n">domain2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">()</span> <span class="c1">#: store the material label of each Gauss point in a vector  </span>
+        <span class="k">return</span> <span class="n">domainidGP</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>      
+
+    <span class="c1">#@profile      </span>
+<div class="viewcode-block" id="FEobject.local_project"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.local_project">[docs]</a>    <span class="k">def</span> <span class="nf">local_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1">#:V is the function space to project on, v is the funtion to be projected, u is the projected function</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        General projection function (used later for calculating values @ GPs</span>
+
+<span class="sd">        :param v: dolfin function</span>
+<span class="sd">        :type v: Function</span>
+<span class="sd">        :param V: function space</span>
+<span class="sd">        :type V: FunctionSpace</span>
+
+<span class="sd">        I give credit to Jeremy Bleyer for this method (`source &lt;https://comet-fenics.readthedocs.io/en/latest/tips_and_tricks.html#efficient-projection-on-dg-or-quadrature-spaces&gt;`_)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dv</span> <span class="o">=</span> <span class="n">TrialFunction</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+        <span class="n">v_</span> <span class="o">=</span> <span class="n">TestFunction</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+        <span class="n">a_proj</span> <span class="o">=</span> <span class="n">inner</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span><span class="n">v_</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">b_proj</span> <span class="o">=</span> <span class="n">inner</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v_</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">LocalSolver</span><span class="p">(</span><span class="n">a_proj</span><span class="p">,</span><span class="n">b_proj</span><span class="p">)</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">factorize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">solve_local_rhs</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">u</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">solve_local_rhs</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="k">return</span></div>
+
+<div class="viewcode-block" id="FEobject.to_matrix"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.to_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">comp_dsde</span><span class="p">):</span> <span class="c1">#probably not optimal, but as it is compiled it doesn&#39;t matter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert to matrix</span>
+
+<span class="sd">        :param comp_dsde: jacobian ds/de in vector form</span>
+<span class="sd">        :type comp_dsde: numpy array</span>
+<span class="sd">        :return: jacobian ds/de in dolfin matrix form</span>
+<span class="sd">        :rtype: as_matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">len1</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">comp_dsde</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">len1</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
+            <span class="n">len1</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">len1</span><span class="p">)</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="p">[[</span><span class="n">comp_dsde</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">*</span><span class="n">len1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len1</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">as_matrix</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error: not square matrix.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mf">0.</span></div>
+
+<div class="viewcode-block" id="FEobject.epsilon2"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.epsilon2">[docs]</a>    <span class="k">def</span> <span class="nf">epsilon2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get generalized deformation vector</span>
+
+<span class="sd">        :param v: dolfin test function</span>
+<span class="sd">        :type v: TestFunction</span>
+<span class="sd">        :return: generalized epsilon</span>
+<span class="sd">        :rtype: feform.generalized_epsilon</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">generalized_epsilon</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FEobject.aux_field2"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.aux_field2">[docs]</a>    <span class="k">def</span> <span class="nf">aux_field2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get auxiliary fields for the Gauss points</span>
+
+<span class="sd">        :param v: dolfin test function</span>
+<span class="sd">        :type v: TestFunction</span>
+<span class="sd">        :return: auxiliary fields</span>
+<span class="sd">        :rtype: feform.auxiliary_fields</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">feform</span><span class="o">.</span><span class="n">auxiliary_fields</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FEobject.setVarForm"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.setVarForm">[docs]</a>    <span class="k">def</span> <span class="nf">setVarForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set Jacobian and Residual (Voigt form)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FEobject.setVarFormTransient"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.setVarFormTransient">[docs]</a>    <span class="k">def</span> <span class="nf">setVarFormTransient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set Jacobian and Residual (Voigt form)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FEobject.dotv_coeffs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.fedefinitions.FEobject.dotv_coeffs">[docs]</a>    <span class="k">def</span> <span class="nf">dotv_coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get left hand side time derivative coefficients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+
+
+
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.fedefinitions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

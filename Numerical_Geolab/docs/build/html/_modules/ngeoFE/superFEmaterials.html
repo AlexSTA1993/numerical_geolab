@@ -1,0 +1,663 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE.superFEmaterials &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.superFEmaterials</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE.superFEmaterials</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Aug 27, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.materials</span> <span class="kn">import</span> <span class="n">UserMaterial</span>
+<span class="c1"># from dolfin.cpp.function import near</span>
+<span class="kn">from</span> <span class="nn">ufl.tensors</span> <span class="kn">import</span> <span class="n">as_scalar</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.tests.test_paulialgebra</span> <span class="kn">import</span> <span class="n">sigma1</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Aug 7, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.feproblem</span> <span class="kn">import</span> <span class="n">UserFEproblem</span>
+<span class="kn">from</span> <span class="nn">ngeoFE.fedefinitions</span> <span class="kn">import</span> <span class="n">FEformulation</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">ffc.quadrature.deprecation</span> <span class="kn">import</span> <span class="n">QuadratureRepresentationDeprecationWarning</span>
+<span class="c1"># from dolfin.cpp.io import HDF5File</span>
+<span class="c1"># from dolfin.cpp.mesh import MeshFunction, SubDomain, UnitSquareMesh</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">,</span> <span class="n">QuadratureRepresentationDeprecationWarning</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SuperFEMaterial"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial">[docs]</a><span class="k">class</span> <span class="nc">SuperFEMaterial</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Super material class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SuperFEMaterial.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">map_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize supermaterial</span>
+
+<span class="sd">        .. todo: check if the supermaterial object is stored locally at rank x proccess &gt; It better shouldn&#39;t; I think it doesn&#39;t.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEformulation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SuperFEMaterialFEformulation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hom_expr</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="o">=</span><span class="n">map_type</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.get_stress_averages"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.get_stress_averages">[docs]</a>    <span class="k">def</span> <span class="nf">get_stress_averages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GP_id</span><span class="p">,</span><span class="n">stressGP</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate average stresses</span>
+
+<span class="sd">        .. todo: </span>
+<span class="sd">            Have to check if it is properly working in parallel</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">stressGP</span><span class="p">[:]</span><span class="o">=</span><span class="n">assemble</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span>
+            <span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">cR_sigma</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">)</span><span class="o">.</span><span class="n">get_local</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.get_dsde_averages"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.get_dsde_averages">[docs]</a>    <span class="k">def</span> <span class="nf">get_dsde_averages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GP_id</span><span class="p">,</span><span class="n">dsdeGP</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate average stiffness tensor (incremental)</span>
+
+<span class="sd">        :param GP_id: id of Gauss point</span>
+
+<span class="sd">        .. todo:: Set the correct expression for the C_hom</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1">#II=np.identity(3).flatten()</span>
+        <span class="c1">#print(II)</span>
+        <span class="n">dsdeGP</span><span class="p">[:]</span><span class="o">=</span><span class="n">assemble</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span>
+            <span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">cR_dsde</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span><span class="p">)</span><span class="o">.</span><span class="n">get_local</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.plot_state"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.plot_state">[docs]</a>    <span class="k">def</span> <span class="nf">plot_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GP_id</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+        <span class="c1">#plt.ion()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x_1$&quot;</span><span class="p">)</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span>   <span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">font</span><span class="p">)</span>
+        <span class="n">Pavg</span><span class="o">=</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span><span class="s2">&quot;DG&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#p=plot(self.FEproblems[GP_id].feobj.usol[0])#, label=&#39;$u_2$&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$\sigma_</span><span class="si">{11}</span><span class="s2">$&quot;</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">plot</span><span class="p">(</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Pavg</span><span class="p">))</span><span class="c1">#,label=&#39;$\sigma_88$&#39;)#, label=&#39;1&#39;)</span>
+        <span class="c1">#plt.colorbar(p);</span>
+        <span class="c1">#plt.legend()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$u_1^{(1)}$&quot;</span><span class="p">)</span>
+        <span class="c1">#p=plot(project(self.FEproblems[GP_id].feobj.usol[1],Pavg))#,label=&#39;$\sigma_88$&#39;)#, label=&#39;1&#39;)</span>
+        <span class="c1">#print(self.FEproblems[GP_id].feobj.usol.vector().get_local())</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="c1">#,label=&#39;$\sigma_88$&#39;)#, label=&#39;1&#39;)</span>
+        <span class="c1">#plt.colorbar(p);</span>
+        <span class="c1">#plt.legend()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+        <span class="c1">#plt.colorbar(p);    </span>
+
+<div class="viewcode-block" id="SuperFEMaterial.usermatGP"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.usermatGP">[docs]</a>    <span class="k">def</span> <span class="nf">usermatGP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">stressGP_t</span><span class="p">,</span><span class="n">deGP</span><span class="p">,</span><span class="n">svarsGP_t</span><span class="p">,</span><span class="n">dsdeGP_t</span><span class="p">,</span><span class="n">dt</span><span class="p">,</span><span class="n">GP_id</span><span class="p">,</span><span class="n">aux_deGP</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Super-user material at a Gauss point</span>
+
+<span class="sd">        :param GP_id:</span>
+<span class="sd">        :param stressGP_t:</span>
+<span class="sd">        :param deGP:</span>
+<span class="sd">        :param svarsGP_t:</span>
+<span class="sd">        :param dsdeGP_t:</span>
+<span class="sd">        :param dt:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Solve the auxiliary problem for the increment        </span>
+        <span class="k">if</span> <span class="n">GP_id</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">GP_id</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SuperFEMaterialFEproblem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEformulation</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="p">))</span>        
+
+        <span class="n">t</span><span class="o">=</span><span class="n">svarsGP_t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tmaterial</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t</span>
+        <span class="k">if</span> <span class="n">tmaterial</span><span class="o">&gt;</span><span class="n">t</span><span class="p">:</span>
+            <span class="c1">#this means that the solver requests a fresh increment in the material -&gt; roll back to previous state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">roll_back_to_previous_state</span><span class="p">(</span><span class="n">GP_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dt</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_macro_epsilon</span><span class="p">(</span><span class="n">deGP</span><span class="p">,</span><span class="n">GP_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">set_init_stress</span><span class="o">=</span><span class="kc">True</span>
+            <span class="c1">#it will increment -&gt; so save the current state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_state</span><span class="p">(</span><span class="n">GP_id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">set_init_stress</span><span class="o">=</span><span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">tmax</span><span class="o">=</span><span class="n">t</span><span class="o">+</span><span class="n">dt</span>
+        <span class="n">converged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">converged</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_output_tdt</span><span class="p">(</span><span class="n">GP_id</span><span class="p">,</span><span class="n">stressGP_t</span><span class="p">,</span><span class="n">dsdeGP_t</span><span class="p">,</span><span class="n">svarsGP_t</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#roll back</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">roll_back_to_previous_state</span><span class="p">(</span><span class="n">GP_id</span><span class="p">)</span>
+            <span class="n">svarsGP_t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t</span>
+            <span class="k">return</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.set_output_tdt"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.set_output_tdt">[docs]</a>    <span class="k">def</span> <span class="nf">set_output_tdt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GP_id</span><span class="p">,</span><span class="n">stress_tdt</span><span class="p">,</span><span class="n">dsde_tdt</span><span class="p">,</span><span class="n">svars_tdt</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_stress_averages</span><span class="p">(</span><span class="n">GP_id</span><span class="p">,</span><span class="n">stress_tdt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_dsde_averages</span><span class="p">(</span><span class="n">GP_id</span><span class="p">,</span><span class="n">dsde_tdt</span><span class="p">)</span> <span class="c1"># has to be calculated better</span>
+        <span class="c1">#other svars may be energies</span>
+        <span class="n">svars_tdt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.save_state"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.save_state">[docs]</a>    <span class="k">def</span> <span class="nf">save_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GP_id</span><span class="p">):</span>
+        <span class="c1">#this might be slow as it involves a lot of copies -&gt; optimization? pointers?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t_prev</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t</span>
+        <span class="c1">#has to be a copy:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps_prev</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.roll_back_to_previous_state"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.roll_back_to_previous_state">[docs]</a>    <span class="k">def</span> <span class="nf">roll_back_to_previous_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GP_id</span><span class="p">):</span>
+        <span class="c1">#this might be slow as it involves a lot of copies -&gt; optimization? pointers?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">slv</span><span class="o">.</span><span class="n">t_prev</span>
+        <span class="c1">#has to be a copy:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps_prev</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">sigma2_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">svars2_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">dsde2_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">set_local</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">usol_prev</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">())</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.update_macro_epsilon"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.update_macro_epsilon">[docs]</a>    <span class="k">def</span> <span class="nf">update_macro_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">eps</span><span class="p">,</span><span class="n">GP_id</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Updates generalized strain increment</span>
+
+<span class="sd">        :param map_type:</span>
+<span class="sd">        :param eps:</span>
+<span class="sd">        :param GP_id:</span>
+
+<span class="sd">        .. todo:: </span>
+<span class="sd">            * Add diffusion</span>
+<span class="sd">            * Generalize for 3D Cauchy</span>
+<span class="sd">            * Add micromorphic</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="o">=</span><span class="n">eps</span><span class="c1">#np.add(self.FEproblems[GP_id].t_eps,eps)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="o">==</span><span class="s2">&quot;Cauchy_1D_AUSSOIS_2019&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">hom_expr</span><span class="o">.</span><span class="n">E_00</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">hom_expr</span><span class="o">.</span><span class="n">G_10</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>            
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="o">==</span><span class="s2">&quot;Cauchy_2D&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">hom_expr</span><span class="o">.</span><span class="n">E_00</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">hom_expr</span><span class="o">.</span><span class="n">E_11</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">hom_expr</span><span class="o">.</span><span class="n">G_01</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEproblems</span><span class="p">[</span><span class="n">GP_id</span><span class="p">]</span><span class="o">.</span><span class="n">t_eps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+        <span class="c1">#self.FEproblems[GP_id].feobj.u0.interpolate(self.FEproblems[GP_id].hom_expr) </span>
+        <span class="c1">#self.FEproblems[GP_id].feobj.u0=self.FEproblems[GP_id].hom_expr</span>
+
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEformulation"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation">[docs]</a>    <span class="k">class</span> <span class="nc">SuperFEMaterialFEformulation</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Defines a user FE formulation for the supermaterial</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEformulation.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1"># Number of stress/deformation components</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">=</span><span class="mi">0</span>
+            <span class="c1"># Number of Gauss points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="o">=</span><span class="mi">0</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEformulation.generalized_epsilon"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.generalized_epsilon">[docs]</a>        <span class="k">def</span> <span class="nf">generalized_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set user&#39;s generalized deformation vector</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEformulation.create_element"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.create_element">[docs]</a>        <span class="k">def</span> <span class="nf">create_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cell</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set desired element</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">pass</span>  </div></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem">[docs]</a>    <span class="k">class</span> <span class="nc">SuperFEMaterialFEproblem</span><span class="p">(</span><span class="n">UserFEproblem</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines FE problem for given FE formulation of the supermaterial</span>
+
+<span class="sd">        Only orthogonal elementary cells are supported (no need for other geometries now)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">FEformulation</span><span class="p">,</span><span class="n">map_type</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;supermaterial description, Cauchy continuum&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="o">=</span><span class="n">map_type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_general_properties</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">periodicityvector</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">boundingbox</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_periodicity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_bottom_corner</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">right_top_corner</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pbcs</span><span class="o">=</span><span class="n">SuperFEMaterial</span><span class="o">.</span><span class="n">SuperFEMaterialPeriodicBoundary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">periodicityvector</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">boundingbox</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keep_previous</span><span class="o">=</span><span class="kc">True</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">FEformulation</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_micro_to_macro_mapping</span><span class="p">()</span>
+            <span class="n">tmpRsigma</span><span class="o">=</span><span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cR_sigma</span><span class="o">=</span><span class="n">TestFunction</span><span class="p">(</span><span class="n">tmpRsigma</span><span class="p">)</span>
+            <span class="n">tmpRdsde</span><span class="o">=</span><span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">p_nstr</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cR_dsde</span><span class="o">=</span><span class="n">TestFunction</span><span class="p">(</span><span class="n">tmpRdsde</span><span class="p">)</span></div>
+            <span class="c1">#self.boundaries=self.create_boundary_subdomains(self.mesh)</span>
+
+        <span class="k">def</span> <span class="nf">_init_micro_to_macro_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Sets micro to macro mapping for periodic homogenization</span>
+
+<span class="sd">            .. todo:: </span>
+<span class="sd">                * Add diffusion</span>
+<span class="sd">                * Generalize for 3D Cauchy</span>
+<span class="sd">                * Add micromorphic</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="o">==</span><span class="s2">&quot;Cauchy_1D_AUSSOIS_2019&quot;</span><span class="p">:</span>
+                <span class="n">expr</span><span class="o">=</span> <span class="p">(</span><span class="s2">&quot;E_00*x[0]&quot;</span><span class="p">,</span><span class="s2">&quot;.5*G_10*x[0]&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hom_expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="n">element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">element</span><span class="p">,</span><span class="n">E_00</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">G_10</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">t_eps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="o">==</span><span class="s2">&quot;Cauchy_2D&quot;</span><span class="p">:</span>
+                <span class="n">expr</span><span class="o">=</span> <span class="p">(</span><span class="s2">&quot;E_00*x[0]+.5*G_01*x[1]&quot;</span><span class="p">,</span><span class="s2">&quot;.5*G_01*x[0]+E_11*x[1]&quot;</span><span class="p">)</span>
+                <span class="c1">#expr= (&quot;x[0]&quot;,&quot;0.&quot;)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hom_expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span><span class="n">element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">element</span><span class="p">,</span><span class="n">E_00</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">G_01</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">E_11</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">t_eps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+            <span class="c1">#    </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feobj</span><span class="o">.</span><span class="n">u0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hom_expr</span>
+            <span class="k">return</span>
+
+        <span class="k">def</span> <span class="nf">_set_periodicity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">left_bottom_corner</span><span class="p">,</span><span class="n">right_top_corner</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Get periodicity vector and bounding box </span>
+
+<span class="sd">            :param left_bottom_corner:</span>
+<span class="sd">            :param right_top_corner:</span>
+<span class="sd">            :type left_bottom_corner:</span>
+<span class="sd">            :type right_top_corner:</span>
+<span class="sd">            :return:</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="c1"># Set bounding box of the mesh (e.g. (e.g. [0., 1.] in 1D, [[0.,0.],[1.,1.]] in 2D, [[0.,0.,0.],[1.,1.,1.]] in 3D)</span>
+            <span class="n">boundingbox</span><span class="o">=</span><span class="n">SuperFEMaterial</span><span class="o">.</span><span class="n">Bounding_box</span><span class="p">([</span><span class="n">left_bottom_corner</span><span class="p">,</span><span class="n">right_top_corner</span><span class="p">])</span>
+            <span class="c1"># Set periodicity vector (e.g. [1.] in 1D, [1.,1.] in 2D, [1.,1.,1.] in 3D)</span>
+            <span class="n">periodicityvector</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">right_top_corner</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">left_bottom_corner</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">periodicityvector</span><span class="p">,</span><span class="n">boundingbox</span>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.pin_point"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point">[docs]</a>        <span class="k">class</span> <span class="nc">pin_point</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.__init__">[docs]</a>            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">point</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="o">=</span><span class="n">point</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.inside"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.inside">[docs]</a>            <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">)):</span>
+                    <span class="n">a</span><span class="o">=+</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+                <span class="n">a</span><span class="o">=</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">a</span><span class="o">&lt;=</span><span class="n">DOLFIN_EPS_LARGE</span> <span class="ow">and</span> <span class="n">on_boundary</span></div></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.mark_boundaries"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.mark_boundaries">[docs]</a>        <span class="k">def</span> <span class="nf">mark_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">boundaries</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Mark right top corner boundary point with id=10</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">pp0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_top_corner</span><span class="p">)</span>
+            <span class="n">pp0</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">boundaries</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="k">return</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.set_bcs"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_bcs">[docs]</a>        <span class="k">def</span> <span class="nf">set_bcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Pin point right top corner dof&#39;s equalt to zero</span>
+
+<span class="sd">            .. todo:: </span>
+<span class="sd">                * Add micromorphic</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="s2">&quot;Cauchy&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_type</span><span class="p">:</span>
+                <span class="n">bcs</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>  
+                        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span> 
+                        <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.</span><span class="p">]],</span>   
+                        <span class="p">]</span>
+                <span class="n">bcs</span><span class="o">=</span><span class="n">bcs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_top_corner</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">bcs</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.set_general_properties"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_general_properties">[docs]</a>        <span class="k">def</span> <span class="nf">set_general_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set here all the parameters of the problem, except material properties </span>
+
+<span class="sd">            When overidden, has to define the maximum number of the state variables of the materials of the supermaterial by setting: self.genprops.p_nsvars= ??</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.create_mesh"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.create_mesh">[docs]</a>        <span class="k">def</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set mesh and subdomains</span>
+
+<span class="sd">            :return: mesh object</span>
+<span class="sd">            :rtype: Mesh</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialFEproblem.set_materials"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_materials">[docs]</a>        <span class="k">def</span> <span class="nf">set_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create material objects and set material parameters</span>
+
+<span class="sd">            :return: Returns a list of UserMaterial objects</span>
+<span class="sd">            :rtype: UserMaterial</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">pass</span>         </div></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.Bounding_box"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.Bounding_box">[docs]</a>    <span class="k">class</span> <span class="nc">Bounding_box</span><span class="p">():</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Bounding box object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="SuperFEMaterial.Bounding_box.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.Bounding_box.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">points</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            :param points: list that contains the two corners of the bounding box:</span>
+<span class="sd">             [[left_x,bottom_y,foreground_z],[right_x,top_y,background_z]]</span>
+<span class="sd">             :type points: List</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_x</span><span class="o">=</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">r_x</span><span class="o">=</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b_y</span><span class="o">=</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_y</span><span class="o">=</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">f_z</span><span class="o">=</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b_z</span><span class="o">=</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span></div></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialPeriodicBoundary"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary">[docs]</a>    <span class="k">class</span> <span class="nc">SuperFEMaterialPeriodicBoundary</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Defines periodic boundary conditions for orthogonal periodic cell</span>
+
+<span class="sd">        I give credit to: Garth N. Wells see `FEniCS Q&amp;A &lt;https://fenicsproject.org/qa/262/possible-specify-more-than-one-periodic-boundary-condition/&gt;`_</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialPeriodicBoundary.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">periodicityvector</span><span class="p">,</span><span class="n">boundingbox</span><span class="p">):</span>
+            <span class="n">SubDomain</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">periodicityvector</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span> <span class="o">=</span> <span class="n">boundingbox</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">periodicityvector</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">periodicityvector</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Lz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialPeriodicBoundary.inside"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.inside">[docs]</a>        <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Check if point belongs to target domain for the map function. Left, bottom and foreground boundaries are the &quot;target domains&quot;</span>
+
+<span class="sd">            :param x: coordinates of the point</span>
+<span class="sd">            :param on_boundary: True if point belongs to boundary</span>
+<span class="sd">            :return: True if it belongs to the target domain</span>
+<span class="sd">            :rtype: boolean </span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="c1"># return True if on left boundary</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">l_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">on_boundary</span><span class="p">)</span>
+            <span class="c1"># return True if on left or bottom boundary AND NOT on one of the two corners (0, 1) and (1, 0)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>    
+                <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>  <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">l_x</span><span class="p">)</span> <span class="ow">or</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_y</span><span class="p">))</span> <span class="ow">and</span> 
+                        <span class="p">(</span><span class="ow">not</span><span class="p">(</span> <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">l_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">t_y</span><span class="p">))</span> <span class="ow">or</span> 
+                              <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_y</span><span class="p">))</span> <span class="p">)</span> <span class="p">)</span> <span class="ow">and</span> <span class="n">on_boundary</span><span class="p">)</span>
+            <span class="c1"># return True if on left, bottom or foreground boundary AND NOT on one of the three corners (0,1,0), (1,0,0) and (0,0,1)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>  <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">l_x</span><span class="p">)</span> <span class="ow">or</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_y</span><span class="p">)</span> <span class="ow">or</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">f_z</span><span class="p">))</span> <span class="ow">and</span> 
+                        <span class="p">(</span><span class="ow">not</span><span class="p">(</span> <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">l_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">t_y</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">f_z</span><span class="p">))</span> <span class="ow">or</span> 
+                              <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_y</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">f_z</span><span class="p">))</span> <span class="ow">or</span>
+                              <span class="p">(</span><span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">l_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_y</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_z</span><span class="p">))</span> <span class="p">)</span> <span class="p">)</span> <span class="ow">and</span> <span class="n">on_boundary</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuperFEMaterial.SuperFEMaterialPeriodicBoundary.map"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.map">[docs]</a>        <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Override FEniCS method to map dof&#39;s at point x to point y</span>
+
+<span class="sd">            :param x: source coordinates</span>
+<span class="sd">            :param y: target coordinates</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="c1">#return if it is on (1,1) corner</span>
+                <span class="k">if</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">t_y</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c1">#return if it is on the right boudary</span>
+                <span class="k">elif</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c1">#return if it is on the top boudary</span>
+                <span class="k">elif</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">t_y</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                <span class="c1">#return if it is on (1,1,1) corner</span>
+                <span class="k">if</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">t_y</span><span class="p">)</span> <span class="ow">and</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_z</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="c1">#return if it is on the right boudary</span>
+                <span class="k">elif</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">r_x</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="c1">#return if it is on the top boudary</span>
+                <span class="k">elif</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">t_y</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="c1">#return if it is on the top boudary</span>
+                <span class="k">elif</span> <span class="n">near</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">b_z</span><span class="p">):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div></div></div>
+
+
+
+
+<span class="c1">#                 # Plot solution</span>
+<span class="c1">#             import matplotlib.pyplot as plt</span>
+<span class="c1">#              </span>
+<span class="c1">#             #x = np.linspace(-.5, .5, 25)</span>
+<span class="c1">#             #y = np.linspace(-1., 1., 50)</span>
+<span class="c1">#             #X, Y = np.meshgrid(x, y)</span>
+<span class="c1">#             #Z=</span>
+<span class="c1">#             #plt.contour(X, Y, Z, 20, cmap=&#39;RdGy&#39;);</span>
+<span class="c1">#             plt.xlabel(&quot;$x_1$&quot;)</span>
+<span class="c1">#             plt.ylabel(&quot;$x_2$&quot;)</span>
+<span class="c1"># #             </span>
+<span class="c1">#             plot(self.FEproblems[GP_id].mesh)</span>
+<span class="c1">#             p=plot(self.FEproblems[GP_id].feobj.usol[0], title=&quot;$u_1$&quot;)</span>
+<span class="c1">#             #p.set_cmap(&#39;RdGy&#39;)</span>
+<span class="c1">#             #p.set_clim(0.0, 1.0)</span>
+<span class="c1">#             plt.colorbar(p);</span>
+<span class="c1">#             plt.show()</span>
+<span class="c1">#             #plt.savefig(&quot;demo.png&quot;)</span>
+<span class="c1">#              </span>
+<span class="c1">#             plot(self.FEproblems[GP_id].mesh)</span>
+<span class="c1">#             p=plot(self.FEproblems[GP_id].feobj.usol[1], title=&quot;$u_2$&quot;)</span>
+<span class="c1">#             #p.set_cmap(&#39;RdGy&#39;)</span>
+<span class="c1">#             #p.set_clim(0.0, 1.0)</span>
+<span class="c1">#             plt.colorbar(p);</span>
+<span class="c1">#             plt.show()</span>
+<span class="c1">#             #plt.savefig(&quot;demo.png&quot;)</span>
+<span class="c1">#              </span>
+<span class="c1">#              </span>
+<span class="c1">#             #plot(my_FEproblem.mesh)</span>
+<span class="c1">#             Pavg=FunctionSpace(self.FEproblems[GP_id].mesh,&quot;DG&quot;,0)</span>
+<span class="c1">#             p=plot(project(self.FEproblems[GP_id].feobj.sigma2[0],Pavg))#, title=&quot;$\sigma_{22}$&quot;)</span>
+<span class="c1">#             print(self.FEproblems[GP_id].feobj.sigma2.vector().get_local())</span>
+<span class="c1">#             #p.set_cmap(&#39;RdGy&#39;)</span>
+<span class="c1">#             p.set_clim(0.0, .4)</span>
+<span class="c1">#             plt.colorbar(p);</span>
+<span class="c1">#             plt.show()</span>
+<span class="c1">#             #plt.savefig(&quot;demo.png&quot;)</span>
+<span class="c1">#             #plot(my_FEproblem.mesh)</span>
+<span class="c1">#             Pavg=FunctionSpace(self.FEproblems[GP_id].mesh,&quot;DG&quot;,0)</span>
+<span class="c1">#             p=plot(project(self.FEproblems[GP_id].feobj.sigma2[1],Pavg))#, title=&quot;$\sigma_{22}$&quot;)</span>
+<span class="c1">#             print(self.FEproblems[GP_id].feobj.sigma2.vector().get_local())</span>
+<span class="c1">#             #p.set_cmap(&#39;RdGy&#39;)</span>
+<span class="c1">#             p.set_clim(0.0, .4)</span>
+<span class="c1">#             plt.colorbar(p);</span>
+<span class="c1">#             plt.show()</span>
+<span class="c1">#             #plt.savefig(&quot;demo.png&quot;)</span>
+
+
+<span class="c1">#         def create_boundary_subdomains(self,mesh):</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             Mark points for imposing BC to avoid rigid body motions</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             subdomains = MeshFunction(&quot;size_t&quot;, mesh, 1)</span>
+<span class="c1">#             subdomains.set_all(0) #assigns material/props number 0 everywhere</span>
+<span class="c1">#             _corner_1=self._corner_1(self.periodicityvector,self.boundingbox)</span>
+<span class="c1">#             _corner_1.mark(subdomains, 1) #assigns material/props number 1 to corner 1</span>
+<span class="c1">#             if len(self.periodicityvector)==1: return subdomains</span>
+<span class="c1">#             _corner_2=self._corner_2(self.periodicityvector,self.boundingbox)</span>
+<span class="c1">#             _corner_2.mark(subdomains, 2) #assigns material/props number 2 to corner 2</span>
+<span class="c1">#             if len(self.periodicityvector)==2: return subdomains </span>
+<span class="c1">#             _corner_3=self._corner_3(self.periodicityvector,self.boundingbox)</span>
+<span class="c1">#             _corner_3.mark(subdomains, 3) #assigns material/props number 3 to corner 3</span>
+<span class="c1">#             return subdomains</span>
+<span class="c1">#</span>
+<span class="c1">#         class _corner_1(SubDomain):</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             Gets left, bottom, foreground corner</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             def __init__(self,periodicityvector,boundingbox):</span>
+<span class="c1">#                 SubDomain.__init__(self)</span>
+<span class="c1">#                 self.periodicityvector = periodicityvector</span>
+<span class="c1">#                 self.boundingbox = boundingbox</span>
+<span class="c1">#                 </span>
+<span class="c1">#             def inside(self, x, on_boundary):</span>
+<span class="c1">#                 if len(self.periodicityvector)==1:</span>
+<span class="c1">#                     return bool(near(x[0], self.boundingbox.l_x))</span>
+<span class="c1">#                 elif len(self.periodicityvector)==2:</span>
+<span class="c1">#                     return bool(near(x[0], self.boundingbox.l_x) and near(x[1], self.boundingbox.b_y)) </span>
+<span class="c1">#                 elif len(self.periodicityvector==3):</span>
+<span class="c1">#                     return bool(near(x[0], self.boundingbox.l_x) and near(x[1], self.boundingbox.b_y) and near(x[2], self.boundingbox.f_z))</span>
+<span class="c1">#         </span>
+<span class="c1">#         class _corner_2(SubDomain):</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             Gets right, bottom, foreground corner</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             def __init__(self,periodicityvector,boundingbox):</span>
+<span class="c1">#                 SubDomain.__init__(self)</span>
+<span class="c1">#                 self.periodicityvector = periodicityvector</span>
+<span class="c1">#                 self.boundingbox = boundingbox</span>
+<span class="c1"># </span>
+<span class="c1">#             def inside(self, x, on_boundary):</span>
+<span class="c1">#                 if len(self.periodicityvector)==2:</span>
+<span class="c1">#                     return bool(near(x[0], self.boundingbox.r_x) and near(x[1], self.boundingbox.b_y)) </span>
+<span class="c1">#                 elif len(self.periodicityvector)==3:</span>
+<span class="c1">#                     return bool(near(x[0], self.boundingbox.r_x) and near(x[1], self.boundingbox.b_y) and near(x[2], self.boundingbox.f_z))</span>
+<span class="c1">#         </span>
+<span class="c1">#         class _corner_3(SubDomain):</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             Gets right, bottom, background corner</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             def __init__(self,periodicityvector,boundingbox):</span>
+<span class="c1">#                 SubDomain.__init__(self)</span>
+<span class="c1">#                 self.periodicityvector = periodicityvector</span>
+<span class="c1">#                 self.boundingbox = boundingbox</span>
+<span class="c1">#             </span>
+<span class="c1">#             def inside(self, x, on_boundary): </span>
+<span class="c1">#                 if len(self.periodicityvector)==3:</span>
+<span class="c1">#                     return bool(near(x[0], self.boundingbox.r_x) and near(x[1], self.boundingbox.b_y) and near(x[2], self.boundingbox.b_z))</span>
+
+<span class="c1">#         def set_bcs(self):</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             Set boundary conditions to avoid rigid body movements (elementary cell is cosidered as Cauchy)</span>
+<span class="c1">#             &quot;&quot;&quot;</span>
+<span class="c1">#             #[topology_id,[dof,value]]</span>
+<span class="c1">#             if len(self.periodicityvector)==1:</span>
+<span class="c1">#                 bcs=[[1,[0,0.]]]</span>
+<span class="c1">#             elif len(self.periodicityvector)==2:</span>
+<span class="c1">#                 bcs=[</span>
+<span class="c1">#                     [1,[0,0.]],</span>
+<span class="c1">#                     [1,[1,0.]],</span>
+<span class="c1">#                     [2,[1,0.]]</span>
+<span class="c1">#                     ]</span>
+<span class="c1">#             elif len(self.periodicityvector)==3:</span>
+<span class="c1">#                 bcs=[</span>
+<span class="c1">#                     [1,[0,0.]],</span>
+<span class="c1">#                     [1,[1,0.]],</span>
+<span class="c1">#                     [1,[2,0.]],</span>
+<span class="c1">#                     [2,[1,0.]],</span>
+<span class="c1">#                     [3,[1,0.]]</span>
+<span class="c1">#                     ]</span>
+<span class="c1">#             bcs=[]</span>
+<span class="c1">#             return bcs    </span>
+
+<span class="c1">#             meshfile=&quot;/mnt/f/DEVELOPMENT/GMSHFENICS/test2D_1.h5&quot;</span>
+<span class="c1">#             mesh = Mesh()</span>
+<span class="c1">#             hdf = HDF5File(mesh.mpi_comm(), meshfile, &quot;r&quot;)</span>
+<span class="c1">#             hdf.read(mesh, &quot;/mesh&quot;, False)</span>
+<span class="c1">#             #cd = CellFunction(&quot;size_t&quot;, mesh) #deprecated</span>
+<span class="c1">#             cd=MeshFunction(&quot;size_t&quot;, mesh, mesh.topology().dim())</span>
+<span class="c1">#             hdf.read(cd, &quot;/cd&quot;)</span>
+<span class="c1">#             #fd = FacetFunction(&quot;size_t&quot;, mesh) #deprecated</span>
+<span class="c1">#             fd=MeshFunction(&quot;size_t&quot;, mesh, mesh.topology().dim()-1)</span>
+<span class="c1">#             hdf.read(fd, &quot;/fd&quot;)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.superFEmaterials</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

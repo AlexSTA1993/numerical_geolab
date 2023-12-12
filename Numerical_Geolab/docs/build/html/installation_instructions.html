@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. Installation instructions &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Material description" href="material_description_state_variables.html" />
+    <link rel="prev" title="1.4.1.4. ngeoFE_unittests.Upscaling package" href="ngeoFE_unittests.Upscaling.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="material_description_state_variables.html" title="2. Material description"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.Upscaling.html" title="1.4.1.4. ngeoFE_unittests.Upscaling package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Installation instructions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="installation-instructions">
+<span id="id1"></span><h1><span class="section-number">1. </span>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h1>
+<section id="direct-download-from-source">
+<h2><span class="section-number">1.1. </span>Direct download from source<a class="headerlink" href="#direct-download-from-source" title="Permalink to this heading">¶</a></h2>
+<p>The project sources including Numerical_Geolab and numerical_geolab_materials are available on Github.
+The user can download the project and add the modules Numerical_Geolab and numerical_geolab_materials to PYTHONPATH i.e:</p>
+<p>For Linux systems:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span>/path/to/numerical_geolab/Numerical_Geolab
+$ <span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span>/path/to/numerical/geolab_materials:<span class="nv">$PYTHONPATH</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For the unittests below to work properly: Numerical_Geolab and numerical_geolab_materials should be located under the same directory</p>
+</div>
+</section>
+<section id="docker-container">
+<h2><span class="section-number">1.2. </span>Docker container<a class="headerlink" href="#docker-container" title="Permalink to this heading">¶</a></h2>
+<p>For the user’s convenience an image of numerical geolab that bases on FEniCS is available. It can be found in the sources
+numerical_geolab/docker.</p>
+<section id="code-validation-via-unittests">
+<h3><span class="section-number">1.2.1. </span>Code validation via unittests<a class="headerlink" href="#code-validation-via-unittests" title="Permalink to this heading">¶</a></h3>
+<p>Numerical Geolab comes equipped with unittests that verify the expected behavior for the material libraries, the
+mechanical models and also the multiphysics models that use the available materials. In order to test that the files work successfully,
+a script is available that performs all tests. The user execute it as follows:
+for Linux systems:</p>
+<ol class="loweralpha simple">
+<li><p>Open a terminal and change the user directory to /path/to/numerical_geolab/Numerical_Geolab/ngeoFE_unittests i.e.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /path/to/numerical_geolab/Numerical_Geolab/ngeoFE_unittests
+</pre></div>
+</div>
+<ol class="loweralpha simple" start="2">
+<li><p>run the python module 0run_all_tests.py i.e.:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3 0run_all_tests.py
+</pre></div>
+</div>
+<p>During the validation procedure numerical geolab can produce plots of specific analysis quantities intrinsic to the unittests inside the ngeoFE/reference_data file
+indicating the evolution. These include stress-strain, temperature-pressure,
+plastic strain rate evolution and where applicable relative errors between analytical and numerical solution  during the tests.</p>
+<p>For Linux systems:
+The user can activate the plotting option by using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">RUN_TESTS_WITH_PLOTS</span><span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+</section>
+<section id="reading-the-documentation">
+<h3><span class="section-number">1.2.2. </span>Reading the documentation<a class="headerlink" href="#reading-the-documentation" title="Permalink to this heading">¶</a></h3>
+<p>The user can parse the available documentation present in the docs directory, where a list of documented python files exist
+for the construction and solution of different problems in inelasticity involving multiphysics couplings and
+micromorphic continua. The tutorials for inalsticity multiphysics and micromorphic continua are available using the following link</p>
+<p><a class="reference internal" href="index.html#numerical-geolab-tutorials2"><span class="std std-ref">Numerical Geolab Tutorials</span></a></p>
+</section>
+<section id="formulate-and-solve-a-custom-problem">
+<h3><span class="section-number">1.2.3. </span>Formulate and solve a custom problem<a class="headerlink" href="#formulate-and-solve-a-custom-problem" title="Permalink to this heading">¶</a></h3>
+<p>The user can use the available example files in the tutorials as the basis for the construction and solution of a new problem.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. Installation instructions</a><ul>
+<li><a class="reference internal" href="#direct-download-from-source">1.1. Direct download from source</a></li>
+<li><a class="reference internal" href="#docker-container">1.2. Docker container</a><ul>
+<li><a class="reference internal" href="#code-validation-via-unittests">1.2.1. Code validation via unittests</a></li>
+<li><a class="reference internal" href="#reading-the-documentation">1.2.2. Reading the documentation</a></li>
+<li><a class="reference internal" href="#formulate-and-solve-a-custom-problem">1.2.3. Formulate and solve a custom problem</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ngeoFE_unittests.Upscaling.html"
+                          title="previous chapter"><span class="section-number">1.4.1.4. </span>ngeoFE_unittests.Upscaling package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="material_description_state_variables.html"
+                          title="next chapter"><span class="section-number">2. </span>Material description</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="material_description_state_variables.html" title="2. Material description"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.Upscaling.html" title="1.4.1.4. ngeoFE_unittests.Upscaling package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Installation instructions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

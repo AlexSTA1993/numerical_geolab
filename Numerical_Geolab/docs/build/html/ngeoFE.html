@@ -1,0 +1,1414 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1.3. ngeoFE package &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.4. ngeoFE_unittests package" href="ngeoFE_unittests.html" />
+    <link rel="prev" title="1.2. docs2 package" href="docs2.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.html" title="1.4. ngeoFE_unittests package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="docs2.html" title="1.2. docs2 package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U"><span class="section-number">1. </span>Numerical_Geolab</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.3. </span>ngeoFE package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ngeofe-package">
+<h1><span class="section-number">1.3. </span>ngeoFE package<a class="headerlink" href="#ngeofe-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2><span class="section-number">1.3.1. </span>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-ngeoFE.fedefinitions">
+<span id="ngeofe-fedefinitions-module"></span><h2><span class="section-number">1.3.2. </span>ngeoFE.fedefinitions module<a class="headerlink" href="#module-ngeoFE.fedefinitions" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 2, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.fedefinitions.</span></span><span class="sig-name descname"><span class="pre">FEformulation</span></span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines general properties of the FE problem</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.auxiliary_fields">
+<span class="sig-name descname"><span class="pre">auxiliary_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.auxiliary_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.auxiliary_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set user’s generalized deformation vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>TestFunction</em>) – test function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.create_element">
+<span class="sig-name descname"><span class="pre">create_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.create_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.create_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set desired element</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cell</strong> (<em>Cell</em>) – mesh cell type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.dotv_coeffs">
+<span class="sig-name descname"><span class="pre">dotv_coeffs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.dotv_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.dotv_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set left hand side derivative coefficients</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.generalized_epsilon">
+<span class="sig-name descname"><span class="pre">generalized_epsilon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.generalized_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.generalized_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set user’s generalized deformation vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>TestFunction</em>) – test function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.setVarFormAdditionalTerms_Jac">
+<span class="sig-name descname"><span class="pre">setVarFormAdditionalTerms_Jac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsde</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.setVarFormAdditionalTerms_Jac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.setVarFormAdditionalTerms_Jac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set user’s additional terms at variational form for Jacobian</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>TrialFunction</em>) – trial function</p></li>
+<li><p><strong>Du</strong> (<em>Function</em>) – increment of trial function</p></li>
+<li><p><strong>v</strong> (<em>svars2</em>) – test of test function</p></li>
+<li><p><strong>svars</strong> – function of state variables</p></li>
+<li><p><strong>dt</strong> (<em>double</em>) – time increment</p></li>
+<li><p><strong>dt</strong> – time increment</p></li>
+</ul>
+</dd>
+</dl>
+<p>WARNING: the derivatives for calculating the Jacobian are made with the Trial function u and not with the Function Du.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEformulation.setVarFormAdditionalTerms_Res">
+<span class="sig-name descname"><span class="pre">setVarFormAdditionalTerms_Res</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEformulation.setVarFormAdditionalTerms_Res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEformulation.setVarFormAdditionalTerms_Res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set user’s additional terms at variational form for Residual</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>TrialFunction</em>) – trial function</p></li>
+<li><p><strong>Du</strong> (<em>Function</em>) – increment of trial function</p></li>
+<li><p><strong>v</strong> (<em>svars2</em>) – test of test function</p></li>
+<li><p><strong>svars</strong> – function of state variables</p></li>
+<li><p><strong>dt</strong> (<em>double</em>) – time increment</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.fedefinitions.</span></span><span class="sig-name descname"><span class="pre">FEobject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nsvars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_previous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates the FE object to be solved with solvers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> (<em>Mesh</em>) – dolfin mesh</p></li>
+<li><p><strong>feform</strong> (<a class="reference internal" href="#ngeoFE.fedefinitions.FEformulation" title="ngeoFE.fedefinitions.FEformulation"><em>FEformulation</em></a>) – finite element variational formulation</p></li>
+<li><p><strong>p_nsvars</strong> (<em>integer</em>) – number of components of state variables vector</p></li>
+<li><p><strong>subdomains</strong> (<em>SubDomain</em>) – list of dolfin subdomains</p></li>
+<li><p><strong>comm</strong> (<em>d.MPI.comm_world</em>) – parallel communicator</p></li>
+<li><p><strong>pbc</strong> (<a class="reference internal" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary" title="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary"><em>SuperFEMaterialPeriodicBoundary</em></a>) – periodic boundary conditions for supermaterial</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.V">
+<span class="sig-name descname"><span class="pre">V</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.V" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.V0">
+<span class="sig-name descname"><span class="pre">V0</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.V0" title="Permalink to this definition">¶</a></dt>
+<dd><p>FunctionSpace used for an initial non-periodic field.n</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_nsvars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_previous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl>
+<dt>Attributes:</dt><dd><p>self.p_nstr (int): Number of components of the generalized stress vector</p>
+<p>self.p_nsvars (int): Number of components of state variables</p>
+<p>self.feform (FeFormulation):attribute of the finite element variational formulation (in problems of pure eleasticity it corresponds to the kinematical description of the strains)</p>
+<p>self.ns (FeFormulation.ns):attribute of number of Gauss points</p>
+<p>self.mesh (UserFeProblem.create_mesh()):attribute of the mesh</p>
+<p>self.cell (mesh.ufl_cell().cellname()):indicates the topological dimension of the element used e.g “interval”,”triangle”,”tetrahedron”</p>
+<p>self.element (self.feform.create_element(self.cell): creates the element with given topology, dimension, interpolation functions and integration order</p>
+<p>self.V (FunctionSpace(mesh, self.element, constrained_domain=self.pbc)): Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.</p>
+<p>It takes into account local connections of the elements at common nodes and assigns the interpolation coefficients to be defined in the solution. The optional parameter constrained_domain is used for problems with periodic boundary conditions.</p>
+<p>In this case the degrees of freedom at opposite edges of the boundary are set to be common.</p>
+<p>self.V0 (FunctionSpace(mesh, self.element)): FunctionSpace used for an initial non-periodic field.</p>
+<p>self.v (TestFunction(self.V)): Test function of the variational formulation.</p>
+<p>self.p_aux (self.feform.p_aux): Get number of auxilary fields defined on the variational formulation of the element.</p>
+<p>self.u (TrialFunction(self.V)): Define trial functions (unknown generalized displacements)</p>
+<p>self.f (Function(self.V)): Define external generalized volumic forces and tractor</p>
+<p>self.u0 (Function(self.V0)): Define initial non-periodic generalized displacements</p>
+<p>self.Du (Function(self.V)): Define incremental solution</p>
+<p>self.du (Function(self.V)): Define iterative solution</p>
+<p>self.usol (Function(self.V, name=”Gen_Diplacements”)): Define total solution.</p>
+<p>self.usol.interpolate(Constant(np.zeros(self.ndofs))):Initialize total solution to zero.</p>
+<blockquote>
+<div><p>__Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=self.feform.p_nstr,quad_scheme=’default’)): Define a Vector Element whose interpolation function just adds the values of the corresponding stress component at the Gauss points.</p>
+<p>For the material definition and subsequent analysis Voight-notation was used taking the components of the stress tensor as vectorial components.</p>
+</div></blockquote>
+<p>self.Vstress = FunctionSpace(mesh,__Ve): Create the appropriate FunctionSpace. Due to the elements used (“Quadrature”) the global interpolation function is Dirac discontinuous over each  Gauss point and each element such that the value of the prescribed integral</p>
+<p>in the value of the integrand itself. Therefore each element is characterized by number (ns) of different stress vectors -one per Gauss point- which add together for the numerical evaluation of the solution integral in the V FunctionSpace.</p>
+<p>__Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=self.p_aux,quad_scheme=’default’)): Same as before for the evaluation of the auxillary fields.</p>
+<p>self.Vaux  (FunctionSpace(mesh,__Ve)): same as before
+__Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=p_nsvars,quad_scheme=’default’)): Same as before for the evaluation of the state variables at the Gauss points as the material algorithm calculates the material state response</p>
+<p>on the Gauss points and numerical integration is performed using the values at the Gauss points. State variables are needed for the calculation of the internal force vector as well as the Jacobian matrix.</p>
+<p>self.Vsvars (FunctionSpace(mesh,__Ve)): Same as before.</p>
+<p>__Ve = VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=self.feform.p_nstr*self.feform.p_nstr,quad_scheme=’default’) The material tangent modulus concerning the generalised stress train response of the material.</p>
+<p>self.Vdsde (FunctionSpace(mesh,__Ve)): same as before.</p>
+<p>self.sigma2 (Function(self.Vstress)): Function of the current stress state living in the Vstress FunctionSpace.</p>
+<p>self.deGP2 (Function(self.Vstress)): Function of the current strain state living in the Vstress FunctionSpace.</p>
+<p>self.aux_deGP2 (Function(self.Vaux)): Function of the auxilary fields spatial directional derivatives as they were defined in FeFormulation,</p>
+<p>living in the Vaux FunctionSpace.</p>
+<p>self.dsde2 (Function(self.Vdsde)): Function of the material tangent modulus living in the Vdsde FunctionSpace.</p>
+<p>For some problems we need to keep the previous state (e.g. SuperMaterials)</p>
+<p>self.keep_previous (logical): Logical flag indicating wether the previous converged state needs to be kept. Important in problems of multiple scales were the Finite-element/material problem at the Gauss points might not converge for all Gauss points in the super element</p>
+<p>In this case we need to prevent the converged Gauss points from updating their state as they would normally do.</p>
+<p>self.sigma2_prev (Function(self.Vstress)): previous stress vector of last total converged increment.</p>
+<p>self.svars2_prev (Function(self.Vsvars)): previous state variables vector of last total converged increment.</p>
+<p>self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment.</p>
+<p>self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem.</p>
+<p>self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)</p>
+<p>Values used for integration at the Gauss points: {“quadrature_degree”:self.ns,”quadrature_scheme”:”default”}</p>
+<p>self.comm=comm</p>
+<p>self.history_indices_ti (int): Indicates the degrees of freedom for which we wish to separately save their force output (e.g traction on a boundary node).  
+self.history_indices_ui (int): Indicates the degrees of freedom for which we wish to separately save their solution output (e.g displacement on a boundary node)
+self.problem_history (list): List gathering the history output of the selected dofs.</p>
+<p>self.domainidGP (self.__init_domains(mesh,subdomains,self.ns)): List of the problems Gauss points for every subdomain defined.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.aux_field2">
+<span class="sig-name descname"><span class="pre">aux_field2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.aux_field2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.aux_field2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get auxiliary fields for the Gauss points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>TestFunction</em>) – dolfin test function</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>auxiliary fields</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>feform.auxiliary_fields</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.cell">
+<span class="sig-name descname"><span class="pre">cell</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>indicates the topological dimension of the element used e.g “interval”,”triangle”,”tetrahedron”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.dotv_coeffs">
+<span class="sig-name descname"><span class="pre">dotv_coeffs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.dotv_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.dotv_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get left hand side time derivative coefficients</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.element">
+<span class="sig-name descname"><span class="pre">element</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.element" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates the element with given topology, dimension, interpolation functions and integration order</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.epsilon2">
+<span class="sig-name descname"><span class="pre">epsilon2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.epsilon2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.epsilon2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get generalized deformation vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>TestFunction</em>) – dolfin test function</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>generalized epsilon</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>feform.generalized_epsilon</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.local_project">
+<span class="sig-name descname"><span class="pre">local_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.local_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.local_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>General projection function (used later for calculating values &#64; GPs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> (<em>Function</em>) – dolfin function</p></li>
+<li><p><strong>V</strong> (<em>FunctionSpace</em>) – function space</p></li>
+</ul>
+</dd>
+</dl>
+<p>I give credit to Jeremy Bleyer for this method (<a class="reference external" href="https://comet-fenics.readthedocs.io/en/latest/tips_and_tricks.html#efficient-projection-on-dg-or-quadrature-spaces">source</a>)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>attribute of the mesh</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.ns">
+<span class="sig-name descname"><span class="pre">ns</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>attribute of number of Gauss points</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.p_nstr">
+<span class="sig-name descname"><span class="pre">p_nstr</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.p_nstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>No of components of the generalized stress vector</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.p_nsvars">
+<span class="sig-name descname"><span class="pre">p_nsvars</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.p_nsvars" title="Permalink to this definition">¶</a></dt>
+<dd><p>No of components of state variables</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.setVarForm">
+<span class="sig-name descname"><span class="pre">setVarForm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.setVarForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.setVarForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Jacobian and Residual (Voigt form)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.setVarFormTransient">
+<span class="sig-name descname"><span class="pre">setVarFormTransient</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.setVarFormTransient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.setVarFormTransient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Jacobian and Residual (Voigt form)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.set_dt">
+<span class="sig-name descname"><span class="pre">set_dt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.set_dt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.set_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets new dt to be consider in setVarForm_x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dt</strong> (<em>double</em>) – time increment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.sigma2_prev">
+<span class="sig-name descname"><span class="pre">sigma2_prev</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.sigma2_prev" title="Permalink to this definition">¶</a></dt>
+<dd><p>previous stress matrixof last total converged increment</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.to_matrix">
+<span class="sig-name descname"><span class="pre">to_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comp_dsde</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/fedefinitions.html#FEobject.to_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.to_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comp_dsde</strong> (<em>numpy array</em>) – jacobian ds/de in vector form</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>jacobian ds/de in dolfin matrix form</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>as_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ngeoFE.fedefinitions.FEobject.v">
+<span class="sig-name descname"><span class="pre">v</span></span><a class="headerlink" href="#ngeoFE.fedefinitions.FEobject.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test function of the variational formulation. n</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE.feproblem">
+<span id="ngeofe-feproblem-module"></span><h2><span class="section-number">1.3.3. </span>ngeoFE.feproblem module<a class="headerlink" href="#module-ngeoFE.feproblem" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 6, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.BoC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.feproblem.</span></span><span class="sig-name descname"><span class="pre">BoC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbolic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#BoC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.BoC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates a Boundary Condition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbolic</strong> (<em>List</em>) – symbolic, user input form of BCs</p></li>
+<li><p><strong>BC</strong> (<em>list of dof's for Neumann and Robin</em><em> or </em><em>dolfin DirichletBC</em>) – Boundary Condition</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.BoC.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbolic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BC</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#BoC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.BoC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.General_FEproblem_properties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.feproblem.</span></span><span class="sig-name descname"><span class="pre">General_FEproblem_properties</span></span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#General_FEproblem_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.General_FEproblem_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines general properties of the FE problem</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.General_FEproblem_properties.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#General_FEproblem_properties.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.General_FEproblem_properties.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.feproblem.</span></span><span class="sig-name descname"><span class="pre">UserFEobject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generalprops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic_bcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_previous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic_histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Gausspointsquerry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic_svars_histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">large_displacements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ngeoFE.fedefinitions.FEobject" title="ngeoFE.fedefinitions.FEobject"><code class="xref py py-class docutils literal notranslate"><span class="pre">FEobject</span></code></a></p>
+<p>Creates a user FE formulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> (<em>Mesh</em>) – dolfin mesh</p></li>
+<li><p><strong>feform</strong> (<a class="reference internal" href="#ngeoFE.fedefinitions.FEformulation" title="ngeoFE.fedefinitions.FEformulation"><em>FEformulation</em></a>) – finite element variational formulation</p></li>
+<li><p><strong>subdomains</strong> (<em>SubDomain</em>) – list of dolfin subdomains</p></li>
+<li><p><strong>boundaries</strong> (<em>MeshFunction</em>) – dolfin MeshFunction of mesh order ndim-1 marked with boundary ids</p></li>
+<li><p><strong>generalprops</strong> (<a class="reference internal" href="#ngeoFE.feproblem.General_FEproblem_properties" title="ngeoFE.feproblem.General_FEproblem_properties"><em>General_FEproblem_properties</em></a>) – general properties</p></li>
+<li><p><strong>symbolic</strong> (<em>list</em>) – symbolic, user input form of BCs</p></li>
+<li><p><strong>comm</strong> (<em>d.MPI.comm_world</em>) – parallel communicator</p></li>
+<li><p><strong>pbc</strong> (<a class="reference internal" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary" title="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary"><em>SuperFEMaterialPeriodicBoundary</em></a>) – periodic boundary conditions for supermaterial</p></li>
+<li><p><strong>keep_previous</strong> (<em>Logical</em>) – Indicates whether to keep previous solution or not</p></li>
+<li><p><strong>symbolic_histories</strong> (<em>set of dofs whose values need to be saved</em>) – list of values</p></li>
+<li><p><strong>large_displacements</strong> (<em>Indicates that large displacements are calculated with the ALE method</em>) – Logical</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generalprops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic_bcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pbc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_previous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic_histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Gausspointsquerry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic_svars_histories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">large_displacements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+<dl>
+<dt>Attributes:</dt><dd><p>self.p_nstr (int): Number of components of the generalized stress vector</p>
+<p>self.p_nsvars (int): Number of components of state variables</p>
+<p>self.feform (FeFormulation):attribute of the finite element variational formulation (in problems of pure eleasticity it corresponds to the kinematical description of the strains)</p>
+<p>self.ns (FeFormulation.ns):attribute of number of Gauss points</p>
+<p>self.mesh (UserFeProblem.create_mesh()):attribute of the mesh</p>
+<p>self.cell (mesh.ufl_cell().cellname()):indicates the topological dimension of the element used e.g “interval”,”triangle”,”tetrahedron”</p>
+<p>self.element (self.feform.create_element(self.cell): creates the element with given topology, dimension, interpolation functions and integration order</p>
+<p>self.V (FunctionSpace(mesh, self.element, constrained_domain=self.pbc)): Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.</p>
+<p>It takes into account local connections of the elements at common nodes and assigns the interpolation coefficients to be defined in the solution. The optional parameter constrained_domain is used for problems with periodic boundary conditions.</p>
+<p>In this case the degrees of freedom at opposite edges of the boundary are set to be common.</p>
+<p>self.V0 (FunctionSpace(mesh, self.element)): FunctionSpace used for an initial non-periodic field.</p>
+<p>self.v (TestFunction(self.V)): Test function of the variational formulation.</p>
+<p>self.p_aux (self.feform.p_aux): Get number of auxilary fields defined on the variational formulation of the element.</p>
+<p>self.u (TrialFunction(self.V)): Define trial functions (unknown generalized displacements)</p>
+<p>self.f (Function(self.V)): Define external generalized volumic forces and tractor</p>
+<p>self.u0 (Function(self.V0)): Define initial non-periodic generalized displacements</p>
+<p>self.Du (Function(self.V)): Define incremental solution</p>
+<p>self.du (Function(self.V)): Define iterative solution</p>
+<p>self.usol (Function(self.V, name=”Gen_Diplacements”)): Define total solution.</p>
+<p>self.usol.interpolate(Constant(np.zeros(self.ndofs))):Initialize total solution to zero.</p>
+<blockquote>
+<div><p>__Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=self.feform.p_nstr,quad_scheme=’default’)): Define a Vector Element whose interpolation function just adds the values of the corresponding stress component at the Gauss points.</p>
+<p>For the material definition and subsequent analysis Voight-notation was used taking the components of the stress tensor as vectorial components.</p>
+</div></blockquote>
+<p>self.Vstress = FunctionSpace(mesh,__Ve): Create the appropriate FunctionSpace. Due to the elements used (“Quadrature”) the global interpolation function is Dirac discontinuous over each  Gauss point and each element such that the value of the prescribed integral</p>
+<p>in the value of the integrand itself. Therefore each element is characterized by number (ns) of different stress vectors -one per Gauss point- which add together for the numerical evaluation of the solution integral in the V FunctionSpace.</p>
+<p>__Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=self.p_aux,quad_scheme=’default’)): Same as before for the evaluation of the auxillary fields.</p>
+<p>self.Vaux  (FunctionSpace(mesh,__Ve)): same as before
+__Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=p_nsvars,quad_scheme=’default’)): Same as before for the evaluation of the state variables at the Gauss points as the material algorithm calculates the material state response</p>
+<p>on the Gauss points and numerical integration is performed using the values at the Gauss points. State variables are needed for the calculation of the internal force vector as well as the Jacobian matrix.</p>
+<p>self.Vsvars (FunctionSpace(mesh,__Ve)): Same as before.</p>
+<p>__Ve = VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=self.feform.p_nstr*self.feform.p_nstr,quad_scheme=’default’) The material tangent modulus concerning the generalised stress train response of the material.</p>
+<p>self.Vdsde (FunctionSpace(mesh,__Ve)): same as before.</p>
+<p>self.sigma2 (Function(self.Vstress)): Function of the current stress state living in the Vstress FunctionSpace.</p>
+<p>self.deGP2 (Function(self.Vstress)): Function of the current strain state living in the Vstress FunctionSpace.</p>
+<p>self.aux_deGP2 (Function(self.Vaux)): Function of the auxilary fields spatial directional derivatives as they were defined in FeFormulation,</p>
+<p>living in the Vaux FunctionSpace.</p>
+<p>self.dsde2 (Function(self.Vdsde)): Function of the material tangent modulus living in the Vdsde FunctionSpace.</p>
+<p>For some problems we need to keep the previous state (e.g. SuperMaterials)</p>
+<p>self.keep_previous (logical): Logical flag indicating wether the previous converged state needs to be kept. Important in problems of multiple scales were the Finite-element/material problem at the Gauss points might not converge for all Gauss points in the super element</p>
+<p>In this case we need to prevent the converged Gauss points from updating their state as they would normally do.</p>
+<p>self.sigma2_prev (Function(self.Vstress)): previous stress vector of last total converged increment.</p>
+<p>self.svars2_prev (Function(self.Vsvars)): previous state variables vector of last total converged increment.</p>
+<p>self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment.</p>
+<p>self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem.</p>
+<p>self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)</p>
+<p>Values used for integration at the Gauss points: {“quadrature_degree”:self.ns,”quadrature_scheme”:”default”}</p>
+<p>self.comm=comm</p>
+<p>self.history_indices_ti (int): Indicates the degrees of freedom for which we wish to separately save their force output (e.g traction on a boundary node).  
+self.history_indices_ui (int): Indicates the degrees of freedom for which we wish to separately save their solution output (e.g displacement on a boundary node)
+self.problem_history (list): List gathering the history output of the selected dofs.</p>
+<p>self.domainidGP (self.__init_domains(mesh,subdomains,self.ns)): List of the problems Gauss points for every subdomain defined.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.dotv_coeffs">
+<span class="sig-name descname"><span class="pre">dotv_coeffs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.dotv_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.dotv_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get left hand side (lhs) time derivative coefficients
+:return feform.dotv_coeffs(): list of coefficients of lhs time derivative
+:type feform.dotv_coeffs(): method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.incrementBCs">
+<span class="sig-name descname"><span class="pre">incrementBCs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_current</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_final</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.incrementBCs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.incrementBCs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment boundary conditions values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_current</strong> (<em>double</em>) – time at current increment</p></li>
+<li><p><strong>t_old</strong> (<em>double</em>) – time at previous increment</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.initBCs">
+<span class="sig-name descname"><span class="pre">initBCs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.initBCs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.initBCs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize and set boundary conditions (marks regions and set BC’s)
+:ivar symbolic_bcs: bcs defined in set_bcs()
+:ivar DCbcs0: list of Dirichlet boundary conditions given by Dolfin module
+:ivar DCbcs: list of Dirichlet boundary conditions given by Dolfin module has to be reinitialized             because SWIG module does not work properly
+:ivar NMbcs: list of Neumann boundary conditions
+:ivar RBbcs: list of Robin boundary conditions
+:ivar NMnbcs:</p>
+<p>For each symbolic boundary condition the routine looks at the form 0f the condition given:
+[region_id,[type,*****]] <strong>*</strong> indicates the code depends on the type of condition to continue</p>
+<p>if type 6,7
+[region_id,[type,bc_indices,bc_value]]
+else:
+[region_id,[type,bc_dof,bc_value]]
+:ivar bc_dof: refers to the local degrees of freedom as defined by the FiniteElement of Dolfin to be inserted in FunctionSpace</p>
+<blockquote>
+<div><p>If Mixed Finite Elements are used then len(bc_dof) != 1 and a sublist needs to be filed indicating the local dof to be constrained.</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+<p>pass the list of values to function __get_BC_point_or_facet(region_id,sV,bc_value)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.init_Jac_res">
+<span class="sig-name descname"><span class="pre">init_Jac_res</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.init_Jac_res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.init_Jac_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the Jacobian and the residual through their respective variational forms. 
+Change between transient or quasistatic problems suitable for first derivative in time.
+::* To do: add inertial variational formulation.
+:ivar dotv_coeffs(): if empty then quasistatic case.
+:var dt: time increment. 
+:type dt: dolfin Expression object.
+:var Jac: Initialized Jacobian object.
+:type Jac: numpy array of reals.
+:var Res: Initialized Residual object.
+:type Res: numpy array of reals.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.setVarForm">
+<span class="sig-name descname"><span class="pre">setVarForm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.setVarForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.setVarForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Jacobian and Residual (Voigt form) default version</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.setVarFormTransient">
+<span class="sig-name descname"><span class="pre">setVarFormTransient</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.setVarFormTransient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.setVarFormTransient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Jacobian and Residual (Voigt form) default version for transient problems</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.set_history_output_indices">
+<span class="sig-name descname"><span class="pre">set_history_output_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.set_history_output_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.set_history_output_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the ids of the nodes in the residual marked by the user for history output and saves them to FEobject
+:var symbolic_history: List containing the region and dofs whose history output is needed.
+:type symbolic_history: nested list.
+:var sV: Function subspace of the degrees of freedom needed.
+:type sV: dolfin FunctionSubspace object.
+:var history_indices_ui:
+:var history_indices_ti:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices">
+<span class="sig-name descname"><span class="pre">set_svars_history_output_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.set_svars_history_output_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the ids of the gauss_points in the state variables vector marked by the user for state variable history output and saves them to FEobject
+:var symbolic_svars_history: List containing the region and dofs whose history output is needed.
+:type symbolic_svars_history: nested list.
+:var sV: Quadrature Function subspace of the degrees of freedom needed in the discontinuous Quadrature space.
+:type sV: dolfin FunctionSubspace object.
+:var svars_history_indices_ui:
+:var svars_history_indices_ti:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.setfi">
+<span class="sig-name descname"><span class="pre">setfi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.setfi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.setfi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set user’s volumic forces and tractor increment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dt</strong> (<em>double</em>) – time increment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEobject.update_mesh">
+<span class="sig-name descname"><span class="pre">update_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displacement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEobject.update_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEobject.update_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that utilizes the ALE module of dolfin to update the mesh after each iteration. 
+If the increment in total is not converged then it resets to the previously converged increment.
+:param mesh: dolfin mesh.e    
+:type mesh: Mesh.
+:param displacement: displacement calculated at the specific iteration of the increment/ total displacement of the unconverged increment.
+:type displacement: dolfin Function.
+:param minus: If true resets position of the mesh to previously converged increment.
+:type minus: Logical.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.feproblem.</span></span><span class="sig-name descname"><span class="pre">UserFEproblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines a user FE problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feform</strong> (<a class="reference internal" href="#ngeoFE.fedefinitions.FEformulation" title="ngeoFE.fedefinitions.FEformulation"><em>FEformulation</em></a>) – finite element variational formulation</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.class_update_mesh">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">class_update_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displacement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.class_update_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.class_update_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that utilizes the ALE module of dolfin to update the mesh after each iteration. 
+If the increment in total is not converged then it resets to the previously converged increment.
+:param mesh: dolfin mesh.e    
+:type mesh: Mesh.
+:param displacement: displacement calculated at the specific iteration of the increment/ total displacement of the unconverged increment.
+:type displacement: dolfin Function.
+:param minus: If true resets position of the mesh to previously converged increment.
+:type minus: Logical.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.create_Gauss_point_querry_domain">
+<span class="sig-name descname"><span class="pre">create_Gauss_point_querry_domain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.create_Gauss_point_querry_domain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.create_Gauss_point_querry_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates separate Gauss querry domain for extraction of appropriate svars degrees of freedom from FunctionSpace Vsvars</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.create_mesh">
+<span class="sig-name descname"><span class="pre">create_mesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.create_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.create_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set mesh
+:return mesh: problem’s mesh 
+:return subdomains: problem’s regions of interest. E.g. Different materials
+:return self.boundaries: Define problem boundaries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.create_subdomains">
+<span class="sig-name descname"><span class="pre">create_subdomains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.create_subdomains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.create_subdomains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create subdomains by marking regions. If no subdomains, set subdomain id=0 everywhere. 
+Subdomains define regions with different properties in the problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mesh</strong> (<em>Mesh</em>) – Domain dolfin mesh</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.history_output">
+<span class="sig-name descname"><span class="pre">history_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.history_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.history_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to get output of residual at selected node</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.history_svars_output">
+<span class="sig-name descname"><span class="pre">history_svars_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.history_svars_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.history_svars_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to get output of svars at selected Gauss point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.large_displacements">
+<span class="sig-name descname"><span class="pre">large_displacements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.large_displacements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.large_displacements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets large displacements flag</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.mark_boundaries">
+<span class="sig-name descname"><span class="pre">mark_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boundaries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.mark_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.mark_boundaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark boundary domains if not marked by mesh file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>boundaries</strong> (<em>MeshFunction</em>) – dolfin MeshFunction of mesh order ndim-1 marked with boundary ids</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.plot_me">
+<span class="sig-name descname"><span class="pre">plot_me</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.plot_me"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.plot_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to plot selected quantities</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.set_bcs">
+<span class="sig-name descname"><span class="pre">set_bcs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.set_bcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.set_bcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set boundary conditions for the user problem / could be replaced by external mesher, e.g. Abaqus, Gmsh…
+Form of the symbolic bcs is a list:
+bcs = [</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">[region_id,[0,[dof],value]]] for Dirichlet incremental</div>
+<div class="line">[region_id,[1,ti_vector] for Neumann incremental</div>
+<div class="line">[region_id,[2,[dof],value]]] for Dirichlet instantaneous</div>
+<div class="line">[region_id,[3,ti_vector] for Neumann instantaneous</div>
+<div class="line">[region_id,[5,ti_vector] for Robin incremental</div>
+<div class="line">[region_id,[6,ti_vector] for point load (Neuman) incremental</div>
+<div class="line">[region_id,[7,ti_vector] for point load (Neuman) instantaneous</div>
+</div>
+<p>]</p>
+</div></blockquote>
+<p>:return bcs
+:type nested list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.set_general_properties">
+<span class="sig-name descname"><span class="pre">set_general_properties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.set_general_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.set_general_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set here all the parameters of the problem, except material properties</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.set_initial_conditions">
+<span class="sig-name descname"><span class="pre">set_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.set_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.set_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize state variables vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.set_materials">
+<span class="sig-name descname"><span class="pre">set_materials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.set_materials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.set_materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create material objects and set material parameters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.set_periodic_bcs">
+<span class="sig-name descname"><span class="pre">set_periodic_bcs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.set_periodic_bcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.set_periodic_bcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set periodic boundary conditions for the user problem</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.feproblem.UserFEproblem.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/feproblem.html#UserFEproblem.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.feproblem.UserFEproblem.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves the FE problem</p>
+<p>The final solution is contained in feobj</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>string</em>) – output hdmf filename for saving results (default: “” - no output)</p></li>
+<li><p><strong>silent</strong> (<em>boolean</em>) – messages display</p></li>
+<li><p><strong>summary</strong> (<em>boolean</em>) – display incrementation summary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if converged</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE.materials">
+<span id="ngeofe-materials-module"></span><h2><span class="section-number">1.3.4. </span>ngeoFE.materials module<a class="headerlink" href="#module-ngeoFE.materials" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 3, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.materials.UserMaterial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.materials.</span></span><span class="sig-name descname"><span class="pre">UserMaterial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_lib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umat_lib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umat_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/materials.html#UserMaterial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.materials.UserMaterial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Material class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.materials.UserMaterial.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_lib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umat_lib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umat_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/materials.html#UserMaterial.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.materials.UserMaterial.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load libraries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env_lib</strong> (<em>List of strings</em>) – environment libraries filenames with path</p></li>
+<li><p><strong>umat_lib</strong> (<em>string</em>) – material library filename with path</p></li>
+<li><p><strong>umat_id</strong> (<em>integer</em>) – material id</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.materials.UserMaterial.usermatGP">
+<span class="sig-name descname"><span class="pre">usermatGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stressGP_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deGP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svarsGP_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsdeGP_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux_deGP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/materials.html#UserMaterial.usermatGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.materials.UserMaterial.usermatGP" title="Permalink to this definition">¶</a></dt>
+<dd><p>User material at a Gauss point</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stressGP_t</strong> (<em>numpy array</em>) – generalized stress at GP - input/output</p></li>
+<li><p><strong>deGP</strong> (<em>numpy array</em>) – generalized deformation vector at GP - input</p></li>
+<li><p><strong>aux_deGP</strong> (<em>numpy array</em>) – auxiliary generalized deformation vector at GP - input</p></li>
+<li><p><strong>svarsGP_t</strong> (<em>numpy array</em>) – state variables at GP - input/output</p></li>
+<li><p><strong>dsdeGP_t</strong> – jacobian at GP - output</p></li>
+<li><p><strong>dt</strong> (<em>double</em>) – time increment</p></li>
+<li><p><strong>GP_id</strong> (<em>integer</em>) – Gauss Point id (global numbering of all Gauss Points in the problem) - for normal materials is of no use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>0 if ok, 1 if failed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE.ngio">
+<span id="ngeofe-ngio-module"></span><h2><span class="section-number">1.3.5. </span>ngeoFE.ngio module<a class="headerlink" href="#module-ngeoFE.ngio" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 2, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.ngio.FileExporter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.ngio.</span></span><span class="sig-name descname"><span class="pre">FileExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/ngio.html#FileExporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.FileExporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Export solution data to file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feobj</strong> (<a class="reference internal" href="#ngeoFE.fedefinitions.FEobject" title="ngeoFE.fedefinitions.FEobject"><em>FEobject</em></a>) – finite element object</p></li>
+<li><p><strong>file</strong> (<em>string</em>) – xdmf filename to save data</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.ngio.FileExporter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/ngio.html#FileExporter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.FileExporter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set necessary spaces and filenames for outout and plotting</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.ngio.FileExporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feobj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/ngio.html#FileExporter.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.FileExporter.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>double</em>) – time</p></li>
+<li><p><strong>feobj</strong> (<a class="reference internal" href="#ngeoFE.fedefinitions.FEobject" title="ngeoFE.fedefinitions.FEobject"><em>FEobject</em></a>) – finite element object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.ngio.Msg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.ngio.</span></span><span class="sig-name descname"><span class="pre">Msg</span></span><a class="reference internal" href="_modules/ngeoFE/ngio.html#Msg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.Msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Print messages with colors</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.ngio.Msg.PrintMsg">
+<span class="sig-name descname"><span class="pre">PrintMsg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RESET'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/ngio.html#Msg.PrintMsg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.Msg.PrintMsg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print message in color and reset to default</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>string</em>) – message to display</p></li>
+<li><p><strong>color</strong> (<em>string</em>) – style to use (RED,BLUE,CYAN,GREEN,RESET,BOLD,REVERSE)</p></li>
+<li><p><strong>replace</strong> (<em>boolean</em>) – replace text in same line</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.ngio.Msg.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/ngio.html#Msg.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.Msg.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set color codes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE.ngio.export_list_to_csv">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE.ngio.</span></span><span class="sig-name descname"><span class="pre">export_list_to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/ngio.html#export_list_to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.ngio.export_list_to_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE.solvers">
+<span id="ngeofe-solvers-module"></span><h2><span class="section-number">1.3.6. </span>ngeoFE.solvers module<a class="headerlink" href="#module-ngeoFE.solvers" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 1, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<p>Contains various incremental solvers.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Implement central finite difference scheme</p></li>
+<li><p>Implement forward Euler</p></li>
+<li><p>Implement Crank-Nicolson</p></li>
+<li><p>Implement Newmark scheme</p></li>
+<li><p>Implement arc-length</p></li>
+</ul>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.solvers.Backward_Euler_Solver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.solvers.</span></span><span class="sig-name descname"><span class="pre">Backward_Euler_Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/solvers.html#Backward_Euler_Solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.solvers.Backward_Euler_Solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Newton-Raphson Solver for time dependent and time independent problems (backward Euler method)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feobj</strong> (<a class="reference internal" href="#ngeoFE.fedefinitions.FEobject" title="ngeoFE.fedefinitions.FEobject"><em>FEobject</em></a>) – finite element object</p></li>
+<li><p><strong>mats</strong> (<a class="reference internal" href="#ngeoFE.materials.UserMaterial" title="ngeoFE.materials.UserMaterial"><em>UserMaterial</em></a>) – list of material objects</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.solvers.Backward_Euler_Solver.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mats</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/solvers.html#Backward_Euler_Solver.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.solvers.Backward_Euler_Solver.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize default parameters for the solver</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.solvers.Backward_Euler_Solver.set_initial_stress">
+<span class="sig-name descname"><span class="pre">set_initial_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/solvers.html#Backward_Euler_Solver.set_initial_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.solvers.Backward_Euler_Solver.set_initial_stress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets initial stresses</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> (<em>double</em>) – Time increment (normally unnecessary)</p></li>
+<li><p><strong>sts</strong> (<a class="reference internal" href="#ngeoFE.ngio.Msg" title="ngeoFE.ngio.Msg"><em>Msg</em></a>) – Messaging object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>feobj.u0</strong> – initial converged displacement field contained in the finite element object</p></li>
+<li><p><strong>feobj.deGP2</strong> – converged strain as projected from the initial displacement field</p></li>
+<li><p><strong>deGP</strong> – strain increment</p></li>
+<li><p><strong>aux_deGP</strong> – strain increment of auxilary fields</p></li>
+<li><p><strong>stress_t</strong> – current value of the problem stress tensor in Voight form</p></li>
+<li><p><strong>svars_t</strong> – current value of the material state variables</p></li>
+<li><p><strong>dsde_tdt</strong> – current value of the problem stiffness tensor</p></li>
+<li><p><strong>nill</strong> – value indicating that the material algorithm has converged (nill=0)</p></li>
+<li><p><strong>sigma2</strong> – updated value of the problem stress tensor</p></li>
+<li><p><strong>svars2</strong> – updated value of the material state variables</p></li>
+<li><p><strong>dsde2</strong> – updated values of the problem stiffness tensor</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return nill<span class="colon">:</span></dt>
+<dd class="field-odd"><p>value indicating that the material algorithm has converged (nill=0)</p>
+</dd>
+<dt class="field-even">Rtype nill<span class="colon">:</span></dt>
+<dd class="field-even"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.solvers.Backward_Euler_Solver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_dtmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/solvers.html#Backward_Euler_Solver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.solvers.Backward_Euler_Solver.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves the problem with backward Euler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outputfile</strong> (<em>string</em>) – output hdmf filename for saving results</p></li>
+<li><p><strong>silent</strong> (<em>boolean</em>) – messages display</p></li>
+<li><p><strong>summary</strong> (<em>boolean</em>) – display incrementation summary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if converged</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.solvers.Backward_Euler_Solver.umat">
+<span class="sig-name descname"><span class="pre">umat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stress_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deGP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux_deGP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svars_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsde_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domainidGP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/solvers.html#Backward_Euler_Solver.umat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.solvers.Backward_Euler_Solver.umat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls user material at Gauss points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stress_t</strong> (<em>numpy array</em>) – generalized stress - input/output</p></li>
+<li><p><strong>deGP</strong> (<em>numpy array</em>) – generalized deformation vector - input</p></li>
+<li><p><strong>aux_deGP</strong> (<em>numpy array</em>) – auxiliary generalized deformation vector - input</p></li>
+<li><p><strong>svars_t</strong> (<em>numpy array</em>) – state variables - input/output</p></li>
+<li><p><strong>dsde_t</strong> (<em>numpy array</em>) – jacobian - output</p></li>
+<li><p><strong>domainidGP</strong> (<em>numpy array</em>) – domain id for choosing the right material</p></li>
+<li><p><strong>dt</strong> (<em>double</em>) – time increment</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return nill<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter indicating convergence of material</p>
+</dd>
+<dt class="field-odd">Rtype nill<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE.superFEmaterials">
+<span id="ngeofe-superfematerials-module"></span><h2><span class="section-number">1.3.7. </span>ngeoFE.superFEmaterials module<a class="headerlink" href="#module-ngeoFE.superFEmaterials" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 27, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE.superFEmaterials.</span></span><span class="sig-name descname"><span class="pre">SuperFEMaterial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Super material class</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.Bounding_box">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Bounding_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.Bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.Bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Bounding box object</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.Bounding_box.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.Bounding_box.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.Bounding_box.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> – list that contains the two corners of the bounding box:
+[[left_x,bottom_y,foreground_z],[right_x,top_y,background_z]]
+:type points: List</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SuperFEMaterialFEformulation</span></span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEformulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ngeoFE.fedefinitions.FEformulation" title="ngeoFE.fedefinitions.FEformulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">FEformulation</span></code></a></p>
+<p>Defines a user FE formulation for the supermaterial</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEformulation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.create_element">
+<span class="sig-name descname"><span class="pre">create_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEformulation.create_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.create_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set desired element</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.generalized_epsilon">
+<span class="sig-name descname"><span class="pre">generalized_epsilon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEformulation.generalized_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEformulation.generalized_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set user’s generalized deformation vector</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SuperFEMaterialFEproblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FEformulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ngeoFE.feproblem.UserFEproblem" title="ngeoFE.feproblem.UserFEproblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserFEproblem</span></code></a></p>
+<p>Defines FE problem for given FE formulation of the supermaterial</p>
+<p>Only orthogonal elementary cells are supported (no need for other geometries now)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FEformulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.create_mesh">
+<span class="sig-name descname"><span class="pre">create_mesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.create_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.create_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set mesh and subdomains</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mesh object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Mesh</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.mark_boundaries">
+<span class="sig-name descname"><span class="pre">mark_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boundaries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.mark_boundaries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.mark_boundaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark right top corner boundary point with id=10</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pin_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.pin_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://fenicsproject.org/olddocs/dolfin/2019.1.0/python/_autogenerated/dolfin.cpp.mesh.html#dolfin.cpp.mesh.SubDomain" title="(in DOLFIN)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubDomain</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://fenicsproject.org/olddocs/dolfin/2019.1.0/python/_autogenerated/dolfin.cpp.mesh.html#dolfin.cpp.mesh.SubDomain" title="(in DOLFIN)"><span class="pre">dolfin.cpp.mesh.SubDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.inside">
+<span class="sig-name descname"><span class="pre">inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://fenicsproject.org/olddocs/dolfin/2019.1.0/python/_autogenerated/dolfin.cpp.mesh.html#dolfin.cpp.mesh.SubDomain" title="(in DOLFIN)"><span class="pre">dolfin.cpp.mesh.SubDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">[</span></span><span class="pre">m</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.inside"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.pin_point.inside" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_bcs">
+<span class="sig-name descname"><span class="pre">set_bcs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.set_bcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_bcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pin point right top corner dof’s equalt to zero</p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Add micromorphic</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_general_properties">
+<span class="sig-name descname"><span class="pre">set_general_properties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.set_general_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_general_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set here all the parameters of the problem, except material properties</p>
+<p>When overidden, has to define the maximum number of the state variables of the materials of the supermaterial by setting: self.genprops.p_nsvars= ??</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_materials">
+<span class="sig-name descname"><span class="pre">set_materials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialFEproblem.set_materials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialFEproblem.set_materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create material objects and set material parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns a list of UserMaterial objects</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ngeoFE.materials.UserMaterial" title="ngeoFE.materials.UserMaterial">UserMaterial</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SuperFEMaterialPeriodicBoundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">periodicityvector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundingbox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialPeriodicBoundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://fenicsproject.org/olddocs/dolfin/2019.1.0/python/_autogenerated/dolfin.cpp.mesh.html#dolfin.cpp.mesh.SubDomain" title="(in DOLFIN)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubDomain</span></code></a></p>
+<p>Defines periodic boundary conditions for orthogonal periodic cell</p>
+<p>I give credit to: Garth N. Wells see <a class="reference external" href="https://fenicsproject.org/qa/262/possible-specify-more-than-one-periodic-boundary-condition/">FEniCS Q&amp;A</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://fenicsproject.org/olddocs/dolfin/2019.1.0/python/_autogenerated/dolfin.cpp.mesh.html#dolfin.cpp.mesh.SubDomain" title="(in DOLFIN)"><span class="pre">dolfin.cpp.mesh.SubDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialPeriodicBoundary.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.inside">
+<span class="sig-name descname"><span class="pre">inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_boundary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialPeriodicBoundary.inside"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.inside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if point belongs to target domain for the map function. Left, bottom and foreground boundaries are the “target domains”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – coordinates of the point</p></li>
+<li><p><strong>on_boundary</strong> – True if point belongs to boundary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if it belongs to the target domain</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.map">
+<span class="sig-name descname"><span class="pre">map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.SuperFEMaterialPeriodicBoundary.map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.SuperFEMaterialPeriodicBoundary.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override FEniCS method to map dof’s at point x to point y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – source coordinates</p></li>
+<li><p><strong>y</strong> – target coordinates</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize supermaterial</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.get_dsde_averages">
+<span class="sig-name descname"><span class="pre">get_dsde_averages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsdeGP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.get_dsde_averages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.get_dsde_averages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate average stiffness tensor (incremental)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>GP_id</strong> – id of Gauss point</p>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Set the correct expression for the C_hom</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.get_stress_averages">
+<span class="sig-name descname"><span class="pre">get_stress_averages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stressGP</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.get_stress_averages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.get_stress_averages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate average stresses</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.plot_state">
+<span class="sig-name descname"><span class="pre">plot_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.plot_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.plot_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.roll_back_to_previous_state">
+<span class="sig-name descname"><span class="pre">roll_back_to_previous_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.roll_back_to_previous_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.roll_back_to_previous_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.save_state">
+<span class="sig-name descname"><span class="pre">save_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.save_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.save_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.set_output_tdt">
+<span class="sig-name descname"><span class="pre">set_output_tdt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stress_tdt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsde_tdt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svars_tdt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.set_output_tdt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.set_output_tdt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.update_macro_epsilon">
+<span class="sig-name descname"><span class="pre">update_macro_epsilon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.update_macro_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.update_macro_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates generalized strain increment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>map_type</strong> – </p></li>
+<li><p><strong>eps</strong> – </p></li>
+<li><p><strong>GP_id</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>Add diffusion</p></li>
+<li><p>Generalize for 3D Cauchy</p></li>
+<li><p>Add micromorphic</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE.superFEmaterials.SuperFEMaterial.usermatGP">
+<span class="sig-name descname"><span class="pre">usermatGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stressGP_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deGP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svarsGP_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsdeGP_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GP_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux_deGP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/superFEmaterials.html#SuperFEMaterial.usermatGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.superFEmaterials.SuperFEMaterial.usermatGP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Super-user material at a Gauss point</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>GP_id</strong> – </p></li>
+<li><p><strong>stressGP_t</strong> – </p></li>
+<li><p><strong>deGP</strong> – </p></li>
+<li><p><strong>svarsGP_t</strong> – </p></li>
+<li><p><strong>dsdeGP_t</strong> – </p></li>
+<li><p><strong>dt</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE.utilities">
+<span id="ngeofe-utilities-module"></span><h2><span class="section-number">1.3.8. </span>ngeoFE.utilities module<a class="headerlink" href="#module-ngeoFE.utilities" title="Permalink to this heading">¶</a></h2>
+<p>Created on Aug 23, 2018</p>
+<p>&#64;author: Ioannis Stefanou</p>
+<p>Provides general utilities for ngeoFE package.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE.utilities.Convert_mesh_xml_to_hdmf">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE.utilities.</span></span><span class="sig-name descname"><span class="pre">Convert_mesh_xml_to_hdmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmlfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmlfacesfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmlregionsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdmfoutputfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/utilities.html#Convert_mesh_xml_to_hdmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.utilities.Convert_mesh_xml_to_hdmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts xml dolfin mesh to hdmf format which allows parallel computations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xmlfile</strong> (<em>string</em>) – xml input filename</p></li>
+<li><p><strong>xmlfacesfile</strong> (<em>string</em>) – xml facets input filename</p></li>
+<li><p><strong>xmlregionsfile</strong> (<em>string</em>) – xml internal regions input filename</p></li>
+<li><p><strong>hdmfoutputfile</strong> (<em>string</em>) – hdmf output filename</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE.utilities.get_u_coordinates">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE.utilities.</span></span><span class="sig-name descname"><span class="pre">get_u_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function_u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE/utilities.html#get_u_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE.utilities.get_u_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE.yadematerial">
+<span id="ngeofe-yadematerial-module"></span><h2><span class="section-number">1.3.9. </span>ngeoFE.yadematerial module<a class="headerlink" href="#module-ngeoFE.yadematerial" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-ngeoFE.yadematerial_2D">
+<span id="ngeofe-yadematerial-2d-module"></span><h2><span class="section-number">1.3.10. </span>ngeoFE.yadematerial_2D module<a class="headerlink" href="#module-ngeoFE.yadematerial_2D" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-ngeoFE">
+<span id="module-contents"></span><h2><span class="section-number">1.3.11. </span>Module contents<a class="headerlink" href="#module-ngeoFE" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.3. ngeoFE package</a><ul>
+<li><a class="reference internal" href="#submodules">1.3.1. Submodules</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.fedefinitions">1.3.2. ngeoFE.fedefinitions module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.feproblem">1.3.3. ngeoFE.feproblem module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.materials">1.3.4. ngeoFE.materials module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.ngio">1.3.5. ngeoFE.ngio module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.solvers">1.3.6. ngeoFE.solvers module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.superFEmaterials">1.3.7. ngeoFE.superFEmaterials module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.utilities">1.3.8. ngeoFE.utilities module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.yadematerial">1.3.9. ngeoFE.yadematerial module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE.yadematerial_2D">1.3.10. ngeoFE.yadematerial_2D module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE">1.3.11. Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="docs2.html"
+                          title="previous chapter"><span class="section-number">1.2. </span>docs2 package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="ngeoFE_unittests.html"
+                          title="next chapter"><span class="section-number">1.4. </span>ngeoFE_unittests package</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.html" title="1.4. ngeoFE_unittests package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="docs2.html" title="1.2. docs2 package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" ><span class="section-number">1. </span>Numerical_Geolab</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.3. </span>ngeoFE package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

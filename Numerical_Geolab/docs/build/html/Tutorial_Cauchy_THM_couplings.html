@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>5. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5.1. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background" href="Tutorial_Cauchy_THM_couplings_theory.html" />
+    <link rel="prev" title="4. Simple shear of a 1D Cosserat layer with Drucker-Prager elastoplastic material" href="Tutorial_Cosserat_elastoplasticity_DP.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cauchy_THM_couplings_theory.html" title="5.1. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cosserat_elastoplasticity_DP.html" title="4. Simple shear of a 1D Cosserat layer with Drucker-Prager elastoplastic material"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab">
+<h1><span class="section-number">5. </span>Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab<a class="headerlink" href="#application-of-thermo-hydro-mechanical-thm-couplings-in-numerical-geolab" title="Permalink to this heading">¶</a></h1>
+<p>In this series of tutorials we will study the indroduction of Thermo- Hydro- Mechanical couplings in the Numerical Geolab  software
+and by extention into FEniCS. We will study both the theoretical background for the application of the linear form of the residual
+and the bilinear form of the jacobian in order to derive the variational form to be solved by the FEniCs software. We will also provide
+the implementation of the variational form in Numerical Geolab with additional commentary. Finally, we will present a series of
+applications ranging from elasticity to plastity, showcasing the effect of the different couplings in the response of the model.</p>
+<div class="line-block">
+<div class="line">Each application is separately described in the documentation</div>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cauchy_THM_couplings_theory.html">5.1. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_Cauchy_THM_couplings_theory.html#strong-form-of-the-system-of-coupled-thm-equations">5.1.1. Strong form of the system of coupled THM equations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_Cauchy_THM_couplings_theory.html#weak-form-of-the-system-of-coupled-thm-equations">5.1.2. Weak form of the system of coupled THM equations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cauchy_THM_couplings_implementation.html">5.2. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Numerical implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_Cauchy_THM_couplings_implementation.html#numerical-implementation-of-the-additional-terms-in-the-finite-element-formulation">5.2.1. Numerical Implementation of the additional terms in the Finite Element formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoelasticity.html">5.3. Cauchy THM couplings: Thermoelasticity application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoelasticity.html#begining-of-file">5.3.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoelasticity.html#finite-element-formulation">5.3.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoelasticity.html#finite-element-problem-description">5.3.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoelasticity.html#analysis-excecution-and-postprocessing">5.3.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroelasticity.html">5.4. Cauchy THM couplings: Hydroelasticity application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroelasticity.html#begining-of-file">5.4.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroelasticity.html#finite-element-formulation">5.4.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroelasticity.html#finite-element-problem-description">5.4.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroelasticity.html#analysis-excecution-and-postprocessing">5.4.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html">5.5. Cauchy THM couplings: Thermoplasticity application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html#begining-of-file">5.5.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html#finite-element-formulation">5.5.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html#finite-element-problem-description">5.5.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermoplasticity%20-%20Von%20Mises%20yield%20criterion.html#analysis-excecution-and-postprocessing">5.5.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Drucker-Prager%20yield%20criterion.html">5.6. Cauchy THM couplings: Hydroplasticity application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20First%20Application.html">5.6.1. Cauchy THM couplings: Hydroplasticity application - Isochoric triaxial test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_hydroplasticity%20-%20Second%20Application.html">5.6.2. Cauchy THM couplings: Hydroplasticity application - Undrained Triaxial test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Von%20Mises%20yield%20criterion.html">5.7. Cauchy THM couplings: Thermo- Hydro- Plasticity application - Von Mises yield criterion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Von%20Mises%20yield%20criterion.html#begining-of-file">5.7.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Von%20Mises%20yield%20criterion.html#finite-element-formulation">5.7.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Von%20Mises%20yield%20criterion.html#finite-element-problem-description">5.7.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Von%20Mises%20yield%20criterion.html#analysis-excecution-and-postprocessing">5.7.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html">5.8. Cauchy THM couplings: Thermo-hydro plasticity application - Drucker-Prager yield criterion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html#begining-of-file">5.8.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html#finite-element-formulation">5.8.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html#finite-element-problem-description">5.8.3. Finite element problem description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial%20Cauchy_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html#analysis-excecution-and-postprocessing">5.8.4. Analysis excecution and postprocessing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Tutorial_Cosserat_elastoplasticity_DP.html"
+                          title="previous chapter"><span class="section-number">4. </span>Simple shear of a 1D Cosserat layer with Drucker-Prager elastoplastic  material</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Tutorial_Cauchy_THM_couplings_theory.html"
+                          title="next chapter"><span class="section-number">5.1. </span>Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cauchy_THM_couplings_theory.html" title="5.1. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab: Theoretical background"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Tutorial_Cosserat_elastoplasticity_DP.html" title="4. Simple shear of a 1D Cosserat layer with Drucker-Prager elastoplastic material"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

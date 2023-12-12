@@ -1,0 +1,138 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity &#8212; Numerical Geolab 1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="simple-shear-of-a-2d-cacuhy-layer-with-von-mises-yield-criterion-and-perzyna-viscoplasticity">
+<h1>2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity<a class="headerlink" href="#simple-shear-of-a-2d-cacuhy-layer-with-von-mises-yield-criterion-and-perzyna-viscoplasticity" title="Permalink to this headline">¶</a></h1>
+<p>In this series of tutorials, we will validate the Cauchy, Perzyna viscoplasticity law available in Numerical Geolab. We will study three applications in order to evaluate the
+accuracy of the underlying material law and the capabilities of Numerical Geolab in applying different types of boundary conditions and materials
+Finally, we will showcase the flexibility of Numerical Geolab in running parametric analyses by simple modifications in the python script.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">The three applications we will study are the following:</div>
+</div>
+<ul class="simple">
+<li>Application 1: Response comparizon in simple shear of a perfectly plastic, strain rate hardening, <span class="math notranslate nohighlight">\(\eta^{vp}&gt;0\)</span>, 2D Cauchy layer under slow and fast shear strain rate.</li>
+<li>Application 2: Shear relaxation of a 2D Cauchy layer, here we will apply an instantatenous bpoundary condition.</li>
+<li>Application 3: Strain localization analysis for a strain softening, H&lt;0, strain-rate hardening, <span class="math notranslate nohighlight">\(\eta^{vp}&gt;0\)</span>, material.</li>
+</ul>
+<div class="line-block">
+<div class="line">Each application is separately described in the documentation:</div>
+</div>
+</div></blockquote>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Viscoplasticity_Application_1.html">2.1. Viscoplastity Application 1:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_1.html#begining-of-file">2.1.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_1.html#finite-element-formulation">2.1.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_1.html#finite-element-problem-description">2.1.3. Finite element problem description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Viscoplasticity_Application_2.html">2.2. Viscoplastity Application 2:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_2.html#begining-of-file">2.2.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_2.html#finite-element-formulation">2.2.2. Finite element formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Viscoplasticity_Application_3.html">2.3. Viscoplastity Application 3:</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#begining-of-file">2.3.1. Begining of file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#finite-element-formulation">2.3.2. Finite element formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#analysis-excecution-and-postprocessing">2.3.3. Analysis excecution and postprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#postprocessing-the-results">2.3.4. Postprocessing the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Viscoplasticity_Application_3.html#application-of-analysis-procedure-and-postprocessing-of-numerical-results">2.3.5. Application of analysis procedure and postprocessing of numerical results</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="cauchy-elastoviscoplasticity-in-numerical-geolab">
+<h2>2.4. Cauchy elastoviscoplasticity in Numerical Geolab<a class="headerlink" href="#cauchy-elastoviscoplasticity-in-numerical-geolab" title="Permalink to this headline">¶</a></h2>
+<p>This paragraph serves to clarify the notation used in Numerical Geolab in comparison to other availlable formulatios broadly applied
+in literature and standard finite element software. In Numerical softare the Perzyna model of viscoplasticity is applied,
+where the yield criterion for the material is given in terms of the J2 invariant of the stress tensor and the strength of the material under pure shear.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Numerical Geolab</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Ioannis Stefanou.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="../../_sources/docs/source/Tutorial_Cauchy_viscoplasticity_VM.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

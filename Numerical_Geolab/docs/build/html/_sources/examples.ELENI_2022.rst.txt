@@ -1,0 +1,70 @@
+examples.ELENI\_2022 package
+============================
+
+Submodules
+----------
+
+examples.ELENI\_2022.Cauchy\_1D\_AUSSOIS\_2019\_HM\_S22\_S12\_automatic\_general2 module
+----------------------------------------------------------------------------------------
+
+.. automodule:: examples.ELENI_2022.Cauchy_1D_AUSSOIS_2019_HM_S22_S12_automatic_general2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.ELENI\_2022.Cauchy\_1D\_AUSSOIS\_2019\_THM\_S22\_S12\_automatic\_general module
+----------------------------------------------------------------------------------------
+
+.. automodule:: examples.ELENI_2022.Cauchy_1D_AUSSOIS_2019_THM_S22_S12_automatic_general
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.ELENI\_2022.Cauchy\_1D\_DRUCKER\_PRAGER\_HM\_automatic\_general3 module
+--------------------------------------------------------------------------------
+
+.. automodule:: examples.ELENI_2022.Cauchy_1D_DRUCKER_PRAGER_HM_automatic_general3
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.ELENI\_2022.Cauchy\_1D\_THM\_Hydroplasticity\_automatic\_general module
+--------------------------------------------------------------------------------
+
+.. automodule:: examples.ELENI_2022.Cauchy_1D_THM_Hydroplasticity_automatic_general
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.ELENI\_2022.Cauchy\_1D\_THM\_Hydroplasticity\_automatic\_general\_Shear module
+---------------------------------------------------------------------------------------
+
+.. automodule:: examples.ELENI_2022.Cauchy_1D_THM_Hydroplasticity_automatic_general_Shear
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.ELENI\_2022.Cauchy\_1D\_THM\_Hydroplasticity\_automatic\_general\_Shear\_dOKIMI module
+-----------------------------------------------------------------------------------------------
+
+.. automodule:: examples.ELENI_2022.Cauchy_1D_THM_Hydroplasticity_automatic_general_Shear_dOKIMI
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+examples.ELENI\_2022.ngeo\_parameters module
+--------------------------------------------
+
+.. automodule:: examples.ELENI_2022.ngeo_parameters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: examples.ELENI_2022
+    :members:
+    :undoc-members:
+    :show-inheritance:

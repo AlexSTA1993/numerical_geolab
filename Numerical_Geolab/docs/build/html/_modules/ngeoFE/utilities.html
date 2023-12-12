@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngeoFE.utilities &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.utilities</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ngeoFE.utilities</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Aug 23, 2018</span>
+
+<span class="sd">@author: Ioannis Stefanou</span>
+
+<span class="sd">Provides general utilities for ngeoFE package. </span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="c1"># from dolfin.cpp.mesh import MeshFunction, Mesh</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">dolfin.cpp.io</span> <span class="kn">import</span> <span class="n">HDF5File</span>
+
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="Convert_mesh_xml_to_hdmf"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.utilities.Convert_mesh_xml_to_hdmf">[docs]</a><span class="k">def</span> <span class="nf">Convert_mesh_xml_to_hdmf</span><span class="p">(</span><span class="n">xmlfile</span><span class="p">,</span><span class="n">xmlfacesfile</span><span class="p">,</span><span class="n">xmlregionsfile</span><span class="p">,</span><span class="n">hdmfoutputfile</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts xml dolfin mesh to hdmf format which allows parallel computations.</span>
+
+<span class="sd">    :param xmlfile: xml input filename</span>
+<span class="sd">    :type xmlfile: string</span>
+<span class="sd">    :param xmlfacesfile: xml facets input filename</span>
+<span class="sd">    :type xmlfacesfile: string</span>
+<span class="sd">    :param xmlregionsfile: xml internal regions input filename</span>
+<span class="sd">    :type xmlregionsfile: string</span>
+<span class="sd">    :param hdmfoutputfile: hdmf output filename</span>
+<span class="sd">    :type hdmfoutputfile: string</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">xmlfile</span><span class="p">);</span>
+    <span class="n">cd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s1">&#39;size_t&#39;</span><span class="p">,</span><span class="n">mesh</span><span class="p">,</span><span class="n">xmlregionsfile</span><span class="p">);</span>
+    <span class="n">fd</span><span class="o">=</span><span class="n">MeshFunction</span><span class="p">(</span><span class="s1">&#39;size_t&#39;</span><span class="p">,</span><span class="n">mesh</span><span class="p">,</span><span class="n">xmlfacesfile</span><span class="p">);</span>
+    <span class="n">hdf</span> <span class="o">=</span> <span class="n">HDF5File</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">mpi_comm</span><span class="p">(),</span> <span class="n">hdmfoutputfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">hdf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">&quot;/mesh&quot;</span><span class="p">)</span>
+    <span class="n">hdf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span> <span class="s2">&quot;/cd&quot;</span><span class="p">)</span>
+    <span class="n">hdf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="s2">&quot;/fd&quot;</span><span class="p">)</span></div>
+
+    <span class="c1">#def map_ncoor_dofval(self,b_nodal,function_u):</span>
+<div class="viewcode-block" id="get_u_coordinates"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.utilities.get_u_coordinates">[docs]</a><span class="k">def</span> <span class="nf">get_u_coordinates</span><span class="p">(</span><span class="n">function_u</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+
+
+    <span class="n">dofmap</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">dofmap</span><span class="p">()</span>
+    <span class="n">dofs</span> <span class="o">=</span> <span class="n">dofmap</span><span class="o">.</span><span class="n">dofs</span><span class="p">()</span>
+    <span class="n">gdim</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+    <span class="c1"># Get coordinates as len(dofs) x gdim array</span>
+    <span class="n">dofs_x</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">tabulate_dof_coordinates</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">gdim</span><span class="p">))</span>
+
+    <span class="n">w</span><span class="o">=</span><span class="n">function_u</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">get_local</span><span class="p">()</span>
+<span class="c1">#     print(dofs_x)</span>
+    <span class="n">values</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">dof</span><span class="p">,</span> <span class="n">dof_x</span><span class="p">,</span> <span class="n">wi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dofs</span><span class="p">,</span> <span class="n">dofs_x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="n">line</span><span class="o">=</span><span class="p">[</span><span class="n">dof</span><span class="p">,</span><span class="n">dof_x</span><span class="p">,</span><span class="n">wi</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="c1">#         print(dof, &#39;:&#39;, dof_x, &quot;u=&quot;,wi)</span>
+
+    <span class="k">return</span> <span class="n">values</span></div>
+
+
+<span class="c1">#####SCRAP</span>
+
+
+<span class="c1">#     class MyFunctionExpression(UserExpression):</span>
+<span class="c1">#         def eval(self, values, x):</span>
+<span class="c1">#             values[0] = 0.</span>
+<span class="c1">#             values[1] = 0.</span>
+<span class="c1">#             if near(x[0],-1./2.): values[0]=0.01</span>
+<span class="c1">#             if near(x[1],1./2.): values[1]=-0.01</span>
+<span class="c1">#         def value_shape(self):</span>
+<span class="c1">#             return (2,)</span>
+<span class="c1">#         </span>
+<span class="c1">#     def testexpr(self):</span>
+<span class="c1">#         f = self.MyFunctionExpression(element=self.V.ufl_element())</span>
+<span class="c1">#         self.ti=interpolate(f,self.V)</span>
+<span class="c1">#         print(&quot;hello0000 region d ti=  &quot;,self.ti.vector().get_local())        </span>
+
+<span class="c1">#                 #[l.extend([[k,v]]) for k,v in dofs_values.items()]</span>
+<span class="c1">#                 print(&quot;hello4444&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_dofs)</span>
+<span class="c1">#                               </span>
+<span class="c1">#                 # works in parallel, as boundaries is a parallel vector and each cpu has its vertices (and ghost vertices).</span>
+<span class="c1">#                 itemindex=self.boundaries.where_equal(region_id)</span>
+<span class="c1">#                 </span>
+<span class="c1">#                 for entity in itemindex:</span>
+<span class="c1">#                     #print(&quot;xxxxxxxxxx&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,MeshEntity(self.mesh,self.boundaries.dim(),entity).dofs())</span>
+<span class="c1">#                     </span>
+<span class="c1">#                     mesh_entity=MeshEntity(self.mesh, self.boundaries.dim(), entity)</span>
+<span class="c1">#                     print(&quot;kkkkkkkkkkkkkkk&quot;,mesh_entity,mesh_entity.index(),mesh_entity.global_index())</span>
+<span class="c1">#                     #for cell in cells(self.mesh):</span>
+<span class="c1">#                     for cell in cells(mesh_entity):</span>
+<span class="c1">#                         print(&quot;lllllllllllllllllllllllllllllll&quot;,cell,cell.index(),cell.global_index())</span>
+<span class="c1">#                         #print(&quot;normal&quot;,cell.index(),)</span>
+<span class="c1">#                         #node_coordinates = dofmap.tabulate_coordinates(cell)</span>
+<span class="c1">#                         global_dofs = dofmap.cell_dofs(cell.global_index())</span>
+<span class="c1">#                         #print(&#39;node coordinates:&#39;,node_coordinates)</span>
+<span class="c1">#                         #print(&#39;dofs global:&#39;,self.comm.Get_rank(),&quot;&gt;&quot;,global_dofs)</span>
+<span class="c1">#                         for gl_dof in global_dofs:</span>
+<span class="c1">#                              </span>
+<span class="c1">#                             lc_dof=np.where(lc_to_gl_dof_owned==gl_dof)</span>
+<span class="c1">#                             #print(&quot;hello4&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_dof,np.shape(lc_dof),len(lc_dof))</span>
+<span class="c1">#                             if not 0 in np.shape(lc_dof): dof_ids.append(lc_dof[0][0])</span>
+
+                        <span class="c1">#local_dofs=np.array([gl_to_lc_owned_dof(gl_dof) for gl_dof in global_dofs ]).flatten()</span>
+                        <span class="c1">#print(&#39;dofs local:&#39;,local_dofs)</span>
+                        <span class="c1">#local_dofs=global_dofs</span>
+                        <span class="c1">#dof_ids.append(local_dofs)</span>
+
+
+
+
+<span class="c1">#                     </span>
+<span class="c1">#                     for vx in vertices(MeshEntity(self.mesh,self.boundaries.dim(),entity)):</span>
+<span class="c1">#                         print(&quot;dffsdfsafasdf&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,vx.index(),v_to_dof_gl[vx.index()])</span>
+<span class="c1">#                           </span>
+<span class="c1">#                         gl_dof_index=v_to_dof_gl[vx.index()]</span>
+<span class="c1">#                         if gl_dof_index&gt;= process_gl_dofs_range_min and gl_dof_index &lt;= process_gl_dofs_range_max:</span>
+<span class="c1">#                         #print(&quot;hello2&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,vx.index(),vx.global_index(),self.V.dofmap().local_to_global_index(vx.index()),vx.is_shared())</span>
+<span class="c1"># #                             print(&quot;hello4&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,vx.index()) </span>
+<span class="c1">#                             if vx.is_shared()==True: print(&quot;shared&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,vx.global_index())</span>
+<span class="c1">#                             dof_ids.append(v_to_dof_local[vx.index()])</span>
+                <span class="c1">#lc_dofs=np.unique(dof_ids)</span>
+
+
+
+
+<span class="c1">#         top0= AutoSubDomain(lambda x, on_bnd: x[1]&gt;+1./2.-DOLFIN_EPS and on_bnd)</span>
+<span class="c1">#         </span>
+<span class="c1">#         bmesh=BoundaryMesh(self.mesh,&quot;exterior&quot;)</span>
+<span class="c1">#         bfunction=MeshFunction(&quot;size_t&quot;, bmesh, bmesh.topology().dim())</span>
+<span class="c1">#         top0.mark(bfunction,1)</span>
+<span class="c1"># </span>
+<span class="c1">#         </span>
+<span class="c1">#         ttt=Function(self.V) </span>
+<span class="c1">#         </span>
+<span class="c1">#         E = MyExpr2D(self.boundaries)</span>
+<span class="c1">#         </span>
+<span class="c1">#         ttt.interpolate(E)</span>
+
+
+
+
+<span class="c1">#         v_to_dof_local=vertex_to_dof_map(self.V)</span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#         v_to_dof_gl2=list(self.V.dofmap().local_to_global_index(v_to_dof_local[i]) for i in v_to_dof_local)</span>
+
+<span class="c1">#         lc_to_gl_dof=dofmap.tabulate_local_to_global_dofs()</span>
+<span class="c1">#         print(&quot;0000000000&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,dofmap.dofs(self.mesh,0),dofmap.dofs())</span>
+<span class="c1"># </span>
+<span class="c1">#         unowned_gl_dof=dofmap.local_to_global_unowned()</span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#         print(&quot;hello&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,self.V.dofmap().off_process_owner())</span>
+<span class="c1"># #         </span>
+<span class="c1"># </span>
+<span class="c1">#         print(&quot;hello1&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_to_gl_dof)        </span>
+<span class="c1">#         lc_to_gl_dof_owned=np.setdiff1d(lc_to_gl_dof,unowned_gl_dof)</span>
+<span class="c1">#         print(&quot;hello2&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_to_gl_dof_owned)</span>
+<span class="c1">#         </span>
+<span class="c1">#         #gl_to_lc_owned_dof=lambda gl_dof: np.where(lc_to_gl_dof_owned==gl_dof)</span>
+<span class="c1">#         </span>
+<span class="c1">#         print(&quot;hello2&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_to_gl_dof)</span>
+
+<span class="c1">#         v_to_dof_gl=list(lc_to_gl_dof[i] for i in v_to_dof_local)</span>
+<span class="c1"># </span>
+<span class="c1">#         print(&quot;hello1-&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,v_to_dof_gl)</span>
+<span class="c1">#         print(&quot;hello1+&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,v_to_dof_gl2)</span>
+<span class="c1">#         print(&quot;hello1&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,vertex_to_dof_map(self.V))</span>
+<span class="c1">#         print(&quot;hello2&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,dof_to_vertex_map(self.V))</span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#         print(&quot;hello5&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,self.V.dofmap().tabulate_local_to_global_dofs())</span>
+<span class="c1">#         #print(&quot;hello6&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,self.V.dofmap().tabulate_entity_dofs())</span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#         process_gl_dofs_range_min=min(self.V.dofmap().ownership_range())</span>
+<span class="c1">#         process_gl_dofs_range_max=max(self.V.dofmap().ownership_range())</span>
+<span class="c1">#          </span>
+<span class="c1">#         print(&quot;hello3&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,&quot;min dof&quot;,process_gl_dofs_range_min,&quot;max dof&quot;,process_gl_dofs_range_max)</span>
+
+
+                    <span class="c1">#lc_dof=np.where(lc_to_gl_dof_owned==gl_dof)</span>
+                    <span class="c1">#print(&quot;hello4&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_dof,np.shape(lc_dof),len(lc_dof))</span>
+                    <span class="c1">#if not 0 in np.shape(lc_dof):</span>
+                                         <span class="c1">#   lc_dof_values.append(value)</span>
+                <span class="c1">#lc_dofs=lc_dofs[:len(lc_to_gl_dof)]</span>
+
+                <span class="c1">#print(&quot;hello2000000000&quot;,self.comm.Get_rank(),&quot;&gt;&quot;,lc_dofs)</span>
+<span class="c1">#                 </span>
+<span class="c1">#                 a=Vector()</span>
+<span class="c1">#                 a.init(10)</span>
+<span class="c1">#                 print(1)</span>
+<span class="c1">#                 </span>
+<span class="c1">#                 e=a.get_local()</span>
+<span class="c1">#                 print(&quot;RRRRRRRRRRRRR&quot;,e[:])</span>
+
+<span class="c1">#                 local_dofs_values=BC.get_boundary_values() #returns in local....... perversity</span>
+<span class="c1">#                 lc_dofs=[];</span>
+<span class="c1">#                 for lc_dof in local_dofs_values.keys():</span>
+<span class="c1">#                     if lc_dof&lt;=len(lc_to_gl_dof): lc_dofs.append(lc_dof)</span>
+
+<span class="c1"># def map_ncoor_dofval(function_u,V,mesh):</span>
+<span class="c1"># </span>
+<span class="c1">#     </span>
+<span class="c1">#     </span>
+<span class="c1">#         list_b=[]</span>
+<span class="c1">#         u_new=[]</span>
+<span class="c1"># #         gamma_new=[]</span>
+<span class="c1">#         for i in range(len(self.function_u)):</span>
+<span class="c1">#             #print(len(self.function_u))</span>
+<span class="c1">#             u_new.append(self.function_u[i])</span>
+<span class="c1">#         </span>
+<span class="c1">#         for i in range(len(self.dofs_x)):</span>
+<span class="c1">#             list_b.append([self.dofs_x[i],b_nodal[i],u_new[i]])</span>
+<span class="c1"># #         print(&quot;hello&quot;,list_b)</span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#         list_ncoor_dofs=[]</span>
+<span class="c1">#         q=0</span>
+<span class="c1">#         m=-1</span>
+<span class="c1"># #q1=0      </span>
+<span class="c1">#         for i in range(len(list_b)):</span>
+<span class="c1">#             if list_b[i]!=None:</span>
+<span class="c1">#                 m+=1</span>
+<span class="c1">#                 list_ncoor_dofs.append([])</span>
+<span class="c1">#                 #list_ncoor_dofs.append([list_b[i][0]])</span>
+<span class="c1">#                 #list_ncoor_dofs[m].append(list_b[i][1])</span>
+<span class="c1">#                 </span>
+<span class="c1">#                 for nel in range(3):    #number of functions to take output</span>
+<span class="c1">#                     list_ncoor_dofs[m].append([])</span>
+<span class="c1">#                     #print(&quot;hello&quot;, list_ncoor_dofs[m])</span>
+<span class="c1">#         </span>
+<span class="c1">#                 for nel in range(3):    #number of functions to take output</span>
+<span class="c1">#                     list_ncoor_dofs[m][nel].append(list_b[i][nel])</span>
+<span class="c1">#                     #print(list_ncoor_dofs[m][nel])</span>
+<span class="c1">#                 </span>
+<span class="c1">#                 q=i+1</span>
+<span class="c1">#                 for j in range(q,(len(b_nodal))):</span>
+<span class="c1">#                     if list_b[j]!=None:</span>
+<span class="c1">#                         if list_b[i][0]==list_b[j][0]:</span>
+<span class="c1">#                             if list_b[i]!=None:</span>
+<span class="c1">#                                 list_ncoor_dofs[m][1].append(list_b[j][1])</span>
+<span class="c1">#                                 list_ncoor_dofs[m][2].append(list_b[j][2])</span>
+<span class="c1">#                                 list_b[j]=None</span>
+<span class="c1">#         list_ncoor_dofs=sorted(list_ncoor_dofs,key=itemgetter(0))</span>
+<span class="c1"># #         print(&quot;hello_list&quot;,list_ncoor_dofs)</span>
+<span class="c1"># #         print(len(self.dofs_x))</span>
+<span class="c1">#         </span>
+<span class="c1">#         </span>
+<span class="c1">#             </span>
+<span class="c1">#          </span>
+<span class="c1">#        </span>
+<span class="c1">#         ncoor_dof={}</span>
+<span class="c1">#         for i in range(len(list_ncoor_dofs)):</span>
+<span class="c1">#             listnew=[]</span>
+<span class="c1"># #             print(i)</span>
+<span class="c1"># #             print(list_ncoor_dofs[i])</span>
+<span class="c1"># #             print(len(list_ncoor_dofs[i]))</span>
+<span class="c1"># #             print((len(self.dofs_x)/len(list_ncoor_dofs)))</span>
+<span class="c1">#             for j in range(0,math.ceil(len(self.dofs_x)/len(list_ncoor_dofs))):</span>
+<span class="c1">#                 listnew.append(list_ncoor_dofs[i][j])</span>
+<span class="c1"># #                print(listnew)</span>
+<span class="c1">#             #print(listnew)</span>
+<span class="c1">#             #ncoor_dof[list_ncoor_dofs[i][0]]=listnew  </span>
+<span class="c1">#             ncoor_dof[i]=listnew              </span>
+<span class="c1"># #         print(ncoor_dof)</span>
+<span class="c1">#         return ncoor_dof</span>
+<span class="c1">#     </span>
+<span class="c1">#     </span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ngeoFE.utilities</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

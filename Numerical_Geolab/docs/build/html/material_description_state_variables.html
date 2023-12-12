@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2. Material description &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.1. CAUCHY3D-DP" href="CAUCHY3D-DP%20material.html" />
+    <link rel="prev" title="1. Installation instructions" href="installation_instructions.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CAUCHY3D-DP%20material.html" title="2.1. CAUCHY3D-DP"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation_instructions.html" title="1. Installation instructions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Material description</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="material-description">
+<span id="material-description-of-state-variables"></span><h1><span class="section-number">2. </span>Material description<a class="headerlink" href="#material-description" title="Permalink to this heading">¶</a></h1>
+<p>The table below contains the material properties used by the Numerical Geolab materials. The user can use its own material libraries
+without the need to follow the properties settings described here.</p>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<div style="overflow-x: auto; width: 500px;">
+   <table style="border-collapse: collapse; table-layout: fixed; width: auto;">
+     <colgroup>
+         <col style="width: 100px;"> <!-- Adjust the width for the first column -->
+         <col style="width: auto;"> <!-- Adjust the width for other columns -->
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+         <col style="width: auto;">
+     </colgroup>
+     <thead>
+         <tr>
+             <th>Materials</th>
+             <th>p_nsvars</th>
+             <th>props[0]</th>
+             <th>props[1]</th>
+             <th>props[2]</th>
+             <th>props[3]</th>
+             <th>props[4]</th>
+             <th>props[5]</th>
+             <th>props[6]</th>
+             <th>props[7]</th>
+             <th>props[8]</th>
+             <th>props[9]</th>
+             <th>props[10]</th>
+             <th>props[11]</th>
+             <th>props[12]</th>
+             <th>props[13]</th>
+             <th>props[14]</th>
+             <th>props[15]</th>
+             <th>props[16]</th>
+             <th>props[17]</th>
+             <th>props[18]</th>
+             <th>props[19]</th>
+             <th>props[20]</th>
+             <th>props[21]</th>
+             <th>props[22]</th>
+             <th>props[23]</th>
+             <th>props[24]</th>
+             <th>props[25]</th>
+             <th>props[26]</th>
+             <th>props[27]</th>
+             <th>props[28]</th>
+         </tr>
+     </thead>
+     <tbody>
+         <tr>
+             <td style="position: sticky; left: 0; background-color: white; z-index: 1;">Cauchy3D-DP</td>
+             <td>38</td>
+             <td>\( K \)</td>
+             <td>\( G \)</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>\(\tan{\phi}\)</td>
+             <td>\(c\)</td>
+             <td>\(\tan{\psi}\)</td>
+             <td>\(H_{s\phi}\)</td>
+             <td>\(H_{sc}\)</td>`
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>\(\eta\)</td>`
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <!-- Add more cells for each row -->
+         </tr>
+         <tr>
+             <td style="position: sticky; left: 0; background-color: white; z-index: 1;">Cosserat3D-DP</td>
+             <td>85</td>
+             <td>\( K \)</td>
+             <td>\( G \)</td>
+             <td>\( Gc \)</td>
+             <td>\( L \)</td>
+             <td>\( M \)</td>
+             <td>\( Mc \)</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>\( R \)</td>
+             <td>\(\tan{\phi}\)</td>
+             <td>\(c\)</td>
+             <td>\(\tan{\psi}\)</td>
+             <td>\(H_{s\phi}\)</td>
+             <td>\(H_{sc}\)</td>`
+             <td>h1</td>
+             <td>\(h_2\)</td>
+             <td>\(h_3\)</td>
+             <td>\(h_4\)</td>
+             <td>\(g_1\)</td>
+             <td>\(g_2\)</td>
+             <td>\(g_3\)</td>
+             <td>\(g_4\)</td>
+             <td>\(\eta\)</td>`
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <!-- Add more cells for each row -->
+         </tr>
+         <tr>
+             <td style="position: sticky; left: 0; background-color: white; z-index: 1;">Cauchy3D-DP-PR-TEMP</td>
+             <td>62</td>
+             <td>\( K \)</td>
+             <td>\( G \)</td>
+             <td>\( \chi \)</td>
+             <td>\( \eta_f \)</td>
+             <td>\(\beta^\star\)</td>
+             <td>\(k_T\)</td>
+             <td>\(\rho C\)</td>
+             <td>\(\alpha\)</td>
+             <td>\(\lambda^\star\)</td>
+             <td>NA</td>
+             <td>\(\tan{\phi}\)</td>
+             <td>\(c\)</td>
+             <td>\(\tan{\psi}\)</td>
+             <td>\(H_{s\phi}\)</td>
+             <td>\(H_{sc}\)</td>`
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>NA</td>
+             <td>\(\eta\)</td>`
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <td>OoB</td>
+             <!-- Add more cells for each row -->
+         </tr>
+         <tr>
+             <td style="position: sticky; left: 0; background-color: white; z-index: 1;">Cosserat3D-THM</td>
+             <td>110</td>
+             <td>\( K \)</td>
+             <td>\( G \)</td>
+             <td>\( Gc \)</td>
+             <td>\( L \)</td>
+             <td>\( M \)</td>
+             <td>\( Mc \)</td>
+             <td>\(R\)</td>
+             <td>\(\chi\)</td>
+             <td>\(\eta_f\)</td>
+             <td>\( \beta^\star \)</td>
+             <td>\(k_T\)</td>
+             <td>\(\rho C\)</td>
+             <td>\(\alpha\)</td>
+             <td>\(\lambda^\star\)</td>
+             <td>NA</td>
+             <td>\(\tan{\phi}\)</td>
+             <td>\(c\)</td>
+             <td>\(\tan{\psi}\)</td>
+             <td>\(H_{s\phi}\)</td>
+             <td>\(H_{sc}\)</td>`
+             <td>h1</td>
+             <td>\(h_2\)</td>
+             <td>\(h_3\)</td>
+             <td>\(h_4\)</td>
+             <td>\(g_1\)</td>
+             <td>\(g_2\)</td>
+             <td>\(g_3\)</td>
+             <td>\(g_4\)</td>
+             <td>\(\eta\)</td>`
+             <!-- Add more cells for each row -->
+         </tr>
+
+         <!-- Add more rows as needed -->
+     </tbody>
+   </table>
+</div><p>Explanation of the symbols in the Table:</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-number">Table 2.1 </span><span class="caption-text">Material properties</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Material Property</p></th>
+<th class="head"><p>Dimensions</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><img class="math" src="_images/math/0450260a9fac64a7d7215f8fdb2dc2c69a834f5e.png" alt="[L]"/></p></td>
+<td></td>
+<td><p>Length</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/1a97bd0ad68f2aa5eb2cae10d9599d43c65bb2c4.png" alt="[T]"/></p></td>
+<td></td>
+<td><p>Time</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/ebdaecf49c50d3c7d450b4869e8a38be0909d93c.png" alt="[M]"/></p></td>
+<td></td>
+<td><p>mass</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/fb851a21bfdd5fe75b1d58766e6a2cf9c4f58e4a.png" alt="[K]"/></p></td>
+<td></td>
+<td><p>Temperature</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/beefb85fc48a27ffbf8e9f5e734139542073823a.png" alt="K"/></p></td>
+<td><p><img class="math" src="_images/math/4ed133f3811ed426daf41f6a3537e50a876f7d38.png" alt="\frac{[M]}{[T^2][L]}"/></p></td>
+<td><p>Triaxial compression modulo</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/f9608d4467deb0d88ac79cfd59dee58649521180.png" alt="G"/></p></td>
+<td><p><img class="math" src="_images/math/4ed133f3811ed426daf41f6a3537e50a876f7d38.png" alt="\frac{[M]}{[T^2][L]}"/></p></td>
+<td><p>Shear modulo</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/81f8e65a6820b79dd1e033765d89cf12986686a1.png" alt="Gc"/></p></td>
+<td><p><img class="math" src="_images/math/4ed133f3811ed426daf41f6a3537e50a876f7d38.png" alt="\frac{[M]}{[T^2][L]}"/></p></td>
+<td><p>Shear modulo owing to anisotropy of Cosserat Material</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/c556a549606c0107dd1a9cd78c957f3addd6d7aa.png" alt="L"/></p></td>
+<td><p><img class="math" src="_images/math/b42135f867a39724d6d7e26f75ea26cc003d5208.png" alt="\frac{[M][L]}{[T^2]}"/></p></td>
+<td><p>Triaxial Moment modulo for Cosserat Material</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/7c91c4fa40485306cfcb4fc9f4c7363d09a5d5c9.png" alt="MG"/></p></td>
+<td><p><img class="math" src="_images/math/b42135f867a39724d6d7e26f75ea26cc003d5208.png" alt="\frac{[M][L]}{[T^2]}"/></p></td>
+<td><p>Shear Moment modulo for Cosserat Material</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/0ba825289497cfc000376ba740dcc3db0a85bb1a.png" alt="MGc"/></p></td>
+<td><p><img class="math" src="_images/math/b42135f867a39724d6d7e26f75ea26cc003d5208.png" alt="\frac{[M][L]}{[T^2]}"/></p></td>
+<td><p>Shear Moment modulo for Cosserat Material</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/456d32ff8b299a1d3032b2fb1b334ef5df342717.png" alt="R"/></p></td>
+<td><p><img class="math" src="_images/math/0450260a9fac64a7d7215f8fdb2dc2c69a834f5e.png" alt="[L]"/></p></td>
+<td><p>Cosserat radius</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/c2770dd8d4448858a56b977ff7c1e97240ea0b00.png" alt="\chi"/></p></td>
+<td><p><img class="math" src="_images/math/640275eeaf81c29031a7aef2a2fc3d2bfbd0e108.png" alt="[L^2]"/></p></td>
+<td><p>Hydraulic permeability</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/4d0524bc82c255277446b299c3264c8710c848f0.png" alt="\eta_f"/></p></td>
+<td><p><img class="math" src="_images/math/b2711f57efa511bdb4b9ec9cce032cf2840bedd2.png" alt="\frac{[M]}{[T]}"/></p></td>
+<td><p>Fluid viscosity</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/9b6ccb6ac6b6986aab4eddcc5b097e9a91251913.png" alt="\beta^\star"/></p></td>
+<td><p><img class="math" src="_images/math/2b1514b384c824b3120551b645b63eb047223f37.png" alt="\frac{[L][T]^2}{[M]}"/></p></td>
+<td><p>Hydraulic compressibility</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/f7a0a9795f82064b57f69a3bfa7127dd5f5e213e.png" alt="k_T"/></p></td>
+<td><p><img class="math" src="_images/math/e2d0b4338fd7503f8ded103f9b8f2ccb40b8093c.png" alt="\frac{[M][L]^2}{[K][T]^2}"/></p></td>
+<td><p>Thermal conductivity</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/05f3a9a12188b88c7bf37b71c7487df867b76d80.png" alt="\rho C"/></p></td>
+<td><p><img class="math" src="_images/math/a8f46587a4a0cc863f0ebb4a94b0288ee644f73a.png" alt="\frac{[M]}{[L][K][T]^2}"/></p></td>
+<td><p>Specific heat density</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/59c7c2a5470a383dac554a155acc72ba97fabb70.png" alt="\alpha"/></p></td>
+<td><p><img class="math" src="_images/math/be35585052084e7ac109b9acb56c7b3f6f71254e.png" alt="\frac{[1]}{[K]}"/></p></td>
+<td><p>Thermal expansion coefficient in one dimension</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/34a85aeff9e68bf06ce6bfe9f7c9b7b5b032a8d6.png" alt="\lambda^\star"/></p></td>
+<td><p><img class="math" src="_images/math/be35585052084e7ac109b9acb56c7b3f6f71254e.png" alt="\frac{[1]}{[K]}"/></p></td>
+<td><p>Thermal expansivity coefficient</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/1ca940889702323d6edf0088448fb2a74a62852b.png" alt="\phi"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Friction angle</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/b1eea9c84022e1c883238a3319bfab7b9f2402a7.png" alt="\psi"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Dilation angle</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/0efb63185bad60424d57728f5613374289ed18d3.png" alt="c"/></p></td>
+<td><p><img class="math" src="_images/math/4ed133f3811ed426daf41f6a3537e50a876f7d38.png" alt="\frac{[M]}{[T^2][L]}"/></p></td>
+<td><p>Cohesion</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/40dda343a075e85810d7bdd56647e8bee1a0df17.png" alt="H_{s\phi}"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Hardening/Softening coefficient on the friction angle</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/2aa9d94a5bb5a4d517a3ebb0581dc6fb82999dc1.png" alt="H_{sc}"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Hardening/Softening coefficient on the cohesion term</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/94c4aacb89528e7d6c65f2fd262091f4c6e38797.png" alt="h_1,...,h_4"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Cosserat specific parameters owing to the Drucker -Prager yield criterion</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/018a654806d7917cb30db299e0cfd9a0e77856f3.png" alt="g_1,...,g_4"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Cosserat specific parameters owing to the Drucker -Prager plastic potential</p></td>
+</tr>
+<tr class="row-odd"><td><p><img class="math" src="_images/math/49fe0c95f21a0a89ed06e897a6f9b56929d17545.png" alt="NA"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Not Attributed</p></td>
+</tr>
+<tr class="row-even"><td><p><img class="math" src="_images/math/85e1e1fae19e523bfcfac69d6db45b2c89e25d03.png" alt="OoB"/></p></td>
+<td><p><img class="math" src="_images/math/b9ebd3f02c7574874d1ae47079c78ed75303d086.png" alt="-"/></p></td>
+<td><p>Out of Bounds</p></td>
+</tr>
+</tbody>
+</table>
+<p>Further description of the material can be found in the following parts of the documentation:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CAUCHY3D-DP%20material.html">2.1. CAUCHY3D-DP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CAUCHY3D-DP%20material.html#elastoplastic-description">2.1.1. Elastoplastic description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CAUCHY3D-DP%20material.html#material-properties">2.1.2. Material properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CAUCHY3D-DP%20material.html#mapping-of-the-accessible-state-variables">2.1.3. Mapping of the accessible state variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>COSSERAT3D-DP material
+COSSERAT3D-EXP material
+COSSERAT3D-BREAKAGE material
+CAUCHY3D-DP-PR-TEMP material
+COSSERAT3D-THM material
+COSSERAT3D-DP material</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="installation_instructions.html"
+                          title="previous chapter"><span class="section-number">1. </span>Installation instructions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CAUCHY3D-DP%20material.html"
+                          title="next chapter"><span class="section-number">2.1. </span>CAUCHY3D-DP</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CAUCHY3D-DP%20material.html" title="2.1. CAUCHY3D-DP"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation_instructions.html" title="1. Installation instructions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Material description</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1.4.1.3.1.1.1.2.1.2. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests package &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.4.1.4. ngeoFE_unittests.Upscaling package" href="ngeoFE_unittests.Upscaling.html" />
+    <link rel="prev" title="1.4.1.3.1.1.1.2.1.1. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP package" href="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.Upscaling.html" title="1.4.1.4. ngeoFE_unittests.Upscaling package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html" title="1.4.1.3.1.1.1.2.1.1. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" ><span class="section-number">1. </span>Numerical_Geolab</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ngeoFE_unittests.html" ><span class="section-number">1.4. </span>ngeoFE_unittests package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="ngeoFE_unittests.Multiphysics.html" ><span class="section-number">1.4.1.3. </span>ngeoFE_unittests.Multiphysics package</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.html" ><span class="section-number">1.4.1.3.1.1. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests package</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.html" accesskey="U"><span class="section-number">1.4.1.3.1.1.1.2. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.4.1.3.1.1.1.2.1.2. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-package">
+<h1><span class="section-number">1.4.1.3.1.1.1.2.1.2. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests package<a class="headerlink" href="#ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.1. </span>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-dp-hydroelasticity-tests-0-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.2. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0" title="Permalink to this heading">¶</a></h2>
+<p>Created on Nov 5, 2018</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D Hydroelasticity.
+Checks:
+-Convergence
+-Generalised force displacement values
+-Steady state displacement values
+-Diffusion time test</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroelasticity_tests_0.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroelasticity_tests_0.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroelasticity_tests_0.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroelasticity_tests_0.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_DP_THM_Hydroelasticity.out</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.test_steady_state_displacement_values">
+<span class="sig-name descname"><span class="pre">test_steady_state_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroelasticity_tests_0.html#Test.test_steady_state_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0.Test.test_steady_state_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-dp-hydroplasticity-tests-0-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.3. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0" title="Permalink to this heading">¶</a></h2>
+<p>Created on Mai 30, 2022</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D Hydroplasticity with a 
+Drucker Prager yield criterion. Check yield limit for different pressure and yielding under isochoric deformation.</p>
+<p>Checks:
+-Convergence
+-Generalised force displacement values
+-Yield criterion</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.check_yielding_criterion">
+<span class="sig-name descname"><span class="pre">check_yielding_criterion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#Test.check_yielding_criterion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.check_yielding_criterion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Hydroplasticity.out</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.calculate_J2">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">calculate_J2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma13</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#calculate_J2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.calculate_J2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.calculate_dissipation">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">calculate_dissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#calculate_dissipation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.calculate_dissipation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.product_sij_sji">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">product_sij_sji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sij</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sji</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_0.html#product_sij_sji"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0.product_sij_sji" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-dp-hydroplasticity-tests-1-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.4. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1" title="Permalink to this heading">¶</a></h2>
+<p>Created on Mai 30, 2022</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D Hydroplasticity with a 
+Drucker Prager yield criterion. Check softening behavior due to pore fluid pressure increase. The unit cube is under 1D compression.</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D Hydroelasticity.
+Checks:
+-Convergence
+-Generalized force displacement values</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Hydroplasticity_2.out</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.calculate_J2">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">calculate_J2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma13</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#calculate_J2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.calculate_J2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.calculate_dissipation">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">calculate_dissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#calculate_dissipation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.calculate_dissipation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.product_sij_sji">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">product_sij_sji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sij</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sji</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Hydroplasticity_tests_1.html#product_sij_sji"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1.product_sij_sji" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-dp-thermo-hydro-plasticity-tests-1-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.5. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1" title="Permalink to this heading">¶</a></h2>
+<p>Created on Mai 30, 2022</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D Thermo-Hydroplasticity with a 
+Drucker Prager yield criterion. Check softening behavior due to pore fluid pressure increase due to thermal
+pressurization. The unit cube is under 1D compression.</p>
+<p>Checks:
+-Convergence
+-Generalised force displacement values
+-Analytical vs numerical total stress
+-Final temperature and pore fluid pressure values
+-Rate of temperature and pore fluid pressure increase</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_DT_DP_equality">
+<span class="sig-name descname"><span class="pre">test_DT_DP_equality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test.test_DT_DP_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_DT_DP_equality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_DT_dissipation_equiality">
+<span class="sig-name descname"><span class="pre">test_DT_dissipation_equiality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test.test_DT_dissipation_equiality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_DT_dissipation_equiality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_final_stress_T_P">
+<span class="sig-name descname"><span class="pre">test_final_stress_T_P</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test.test_final_stress_T_P"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_final_stress_T_P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Thermo_Hydro_plasticity.out</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.calculate_J2">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">calculate_J2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma13</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#calculate_J2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.calculate_J2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.calculate_dissipation">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">calculate_dissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#calculate_dissipation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.calculate_dissipation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.product_sij_sji">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.</span></span><span class="sig-name descname"><span class="pre">product_sij_sji</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sij</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sji</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.html#product_sij_sji"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1.product_sij_sji" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-thermohydroelasticity-tests-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.6. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests" title="Permalink to this heading">¶</a></h2>
+<p>Created on Nov 5, 2018</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 1D linear elasticity
+Checks:
+-Convergence
+-Generalised force displacement values
+-Analytical vs numerical total stress
+-Final temperature and pore fluid pressure values
+-Rate of temperature and pore fluid pressure increase</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_ThermoHydroelasticity_tests.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_ThermoHydroelasticity_tests.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_ThermoHydroelasticity_tests.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_ThermoHydroelasticity_tests.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal generalized forces and displacements to values in ./reference_data/Cauchy3D_ThermoHydroelasticity_0.out</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.test_thermal_diffusion">
+<span class="sig-name descname"><span class="pre">test_thermal_diffusion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_ThermoHydroelasticity_tests.html#Test.test_thermal_diffusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests.Test.test_thermal_diffusion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-thermo-hydro-plasticity-tests-0-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.7. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0" title="Permalink to this heading">¶</a></h2>
+<p>Created on Mai 30, 2022</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D Thermo-Hydroplasticity with a 
+Von-Mises yield criterion. Check pore fluid pressure increase due to thermal
+pressurization. The unit cube is under 1D shear.</p>
+<p>Checks:
+-Convergence
+-Generalised force displacement values
+-Analytical vs numerical total stress
+-Final temperature and pore fluid pressure values
+-Rate of temperature and pore fluid pressure increase</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_DT_DP_equality">
+<span class="sig-name descname"><span class="pre">test_DT_DP_equality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test.test_DT_DP_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_DT_DP_equality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_DT_dissipation_equiality">
+<span class="sig-name descname"><span class="pre">test_DT_dissipation_equiality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test.test_DT_dissipation_equiality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_DT_dissipation_equiality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_final_stress_T_P">
+<span class="sig-name descname"><span class="pre">test_final_stress_T_P</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test.test_final_stress_T_P"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_final_stress_T_P" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Thermo_Hydro_plasticity.out</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.calculate_dissipation">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">calculate_dissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermo_Hydro_plasticity_tests_0.html#calculate_dissipation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0.calculate_dissipation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-thermoelasticity-tests-0-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.8. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0" title="Permalink to this heading">¶</a></h2>
+<p>Created on Nov 5, 2018</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 1D linear elasticity</p>
+<p>Checks:
+-Convergence
+-Generalised force displacement values
+-Analytical vs numerical total stress
+-Steady state displacement values
+-Thermal dissusion evolution</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoelasticity_tests_0.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoelasticity_tests_0.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoelasticity_tests_0.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoelasticity_tests_0.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Thermoelasticity.out</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.test_steady_state_displacement_values">
+<span class="sig-name descname"><span class="pre">test_steady_state_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoelasticity_tests_0.html#Test.test_steady_state_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0.Test.test_steady_state_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0">
+<span id="ngeofe-unittests-multiphysics-cauchy-tests-threed-tests-cauchy3d-thermoplasticity-tests-0-module"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.9. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0 module<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0" title="Permalink to this heading">¶</a></h2>
+<p>Created on Mai 30, 2022</p>
+<p>&#64;author: Alexandros Stathas</p>
+<p>Contains unit tests of ngeoFE applied to Cauchy continua in 3D elastoplasticity with a Von-Mises yield criterion.
+Checks:
+-Convergence
+-Generalised force displacement values
+-Dissipation and temperature increase</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoplasticity_tests_0.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.setUpClass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpClass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoplasticity_tests_0.html#Test.setUpClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.setUpClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run FE analysis example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.test_DT_dissipation_equiality">
+<span class="sig-name descname"><span class="pre">test_DT_dissipation_equiality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoplasticity_tests_0.html#Test.test_DT_dissipation_equiality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.test_DT_dissipation_equiality" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.test_execution">
+<span class="sig-name descname"><span class="pre">test_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoplasticity_tests_0.html#Test.test_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.test_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests execution and convergence</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.test_generalized_force_displacement_values">
+<span class="sig-name descname"><span class="pre">test_generalized_force_displacement_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoplasticity_tests_0.html#Test.test_generalized_force_displacement_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.Test.test_generalized_force_displacement_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests calculated nodal forces and displacements to values in ./reference_data/Cauchy3D_THM_Thermoplasticity.out</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.calculate_dissipation">
+<span class="sig-prename descclassname"><span class="pre">ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.</span></span><span class="sig-name descname"><span class="pre">calculate_dissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma23</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ngeoFE_unittests/Multiphysics/Cauchy_tests/ThreeD/Tests/Cauchy3D_Thermoplasticity_tests_0.html#calculate_dissipation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0.calculate_dissipation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests">
+<span id="module-contents"></span><h2><span class="section-number">1.4.1.3.1.1.1.2.1.2.10. </span>Module contents<a class="headerlink" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests" title="Permalink to this heading">¶</a></h2>
+<p>Created on May 5, 2022</p>
+<p>&#64;author: Alexandros Stathas</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.4.1.3.1.1.1.2.1.2. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests package</a><ul>
+<li><a class="reference internal" href="#submodules">1.4.1.3.1.1.1.2.1.2.1. Submodules</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0">1.4.1.3.1.1.1.2.1.2.2. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0">1.4.1.3.1.1.1.2.1.2.3. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1">1.4.1.3.1.1.1.2.1.2.4. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1">1.4.1.3.1.1.1.2.1.2.5. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests">1.4.1.3.1.1.1.2.1.2.6. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0">1.4.1.3.1.1.1.2.1.2.7. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0">1.4.1.3.1.1.1.2.1.2.8. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0">1.4.1.3.1.1.1.2.1.2.9. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0 module</a></li>
+<li><a class="reference internal" href="#module-ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests">1.4.1.3.1.1.1.2.1.2.10. Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html"
+                          title="previous chapter"><span class="section-number">1.4.1.3.1.1.1.2.1.1. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="ngeoFE_unittests.Upscaling.html"
+                          title="next chapter"><span class="section-number">1.4.1.4. </span>ngeoFE_unittests.Upscaling package</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.Upscaling.html" title="1.4.1.4. ngeoFE_unittests.Upscaling package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.html" title="1.4.1.3.1.1.1.2.1.1. ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" ><span class="section-number">1. </span>Numerical_Geolab</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ngeoFE_unittests.html" ><span class="section-number">1.4. </span>ngeoFE_unittests package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="ngeoFE_unittests.Multiphysics.html" ><span class="section-number">1.4.1.3. </span>ngeoFE_unittests.Multiphysics package</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.html" ><span class="section-number">1.4.1.3.1.1. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests package</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.html" ><span class="section-number">1.4.1.3.1.1.1.2. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.4.1.3.1.1.1.2.1.2. </span>ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

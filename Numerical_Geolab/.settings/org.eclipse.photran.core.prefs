@@ -1,0 +1,4 @@
+EnableVPG=false
+FortranIncludePaths=/Numerical_Geolab_Materials\n
+FortranModulePaths=/Numerical_Geolab_Materials\n
+eclipse.preferences.version=1
