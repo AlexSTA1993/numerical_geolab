@@ -99,7 +99,7 @@ The user can parse the available documentation present in the docs directory, wh
 for the construction and solution of different problems in inelasticity involving multiphysics couplings and 
 micromorphic continua. The tutorials for inalsticity multiphysics and micromorphic continua are available in  
 
-`Documentation <Numerical_Geolab/docs/build/html/index.html>_`
+`Documentation <Numerical_Geolab/docs/build/html/index.html>`_
 
 Formulating and solving a custom problem
 ........................................
