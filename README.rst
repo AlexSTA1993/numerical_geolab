@@ -27,13 +27,13 @@ The Finite Element module builts on : `FEniCS <https://fenicsproject.org>`_ (ope
 *Numerical Geolab (nGeo)* is an open source computational platform for the solution of engineering problems involving material inelasticity, multiphysics, and generalized continua. nGeo
 solves the underlying mathematical form incrementally and uses the Voigt-type notation, in order to handle micromorphic continua and multiphysics equations.
 
-For complete description refer to  `Documentation <Numerical_Geolab/docs/build/html/index>`_
+For complete description refer to  `Documentation <Numerical_Geolab/docs/build/html/index.html>`_
 
 Installation_instructions
-=========================
+-------------------------
 
 Direct download from source
----------------------------
+...........................
 
 The project sources including Numerical_Geolab and numerical_geolab_materials are available on Github. 
 The user can download the project and add the modules Numerical_Geolab and numerical_geolab_materials to PYTHONPATH i.e:
@@ -49,7 +49,8 @@ For Linux systems:
    For the unittests below to work properly: Numerical_Geolab and numerical_geolab_materials should be located under the same directory
 
 Docker container
-----------------
+................
+
 For the user's convenience an image of numerical geolab that bases on FEniCS is available. It can be pulled from dockerhub
 
 .. code-block:: bash
@@ -57,10 +58,10 @@ For the user's convenience an image of numerical geolab that bases on FEniCS is 
    $ docker pull alexsta1993/numerical_geolab
 
 Suggested workflow
-==================
+------------------
 
-Runbing the unittests
----------------------
+Running the unittests
+.....................
 
 Numerical Geolab comes equipped with unittests that verify the expected behavior for the material libraries, the
 mechanical models and also the multiphysics models that use the available materials. In order to test that the files work successfully,  
@@ -92,21 +93,21 @@ The user can activate the plotting option by using the following command:
 
 
 Reading the documentation
--------------------------
+.........................
 
 The user can parse the available documentation present in the docs directory, where a list of documented python files exist 
 for the construction and solution of different problems in inelasticity involving multiphysics couplings and 
 micromorphic continua. The tutorials for inalsticity multiphysics and micromorphic continua are available in  
 
-`Documentation <Numerical_Geolab/docs/build/html/index>_`
+`Documentation <Numerical_Geolab/docs/build/html/index.html>_`
 
 Formulating and solving a custom problem
------------------------------------------
+........................................
 
-The user can use the available example files in the `Tutorials <Numerical_Geolab/docs/build/html/index>`_ as the basis for the construction and solution of a new problem.
+The user can use the available example files in the `Tutorials <Numerical_Geolab/docs/build/html/index.html>`_ as the basis for the construction and solution of a new problem.
 
 Project structure
-=================
+-----------------
 
 .. image:: Numerical_Geolab/docs/source/_images/classes.png
    :alt: Structure of classes
@@ -132,9 +133,9 @@ Construction of the variational formulation in nGeo
 
 
 Numerical Geolab Tutorials
-==========================
+--------------------------
 
-List of available tutials (see also `Documentation <Numerical_Geolab/docs/build/html/index>`_).
+List of available tutials (see also `Documentation <Numerical_Geolab/docs/build/html/index.html>`_).
 
 * Tutorial_Cauchy_elastoplasticity_VM
 * Tutorial_Cauchy_viscoplasticity_VM
