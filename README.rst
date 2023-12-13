@@ -6,7 +6,7 @@
 ================================  
 Numerical Geolab's documentation
 ================================
-.. image:: _Numerical_Geolab/docs/source/images/CoQuake_Banner2.png
+.. image:: _Numerical_Geolab/docs/source/_images/CoQuake_Banner2.png
    :alt: ERC-CoQuake project logo
    :target: http://www.coquake.com
    :align: center
