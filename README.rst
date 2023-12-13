@@ -22,12 +22,12 @@ For more details visit: `CoQuake Project <http://www.coquake.com>`_
 
 Contact: `Ioannis Stefanou <http://istefanou1@gmail.com>`_
 
-The Finite Element module builts on : `FEniCS <https://fenicsproject.org>_` (open-source, under `LGPLv3 <https://www.gnu.org/licenses/lgpl-3.0.en.html>_`). 
+The Finite Element module builts on : `FEniCS <https://fenicsproject.org>`_ (open-source, under `LGPLv3 <https://www.gnu.org/licenses/lgpl-3.0.en.html>`_). 
 
 *Numerical Geolab (nGeo)* is an open source computational platform for the solution of engineering problems involving material inelasticity, multiphysics, and generalized continua. nGeo
 solves the underlying mathematical form incrementally and uses the Voigt-type notation, in order to handle micromorphic continua and multiphysics equations.
 
-For complete description refer to  `Documentation <Numerical_Geolab/docs/source/index>_`
+For complete description refer to  `Documentation <Numerical_Geolab/docs/build/html/index>`_
 
 Installation_instructions
 =========================
@@ -98,17 +98,17 @@ The user can parse the available documentation present in the docs directory, wh
 for the construction and solution of different problems in inelasticity involving multiphysics couplings and 
 micromorphic continua. The tutorials for inalsticity multiphysics and micromorphic continua are available in  
 
-`Documentation <Numerical_Geolab/docs/source/index>_`
+`Documentation <Numerical_Geolab/docs/build/html/index>_`
 
 Formulating and solving a custom problem
 -----------------------------------------
 
-The user can use the available example files in the `Tutorials <Numerical_Geolab/docs/source/index>_` as the basis for the construction and solution of a new problem.
+The user can use the available example files in the `Tutorials <Numerical_Geolab/docs/build/html/index>`_ as the basis for the construction and solution of a new problem.
 
 Project structure
 =================
 
-.. image:: _Numerical_Geolab/docs/source/images/classes.png
+.. image:: Numerical_Geolab/docs/source/_images/classes.png
    :alt: Structure of classes
    :target: _Numerical_Geolab/docs/source/images/classes.png
    :align: center
@@ -134,7 +134,7 @@ Construction of the variational formulation in nGeo
 Numerical Geolab Tutorials
 ==========================
 
-List of available tutials (see also `Documentation<Numerical_Geolab/docs/source/index>_`).
+List of available tutials (see also `Documentation <Numerical_Geolab/docs/build/html/index>`_).
 
 * Tutorial_Cauchy_elastoplasticity_VM
 * Tutorial_Cauchy_viscoplasticity_VM
