@@ -22,8 +22,11 @@ For Linux systems:
 
 Docker container
 ----------------
-For the user's convenience an image of numerical geolab that bases on FEniCS is available. It can be found in the sources 
-numerical_geolab/docker. 
+For the user's convenience an image of numerical geolab that bases on FEniCS is available. It can be pulled from dockerhub
+
+.. code-block:: bash
+   
+   $ docker pull alexsta1993/numerical_geolab
 
 -----------------------------
 Code validation via unittests

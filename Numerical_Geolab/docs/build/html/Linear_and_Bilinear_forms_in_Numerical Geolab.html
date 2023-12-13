@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material" href="Tutorial_Cauchy_elastoplasticity_VM.html" />
-    <link rel="prev" title="2. Material description of state variables" href="material_description_state_variables.html" /> 
+    <link rel="prev" title="1. CAUCHY3D-DP" href="CAUCHY3D-DP%20material.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -32,7 +32,7 @@
           <a href="Tutorial_Cauchy_elastoplasticity_VM.html" title="1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="material_description_state_variables.html" title="2. Material description of state variables"
+          <a href="CAUCHY3D-DP%20material.html" title="1. CAUCHY3D-DP"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Linear and Bilinear forms in Numerical Geolab</a></li> 
@@ -46,6 +46,108 @@
             
   <section id="linear-and-bilinear-forms-in-numerical-geolab">
 <span id="id1"></span><h1><span class="section-number">1. </span>Linear and Bilinear forms in Numerical Geolab<a class="headerlink" href="#linear-and-bilinear-forms-in-numerical-geolab" title="Permalink to this heading">¶</a></h1>
+<section id="general-formulation-of-the-weak-form-for-a-multiphysics-coupled-solid-mechanics-problem">
+<h2><span class="section-number">1.1. </span>General formulation of the weak form for a multiphysics coupled solid mechanics problem<a class="headerlink" href="#general-formulation-of-the-weak-form-for-a-multiphysics-coupled-solid-mechanics-problem" title="Permalink to this heading">¶</a></h2>
+<p>Numerical Geolab, implements a general incremental variational form for the solid mechanics problems involving generalized continua taking advantage of a generalized Voigt-type notation. Moreover, the variational form provided below takes into account multiphysics couplings and transient terms that can result from balance equations.</p>
+<section id="general-variational-formulation-in-generalized-voigt-form-implemented-in-numerical-geolab-no-transient-terms">
+<h3><span class="section-number">1.1.1. </span>General variational formulation in generalized Voigt form implemented in Numerical Geolab -No transient terms<a class="headerlink" href="#general-variational-formulation-in-generalized-voigt-form-implemented-in-numerical-geolab-no-transient-terms" title="Permalink to this heading">¶</a></h3>
+<p>We consider the incremental formulation of a solid mechanics problem in material inelasticity. In such a case the weak form of the force and momentum balance equations in Voigt form to be solved by nGeo are the following:</p>
+<div class="math" id="multiphysics-variational-formulation">
+<p><img src="_images/math/0c631120ea2335e28488730c27bde83a844336ac.png" alt="-\int_\Omega \Delta{g}_{j} {\tilde{\psi}}_{j}d\Omega+\int_\Omega \Delta{f}_i {\tilde{v}}_id\Omega+\int_\Gamma \Delta{t}_i {\tilde{v}}_id\Gamma=0,
+ \label{multiphysics variational formulation}"/></p>
+</div><p>where <img class="math" src="_images/math/82da48caef3617ff69ce0b4b620510fcac877caf.png" alt="{g}_i"/> is the Voigt vector of generalized stresses, <img class="math" src="_images/math/9bf2dd9559c26c7a05ca659be3f41ff3f46834a2.png" alt="{\psi}_i"/> is the Voigt vector of generalized strains, <img class="math" src="_images/math/9dd5b5d74755d8e79dceba397ff038f861a38300.png" alt="{f}_i"/> is the generalized volumic force vector applied on the volume <img class="math" src="_images/math/01a3f91aaf04b2929179b7428e02bfc5e1dcf17b.png" alt="\Omega"/> of the body and <img class="math" src="_images/math/7c04065ec639c4a8877eb15dae41920183845997.png" alt="{t}_i"/> is the generalized traction vector applied at the surface <img class="math" src="_images/math/72326543fc0f859629bfbe75630226ffda099409.png" alt="\Gamma"/> of the domain. We use the <img class="math" src="_images/math/edb4a946b72043a3dca4e4cf3aa14b3a6e06022e.png" alt="(\tilde{\cdot})"/> symbol, in order to denote the testfunction fields necessary for deriving the weak form.</p>
+<p>We note that this formulation is general enough to contain also the the mass and energy balance diffusion equations at steady state (absence of the transient terms). %We use the symbol $({cdot})$ to denote the generalized vectors containing the fluxes, gradients and values of the physical quantities that are coupled to the generalized stresses, strains and forces of the mechanical problem respectively.
+We consider the incremental solution of a solid mechanics problem in material inelasticity (see <a class="reference internal" href="#zie" id="id2"><span>[ZIE]</span></a>). During the <img class="math" src="_images/math/29b778e3cef94abba2a850e2c4359684ee976273.png" alt="k+1"/> iteration of the $m$ increment, in the case where no transient terms are considered, the general incremental variational form used by nGeo is the following:</p>
+<div role="list" class="citation-list">
+<div class="citation" id="zie" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">ZIE</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="15">
+<li><ol class="upperalpha simple" start="3">
+<li><p>Zienkiewicz and R. L. Taylor. The finite element method for solid and structural mechanics. Elsevier, 2005</p></li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+<div class="math">
+<p><img src="_images/math/6bace1a050e60ec4ea37b46ad1bd81e16cc6f8a1.png" alt="\int_\Omega\Delta{\psi}_i\;^\text{m}D^{\text{k}+1}_{ij} {\tilde{\psi}}_{j}d\Omega=-\int_\Omega \;^\text{m}{g}^{\text{k}+1}_{j} {\tilde{\psi}}_{j}d\Omega+\int_\Omega \;^\text{m}{f}_i {\tilde{v}}_id\Omega+\int_\Gamma \;^\text{m}{t}_i {\tilde{v}}_id\Gamma,"/></p>
+</div><p>where, the term of the left hand side contains the new generalized strain increment <img class="math" src="_images/math/aa54fdb0620be5ee1aec5c47d8d346605da65603.png" alt="\Delta{\psi}_i"/> and the generalized inelastic
+material matrix <img class="math" src="_images/math/5c54c892a6c36a05d63a60d09af70e745c2a6ea1.png" alt="D_{ij}"/>. The terms in the right correspond to the residual at the k+1  iteration of the m increment. In the residual,
+we take into account the difference between the external generalized volumic and surface forces <img class="math" src="_images/math/f6f59283ed98caa3770bf141cc4091b3efc8306c.png" alt="{f}_i,\;{t}_i"/> at the end of the increment
+versus the internal work done by the internal generalized stresses <img class="math" src="_images/math/82da48caef3617ff69ce0b4b620510fcac877caf.png" alt="{g}_i"/> after the material update algorithm at the k+1 iteration.</p>
+<p>In the case of a classical Cauchy continuum, the terms <img class="math" src="_images/math/c0904b1e10010607d5143f5fab19cd5d285796d2.png" alt="\Delta {g}_{j}, {\tilde{\psi}}_{j}"/> correspond to the stress vector,
+<img class="math" src="_images/math/830d4b10adeb64b3750a88185e62efa534315a54.png" alt="{g}_{j}=\left[\sigma_{11},\sigma_{22},\sigma_{33},\sigma_{23},\sigma_{13},\sigma_{12}\right]^T"/> and the kinematically admissible energy conjugate strain vector.
+<img class="math" src="_images/math/48296d7833309c156923ab82a5d4377c67fbfc7d.png" alt="{\psi}_{j}=\left[\varepsilon_{11},\varepsilon_{22},\varepsilon_{33},\varepsilon_{23},\varepsilon_{13},\varepsilon_{12}\right]^T"/> respectively. Considering the terms of the
+external work <img class="math" src="_images/math/3716de477f39500848e7adf9d22e4fa7b39a93bf.png" alt="{f}_i,{t}_i"/>, they correspond to the vectors of volumic forces and surface tractions respectively. The term <img class="math" src="_images/math/fe08d036c298f593c7cca685ff234fc9bf7ce2e0.png" alt="{v}_i"/> corresponds to the displacement vector field.</p>
+</section>
+<section id="implementation-of-generalized-continua">
+<h3><span class="section-number">1.1.2. </span>Implementation of generalized continua<a class="headerlink" href="#implementation-of-generalized-continua" title="Permalink to this heading">¶</a></h3>
+<p>We note that we can apply the weak from of equation <span class="xref std std-ref">multiphysics variational formulation</span> also to the case of generalized continua, i.e continua
+with microstructure (see <a class="reference internal" href="#germ" id="id3"><span>[GERM]</span></a>). More specifically, in a medium with microstructure, we consider that each material point <img class="math" src="_images/math/ebd840cd1d5a1279ac5d2efaf8d3883e00388e00.png" alt="(P_M)"/> has
+its own micro structure, where <img class="math" src="_images/math/3a7ecb3b57b0094229edef2ebbe9e92f1e2afdc3.png" alt="P_M"/> is the center of mass. The displacement of a point <img class="math" src="_images/math/8d4e064a0d1f50fa17f5989773d755255425728f.png" alt="P_M'"/> close to <img class="math" src="_images/math/3a7ecb3b57b0094229edef2ebbe9e92f1e2afdc3.png" alt="P_M"/> can then be described by the Taylor expansion
+of the displacement in a small distance <img class="math" src="_images/math/9c8fe963ae3d8a1c459f169f557a9089fb7cdcc9.png" alt="x'_j"/> around <img class="math" src="_images/math/3a7ecb3b57b0094229edef2ebbe9e92f1e2afdc3.png" alt="P_M"/>. Thus, we can write:</p>
+<div role="list" class="citation-list">
+<div class="citation" id="germ" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GERM<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id5">2</a>)</span>
+<ol class="upperalpha simple" start="16">
+<li><p>Germain. The Method of Virtual Power in Continuum Mechanics . Part 2 : Microstructure Author ( s ): P . Germain Source : SIAM Journal on Applied Mathematics , Vol . 25 , No . 3 ( Nov., 1973 ), pp . 556-575. 25(3):556–575, 1973.</p></li>
+</ol>
+</div>
+</div>
+<div class="math">
+<p><img src="_images/math/a45db1421eb6285f070b679e5c849f61d142c9d7.png" alt="{v}'_i={v}_i+\chi_{ij}x'_j+\chi_{ijk}x'_jx'_k+...\;,"/></p>
+</div><p>where without loss of generality <img class="math" src="_images/math/6dc3089dc058f10b2831c70f24b67ce68c962559.png" alt="\chi_{ijk}"/> can be assumed symmetric w.r.t. the indices <img class="math" src="_images/math/724fd0bbe8ce16134a84a251d25c1a1430ef98fe.png" alt="j,k"/>. The resulting principle of incremental virtual work
+that gives rise to the appropriate balance equations for the nth-order micromorphic continuum is given by:</p>
+<div class="math" id="id4">
+<p><img src="_images/math/517c1c72a74d3b750113b3ce7d233b7643b8225d.png" alt="&amp;P_{int}+P_{ext,c}+P_{ext,d}=0,\nonumber\\
+&amp;P_{int}=-\int_\Omega \Delta \tau_{ij}v_{i,j}-(\Delta\tau_{[ij]}\chi_{ij}+\Delta\tau_{ijk}\chi_{ijk}+...)+(\Delta b_{ijk}\kappa_{ijk}+\Delta b_{ijkl}\kappa_{ijkl}+...)d\Omega,\nonumber\\
+&amp;P_{ext,d}=\int_\Omega \Delta {f}_i v_i +\Delta\Psi_{ij}\chi_{ij}+\Delta\Psi_{ijk}\chi_{ijk}+...d\Omega\nonumber\\
+&amp;P_{ext,c}=\int_\Gamma \Delta {t}_i {v}_i+\Delta M_{ij}\chi_{ij}+\Delta M_{ijk}\chi_{ijk}+...d\Gamma,\nonumber\\
+&amp;\kappa_{ijk}=\chi_{ij,k},\text{ and } \kappa_{ijkl}=\chi_{ijk,l},\; ...\;,"/></p>
+</div><p>where the symbol <img class="math" src="_images/math/7723f392bd9f1ae83a99fb9858738da950ee5ae5.png" alt="\cdot_{\cdot,j}"/> indicates differentiation with respect to the spatial dimension of the problem, <img class="math" src="_images/math/82ec7bf36aaf7ca7639b7b5f7351f9ae6d52ae7f.png" alt="\tau_{[ij]}"/> denotes the antisymmetric part of the tensor
+<img class="math" src="_images/math/6a062ab13ad8fbbc13543198c99fa77788beeef8.png" alt="\tau_{ij}"/>. The quantities <img class="math" src="_images/math/a9033f341718aade54b4db23015186b3ac7694fa.png" alt="\Psi_{ij},\Psi_{ijk}"/> are the generalized volumic forces and <img class="math" src="_images/math/05294089ee537994fab5a3e5655dbfc4b9196d21.png" alt="M_{ij},M_{ijk}"/> the generalized traction forces at the boundary of the domain.
+We can rewrite equation <span class="xref std std-ref">generalized continua variational formulation</span> into <span class="xref std std-ref">multiphysics variational formulation</span> by setting:</p>
+<div class="math">
+<p><img src="_images/math/16e1dd598159b77d9d4ac128b91242b0eeac305d.png" alt="&amp;{g}_j=\left[\tau_{pq},\tau_{[pq]}, \tau_{pqr},  b_{pqr}, b_{pqrm}, ...\right]^T_{(1\times N_1)},\nonumber\\
+&amp;{\psi}_j=\left[v_{p,q},\chi_{[pq]}, \chi_{pqr},  \kappa_{pqr}, \kappa_{pqrm}, ...\right]^T_{(1\times N_1)},\nonumber\\
+&amp;{f}_i=\left[f_p,\Psi_{pq},\Psi_{pqr},...\right]^T_{(1\times N_2)},\nonumber\\
+&amp;{t}_i=\left[t_p,M_{pq},M_{pqr},...\right]^T_{(1\times N_2)},\nonumber\\
+&amp;{v}_i=\left[v_p,\chi_{pq},\chi_{pqr},...\right]^T_{(1\times N_2)},\nonumber\\
+&amp; j=1,...,N_1\text{ with } N_1=pq\left[(1+r)+rm(1+...)+...\right],\nonumber\\
+&amp; i=1,...,N_2\text{ with } N_2=p\left[(1+q)+rq(1+...)+...\right]."/></p>
+</div><p>In the case of generalized continua, the terms <img class="math" src="_images/math/137edd239fc062d43b4c161ab8d359f17445256e.png" alt="\Delta {g}_{j}, {\psi}_{j}"/> correspond to the generalized stress vector, and the kinematically admissible energy conjugate generalized strain vector
+as presented in <a class="reference internal" href="#germ" id="id5"><span>[GERM]</span></a> . Likewise the terms of the external work <img class="math" src="_images/math/3716de477f39500848e7adf9d22e4fa7b39a93bf.png" alt="{f}_i,{t}_i"/>, they correspond to the vectors of generalized volumic forces and the generalized surface tractions respectively.</p>
+<p>When a first order micromorphic (Cosserat) continuum is used, generalized stress and strain asymmetry ensues, and the user needs to populate the generalized stress and strain vectors by the full components
+of the generalized stress, couple stress and strain and curvature quantities. In the 3D case of the equilibrium this leads to a <img class="math" src="_images/math/4b5bce690448aee6bd5af9b53a83658bd89672ed.png" alt="[36\times 1]"/> vector for the generalized stresses
+<img class="math" src="_images/math/1fe457af73538c391b015e40b2c1f9ee78490479.png" alt="{g}_i=\left[\tau_{11},\tau_{12},...,\tau_{33},\mu_{11},\mu_{12},...,\mu_{33}\right]^T"/> and strains <img class="math" src="_images/math/d888a3b6997c912d1cab0723bf58625abf3a94ac.png" alt="{\psi}_i=\left[\gamma_{11},\gamma_{12},...,\gamma_{33},\kappa_{11},\kappa_{12},...,\kappa_{33}\right]"/>.
+For the generalized forces, moments and displacements the vector dimensions are <img class="math" src="_images/math/958d00d050890081f474ab98b0293742160a0005.png" alt="[6\times 1]"/> containing <img class="math" src="_images/math/687cbad9aa87369462dfc489bb3c8746847de6e6.png" alt="{f}_i=\left[f_1,f_2,f_3,c_1,c_2,c_3\right]^T"/>, <img class="math" src="_images/math/e6611d75711c9c9b63288afe989bb4094b9bed4d.png" alt="{t}_i=\left[t_1,t_2,t_3,m_1,m_2,m_3\right]^T"/> and <img class="math" src="_images/math/df65dce572bf952ba45c4055ef1cfad403fb246c.png" alt="{v}_i=\left[u_1,u_2,u_3,\omega_1,\omega_2,\omega_3\right]^T"/>.</p>
+</section>
+<section id="implementation-of-transient-terms-thmc-couplings">
+<h3><span class="section-number">1.1.3. </span>Implementation of transient terms -THMC couplings<a class="headerlink" href="#implementation-of-transient-terms-thmc-couplings" title="Permalink to this heading">¶</a></h3>
+<p>The consideration of multiphysics couplings results in the use of coupled diffusion equations. This is the case, for instance, when THMC
+couplings are implemented. In this case, the energy balance and mass balance equations need to be taken into account for the description of
+the fields of temperature, pore fluid pressure and concentration of chemical quantities. The incremental weak form of the system of the energy,
+mass, and chemical potential balance equations is given by application of the Galerkin procedure for the total system of equilibrium equations:</p>
+<div class="math">
+<p><img src="_images/math/ac41cfa172984527684b20e4c5a102017123f07d.png" alt="\frac{1}{\Delta t}\int_{\Omega} \Delta T \tilde{T}d\Omega+\frac{1}{\Delta t}\int_{\Omega} \Delta P \tilde{P}d\Omega &amp;+\frac{1}{\Delta t}\sum_{i=1}^{N}\int_{\Omega}\Delta Q_i\tilde{Q}_id\Omega\nonumber\\
+ &amp;-\int_{\Omega}c_{th}\Delta T_{,i} \tilde{T}_{,i}d\Omega-\int_{\Omega}c_{hy}\Delta P_{,i}\tilde{P}_{,i}d\Omega-\sum_{i=1}^{N}\int_{\Omega}c_{qi}\Delta Q_{i,j}\tilde{Q}_{i,j}d\Omega\nonumber\\
+ &amp;-\int_{\Omega}C_T\tilde{T}d\Omega-\int_{\Omega}C_P\tilde{P}_{,i}d\Omega-\sum_{i=1}^{N}\int_{\Omega}C_{Qi}\tilde{Q}_{i}d\Omega\nonumber\\
+ &amp;-\int_{\Gamma}\Delta Q^{th}_{i}\tilde{T}_{,i}d\Gamma-\int_{\Gamma}\Delta Q^{hy}_i\tilde{P}_{,i}d\Gamma-\sum_{i=1}^{N}\int_{\Omega}\Delta Q^q_{i,j}\tilde{Q}_{i,j}d\Omega\nonumber\\
+ &amp;=0,"/></p>
+</div><p>where <img class="math" src="_images/math/ed5489a3f2e962533ebbee25f7ec63f0e5a12d38.png" alt="C_T,C_P,C_{Q1},...,C_{Qn}"/> are the coupling terms between the diffusion equations and the generalized linear and angular momentum balance equations.
+We note here that the coupling terms are problem specific and as such they will be subject to user modification. We note that we can treat the temperature, pore
+fluid pressure and chemical concentration fields as extra unknowns to be appended on the fields of the generalized unknown displacements.</p>
+<p>The right part of the diffusion equations, which shows a differentiation with respect to time of the unknown fields, can be added in the weak form by the multiplication of the vector
+of unknown increments <img class="math" src="_images/math/b386cac20c5c4db1af5620d6281dc55595bee25f.png" alt="\Delta\hat{v}_i=\left[\Delta u_1,...,\Delta \omega_3,\Delta T,\Delta P,...,\Delta Q_n\right]^T"/> by a mapping vector containing the values 0 and 1 depending on the presence of a time derivative in the system of equations. In the above case the mapping vector will take the form <img class="math" src="_images/math/8e11c1a2f7835d296bcd983742fe3a8b9b5bffdc.png" alt="\alpha_i=[0,...,0,1,1,...,1]^T"/>.
+We complete the numerical calculation of the derivative by dividing with the time increment <img class="math" src="_images/math/afcf61eb2dfc11313db0ffc828725c7ae58003d9.png" alt="\Delta t"/>.
+The final incremental weak form of the problem is then given by:</p>
+<div class="math" id="multiphysics-variational-formulation-transient">
+<p><img src="_images/math/01ec908ce1076948a2beb1dd24a55094d6510057.png" alt="\frac{1}{\Delta t}\int_\Omega\delta_{jmp}\alpha_m\Delta {v}_{p} {\tilde{v}}_{j}d\Omega-\int_\Omega\Delta {g}_{j} {\tilde{\psi}}_{j}d\Omega+\int_\Omega\Delta {f}_i {\tilde{v}}_id\Omega+\int_\Gamma\Delta {t}_i {\tilde{v}}_id\Gamma=0,"/></p>
+</div><p>where <img class="math" src="_images/math/5ca5e5bad17e143c3d1e84445a0af121c1108f60.png" alt="\delta_{jmp}"/> is a third order tensor denoting the Hadamard product, i.e. <img class="math" src="_images/math/d1be7d35bceaf246aa648863b8e23a786a3785b3.png" alt="\delta_{jmp}=1"/> when <img class="math" src="_images/math/3a07b3a4e1e6e7ae60fb7229682c6a89f97d2bdb.png" alt="j=m=p"/> and 0 otherwise.
+Furthermore, <img class="math" src="_images/math/5b693258a187c29045ed4cfbe0f30550490786f2.png" alt="\alpha_m=[0,...,0,1,1,...,1]^T"/> is the time derivative mapping vector. In the external forces the volumic and surface fluxes need to also be appended.</p>
+</section>
+</section>
 </section>
 
 
@@ -56,9 +158,24 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. Linear and Bilinear forms in Numerical Geolab</a><ul>
+<li><a class="reference internal" href="#general-formulation-of-the-weak-form-for-a-multiphysics-coupled-solid-mechanics-problem">1.1. General formulation of the weak form for a multiphysics coupled solid mechanics problem</a><ul>
+<li><a class="reference internal" href="#general-variational-formulation-in-generalized-voigt-form-implemented-in-numerical-geolab-no-transient-terms">1.1.1. General variational formulation in generalized Voigt form implemented in Numerical Geolab -No transient terms</a></li>
+<li><a class="reference internal" href="#implementation-of-generalized-continua">1.1.2. Implementation of generalized continua</a></li>
+<li><a class="reference internal" href="#implementation-of-transient-terms-thmc-couplings">1.1.3. Implementation of transient terms -THMC couplings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="material_description_state_variables.html"
-                          title="previous chapter"><span class="section-number">2. </span>Material description of state variables</a></p>
+    <p class="topless"><a href="CAUCHY3D-DP%20material.html"
+                          title="previous chapter"><span class="section-number">1. </span>CAUCHY3D-DP</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -92,7 +209,7 @@
           <a href="Tutorial_Cauchy_elastoplasticity_VM.html" title="1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material"
              >next</a> |</li>
         <li class="right" >
-          <a href="material_description_state_variables.html" title="2. Material description of state variables"
+          <a href="CAUCHY3D-DP%20material.html" title="1. CAUCHY3D-DP"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Linear and Bilinear forms in Numerical Geolab</a></li> 

@@ -81,7 +81,7 @@ class Test(unittest.TestCase):
         #asserts that data are correct
         #if data are correct then plot diagram
         
-        if equal:
+        if equal and activate_plots:
             step=int(5./self.my_FEproblem1.slv.dtmax)
             x1=list(values_time1[1:].copy())
             y1=list(values_gen_disp1[:-1:step,-1].copy()[:-1])
