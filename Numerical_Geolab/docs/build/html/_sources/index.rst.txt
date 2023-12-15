@@ -62,7 +62,9 @@ Numerical Geolab ReadMe
 
    installation_instructions
    material_description_state_variables
-
+   Solver_Flowchart
+   Definition_of Boundary_Conditions
+   
 Numerical Geolab Theory
 -----------------------
 .. toctree::

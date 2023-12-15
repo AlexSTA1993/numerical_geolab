@@ -38,16 +38,116 @@
             
   <section id="numerical-geolab-s-documentation">
 <h1>Numerical Geolab’s documentation<a class="headerlink" href="#numerical-geolab-s-documentation" title="Permalink to this heading">¶</a></h1>
-<a class="reference external image-reference" href="http://www.coquake.com"><img alt="ERC-CoQuake project logo" class="align-center" src="_images/CoQuake_Banner2.png" /></a>
+<a class="reference external image-reference" href="http://www.coquake.com"><img alt="ERC-CoQuake project logo" class="align-center" src="_Numerical_Geolab/docs/source/images/CoQuake_Banner2.png" /></a>
 <section id="about">
 <h2>About<a class="headerlink" href="#about" title="Permalink to this heading">¶</a></h2>
 <p><em>Numerical Geolab</em> codes and algorithms serve as a basic ingredient for the numerical developments of the <em>CoQuake</em> project.</p>
 <p>CoQuake project receives funding from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agreement No 757848 “Controlling earthQuakes”).</p>
 <p>For more details visit: <a class="reference external" href="http://www.coquake.com">CoQuake Project</a></p>
-<p>Contact: <a class="reference external" href="istefanou1&#64;gmail.com">Ioannis Stefanou</a></p>
-<p>The Finite Element module builts on : <a class="reference external" href="https://fenicsproject.org">FEniCS project</a> (open-source, under <a class="reference external" href="https://www.gnu.org/licenses/lgpl-3.0.en.html">LGPLv3</a>).</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
+<p>Contact: <a class="reference external" href="http://istefanou1&#64;gmail.com">Ioannis Stefanou</a></p>
+<p>The Finite Element module builts on : <cite>FEniCS&lt;https://fenicsproject.org&gt;_</cite> (open-source, under <cite>LGPLv3&lt;https://www.gnu.org/licenses/lgpl-3.0.en.html&gt;_</cite>).</p>
+<p><em>Numerical Geolab (nGeo)</em> is an open source computational platform for the solution of engineering problems involving material inelasticity, multiphysics, and generalized continua. nGeo
+solves the underlying mathematical form incrementally and uses the Voigt-type notation, in order to handle micromorphic continua and multiphysics equations.</p>
+<p>For complete description refer to  <cite>Documentation&lt;Numerical_Geolab/docs/source/index&gt;_</cite></p>
+</section>
+</section>
+<section id="installation-instructions">
+<h1>Installation_instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h1>
+<section id="direct-download-from-source">
+<h2>Direct download from source<a class="headerlink" href="#direct-download-from-source" title="Permalink to this heading">¶</a></h2>
+<p>The project sources including Numerical_Geolab and numerical_geolab_materials are available on Github.
+The user can download the project and add the modules Numerical_Geolab and numerical_geolab_materials to PYTHONPATH i.e:</p>
+<p>For Linux systems:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span>/path/to/numerical_geolab/Numerical_Geolab
+$ <span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span>/path/to/numerical/geolab_materials:<span class="nv">$PYTHONPATH</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For the unittests below to work properly: Numerical_Geolab and numerical_geolab_materials should be located under the same directory</p>
+</div>
+</section>
+<section id="docker-container">
+<h2>Docker container<a class="headerlink" href="#docker-container" title="Permalink to this heading">¶</a></h2>
+<p>For the user’s convenience an image of numerical geolab that bases on FEniCS is available. It can be pulled from dockerhub</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker pull alexsta1993/numerical_geolab
+</pre></div>
+</div>
+</section>
+</section>
+<section id="suggested-workflow">
+<h1>Suggested workflow<a class="headerlink" href="#suggested-workflow" title="Permalink to this heading">¶</a></h1>
+<section id="runbing-the-unittests">
+<h2>Runbing the unittests<a class="headerlink" href="#runbing-the-unittests" title="Permalink to this heading">¶</a></h2>
+<p>Numerical Geolab comes equipped with unittests that verify the expected behavior for the material libraries, the
+mechanical models and also the multiphysics models that use the available materials. In order to test that the files work successfully,
+a script is available that performs all tests. The user execute it as follows:
+for Linux systems:</p>
+<ol class="loweralpha simple">
+<li><p>Open a terminal and change the user directory to /path/to/numerical_geolab/Numerical_Geolab/ngeoFE_unittests i.e.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /path/to/numerical_geolab/Numerical_Geolab/ngeoFE_unittests
+</pre></div>
+</div>
+<ol class="loweralpha simple" start="2">
+<li><p>run the python module 0run_all_tests.py i.e.:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python3 0run_all_tests.py
+</pre></div>
+</div>
+<p>During the validation procedure numerical geolab can produce plots of specific analysis quantities intrinsic to the unittests inside the ngeoFE/reference_data file
+indicating the evolution. These include stress-strain, temperature-pressure,
+plastic strain rate evolution and where applicable relative errors between analytical and numerical solution  during the tests.</p>
+<p>For Linux systems:
+The user can activate the plotting option by using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">RUN_TESTS_WITH_PLOTS</span><span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+</section>
+<section id="reading-the-documentation">
+<h2>Reading the documentation<a class="headerlink" href="#reading-the-documentation" title="Permalink to this heading">¶</a></h2>
+<p>The user can parse the available documentation present in the docs directory, where a list of documented python files exist
+for the construction and solution of different problems in inelasticity involving multiphysics couplings and
+micromorphic continua. The tutorials for inalsticity multiphysics and micromorphic continua are available in</p>
+<p><cite>Documentation&lt;Numerical_Geolab/docs/source/index&gt;_</cite></p>
+</section>
+<section id="formulating-and-solving-a-custom-problem">
+<h2>Formulating and solving a custom problem<a class="headerlink" href="#formulating-and-solving-a-custom-problem" title="Permalink to this heading">¶</a></h2>
+<p>The user can use the available example files in the <cite>Tutorials&lt;Numerical_Geolab/docs/source/index&gt;_</cite> as the basis for the construction and solution of a new problem.</p>
+</section>
+</section>
+<section id="project-structure">
+<h1>Project structure<a class="headerlink" href="#project-structure" title="Permalink to this heading">¶</a></h1>
+<a class="reference external image-reference" href="_Numerical_Geolab/docs/source/images/classes.png"><img alt="Structure of classes" class="align-center" src="_Numerical_Geolab/docs/source/images/classes.png" /></a>
+<p>Main modules of Numerical Geolab nGeo</p>
+<ul class="simple">
+<li><p>ngeoAI</p></li>
+<li><p>ngeoFE</p></li>
+<li><p>ngeoFE_unittests</p></li>
+</ul>
+<section id="numerical-geolab-theory">
+<h2>Numerical Geolab Theory<a class="headerlink" href="#numerical-geolab-theory" title="Permalink to this heading">¶</a></h2>
+<p>Construction of the variational formulation in nGeo</p>
+<ul class="simple">
+<li><p>Linear_and_Bilinear_forms_in_Numerical Geolab</p></li>
+</ul>
+</section>
+</section>
+<section id="numerical-geolab-tutorials">
+<h1>Numerical Geolab Tutorials<a class="headerlink" href="#numerical-geolab-tutorials" title="Permalink to this heading">¶</a></h1>
+<p>List of available tutials (see also <cite>Documentation&lt;Numerical_Geolab/docs/source/index&gt;_</cite>).</p>
+<ul class="simple">
+<li><p>Tutorial_Cauchy_elastoplasticity_VM</p></li>
+<li><p>Tutorial_Cauchy_viscoplasticity_VM</p></li>
+<li><p>Tutorial_Cosserat_elastoplasticity_VM</p></li>
+<li><p>Tutorial_Cosserat_elastoplasticity_DP</p></li>
+<li><p>Tutorial_Cauchy_THM_couplings</p></li>
+<li><p>Tutorial Cosserat_THM_thermo_hydro_plasticity - Drucker-Prager yield criterion</p></li>
+<li><p>Tutorial_Cosserat_Breakage_Mechanics</p></li>
+<li><p>Tutorial_Usage_of_custom_material</p></li>
+</ul>
+<section id="future-contributions">
+<h2>Future contributions<a class="headerlink" href="#future-contributions" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Machine Learning (in progress…)</p></li>
 <li><p>Discrete Elements</p></li>
@@ -55,75 +155,6 @@
 <li><p>Contact/Interfaces</p></li>
 <li><p>Improve accuracy of diffusion in unit-tests (use of a centered finite difference algorithm for the time discretization)</p></li>
 </ul>
-</div>
-</section>
-<section id="project-structure">
-<h2>Project structure<a class="headerlink" href="#project-structure" title="Permalink to this heading">¶</a></h2>
-<a class="reference external image-reference" href="_images/classes.png"><img alt="Structure of classes" class="align-center" src="_images/classes.png" /></a>
-<section id="project-modules">
-<h3>Project modules<a class="headerlink" href="#project-modules" title="Permalink to this heading">¶</a></h3>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">1. Numerical_Geolab</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="conf.html">1.1. conf module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs2.html">1.2. docs2 package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ngeoFE.html">1.3. ngeoFE package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ngeoFE_unittests.html">1.4. ngeoFE_unittests package</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-</section>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
-<section id="numerical-geolab-readme">
-<h2>Numerical Geolab ReadMe<a class="headerlink" href="#numerical-geolab-readme" title="Permalink to this heading">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation_instructions.html">1. Installation instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation_instructions.html#direct-download-from-source">1.1. Direct download from source</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation_instructions.html#docker-container">1.2. Docker container</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="material_description_state_variables.html">2. Material description</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CAUCHY3D-DP%20material.html">2.1. CAUCHY3D-DP</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="numerical-geolab-theory">
-<h2>Numerical Geolab Theory<a class="headerlink" href="#numerical-geolab-theory" title="Permalink to this heading">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html">1. Linear and Bilinear forms in Numerical Geolab</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html#general-formulation-of-the-weak-form-for-a-multiphysics-coupled-solid-mechanics-problem">1.1. General formulation of the weak form for a multiphysics coupled solid mechanics problem</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="numerical-geolab-tutorials">
-<span id="numerical-geolab-tutorials2"></span><h2>Numerical Geolab Tutorials<a class="headerlink" href="#numerical-geolab-tutorials" title="Permalink to this heading">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cauchy_elastoplasticity_VM.html">1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cauchy_viscoplasticity_VM.html">2. Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cosserat_elastoplasticity_VM.html">3. Simple shear of a 1D Cosserat layer with Drucker-Prager elastoplastic  material</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cosserat_elastoplasticity_DP.html">4. Simple shear of a 1D Cosserat layer with Drucker-Prager elastoplastic  material</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cauchy_THM_couplings.html">5. Application of Thermo- Hydro- Mechanical (THM) couplings in Numerical Geolab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial%20Cosserat_THM_thermo_hydro_plasticity%20-%20Drucker-Prager%20yield%20criterion.html">6. Cosserat THM couplings: Thermo-hydro plasticity application - Drucker-Prager yield criterion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Cosserat_Breakage_Mechanics.html">7. Simple shear of a 1D Cosserat layer with Breakage Mechanics material</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial_Usage_of_custom_material.html">8. Usage of custom material</a></li>
-</ul>
-</div>
 </section>
 </section>
 
@@ -139,14 +170,25 @@
     <ul>
 <li><a class="reference internal" href="#">Numerical Geolab’s documentation</a><ul>
 <li><a class="reference internal" href="#about">About</a></li>
-<li><a class="reference internal" href="#project-structure">Project structure</a><ul>
-<li><a class="reference internal" href="#project-modules">Project modules</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-<li><a class="reference internal" href="#numerical-geolab-readme">Numerical Geolab ReadMe</a></li>
+<li><a class="reference internal" href="#installation-instructions">Installation_instructions</a><ul>
+<li><a class="reference internal" href="#direct-download-from-source">Direct download from source</a></li>
+<li><a class="reference internal" href="#docker-container">Docker container</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#suggested-workflow">Suggested workflow</a><ul>
+<li><a class="reference internal" href="#runbing-the-unittests">Runbing the unittests</a></li>
+<li><a class="reference internal" href="#reading-the-documentation">Reading the documentation</a></li>
+<li><a class="reference internal" href="#formulating-and-solving-a-custom-problem">Formulating and solving a custom problem</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-structure">Project structure</a><ul>
 <li><a class="reference internal" href="#numerical-geolab-theory">Numerical Geolab Theory</a></li>
-<li><a class="reference internal" href="#numerical-geolab-tutorials">Numerical Geolab Tutorials</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#numerical-geolab-tutorials">Numerical Geolab Tutorials</a><ul>
+<li><a class="reference internal" href="#future-contributions">Future contributions</a></li>
 </ul>
 </li>
 </ul>

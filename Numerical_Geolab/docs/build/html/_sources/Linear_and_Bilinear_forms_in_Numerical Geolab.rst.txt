@@ -125,3 +125,76 @@ The final incremental weak form of the problem is then given by:
 
 where :math:`\delta_{jmp}` is a third order tensor denoting the Hadamard product, i.e. :math:`\delta_{jmp}=1` when :math:`j=m=p` and 0 otherwise. 
 Furthermore, :math:`\alpha_m=[0,...,0,1,1,...,1]^T` is the time derivative mapping vector. In the external forces the volumic and surface fluxes need to also be appended.
+
+Numerical Implementation in nGeo
+================================
+
+Implementation of the weak formulation
+--------------------------------------
+
+We focus now on the two methods :py:meth:`setVarForm()`, :py:meth:`setVarFormTransient()` that construct the algebraic system to be solved based on the weak form of the 
+system of PDEs, and using the UFL symbolic form language. These two methods contain the weak form for the two general cases of problems currently available in Numerical 
+Geolab, i.e. the case of quasistatic and transient analyses. In both cases the Voigt form for the unknowns of the problem is used for the construction of the weak form.
+
+.. code-block:: python
+ 
+    def setVarForm(self):
+        """
+        Set Jacobian and Residual (Voigt form) default version
+        """
+        n=FacetNormal(self.mesh)
+        ds=Measure("ds", domain=self.mesh,subdomain_data = self.boundaries,metadata=self.metadata)
+        Jac=inner(dot(self.to_matrix(self.dsde2),self.epsilon2(self.u)),self.epsilon2(self.v))\
+                        *dx(metadata=self.metadata)
+        Res = -inner(self.sigma2,self.epsilon2(self.v))*dx(metadata=self.metadata)
+        for NM in self.NMbcs:
+        Res+= dot(NM.ti,self.v)*ds(NM.region_id)
+        for NMn in self.NMnbcs:
+        Res+=NMn.p*dot(n,as_vector(np.take(self.v,NMn.indices)))*ds(NMn.region_id)
+        for RB in self.RBbcs:
+        Res+= dot(np.multiply(RB.ks,self.u),self.v)*ds(RB.region_id)
+
+       Jac+=self.feform.setVarFormAdditionalTerms_Jac(self.u,self.Du,self.v,self.svars2,\
+                  self.metadata,0.,self.to_matrix(self.dsde2))
+       Res+=self.feform.setVarFormAdditionalTerms_Res(self.u,self.Du,self.v,self.svars2,\
+                  self.metadata,0.)
+       return Jac, Res
+
+.. code-block:: python
+
+    def setVarFormTransient(self):
+        """
+        Set Jacobian and Residual (Voigt form) default version for transient problems
+        """
+        n=FacetNormal(self.mesh)
+        ds=Measure("ds", subdomain_data = self.boundaries)
+
+        Jac = (1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.u)) , self.v)*dx(metadata=self.metadata)
+        Jac+= (1./self.dt)*self.dt*inner(dot(self.to_matrix(self.dsde2), self.epsilon2(self.u)),self.epsilon2(self.v))*dx(metadata=self.metadata)
+    
+        Res = -(1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.Du)), self.v)\
+                     *dx(metadata=self.metadata) 
+        Res+= -(1./self.dt)*self.dt*inner(self.sigma2,self.epsilon2(self.v))\
+                     *dx(metadata=self.metadata)
+        for NM in self.NMbcs:
+            Res+= (1./self.dt)*self.dt*dot(NM.ti,self.v)*ds(NM.region_id)
+        for NMn in self.NMnbcs:
+            Res+= (1.self.dt)*self.dt*NMn.p*dot(n,as_vector(np.take(self.v,NMn.indices)))\
+                        *ds(NMn.region_id)
+        for RB in self.RBbcs:
+            Res+= (1./self.dt)*self.dt*dot(np.multiply(RB.ks,self.u),self.v)*ds(RB.region_id) 
+        Jac+=self.feform.setVarFormAdditionalTerms_Jac(self.u,self.Du,self.v,self.svars2,\
+                     self.metadata,self.dt,self.to_matrix(self.dsde2))
+        Res+=self.feform.setVarFormAdditionalTerms_Res(self.u,self.Du,self.v,self.svars2,\
+                     self.metadata,self.dt)
+        return Jac, Res
+
+The calculation of the problem's jacobian matrix (variable :py:const:`Jac`) takes places with the help of the automatic differentiation feature of the UFL language. 
+More specifically, automatic differentiation takes place in every term containing the integral of functions that have the :py:meth:`{Testfunction()` and :py:meth:`Trialfunction()` as their arguments 
+(terms with variables :py:const:`u,v` in the functions presented above. The evaluation of both the linear and bilinear forms of the residual and its jacobian, respectively,
+is performed via Gauss quadrature rule, at the Gauss point of each finite element. We obtain access to the Gauss points of the finite element model by specifying the 
+:py:const:`metadata` variable inside the integration measure. The quantities describing the stress field (:py:const:`self.sigma2`) and elastoplastic matrix components (:py:const:`self.dsde2`) correspond to vectorfields 
+that are evaluated at the Gauss points and the quantities referring to the nodal output of the incremental displacement field, :py:const:`v ` 
+and the output of the :py:meth:`Testfunction()`, :py:const:`u`  are evaluated at the nodes of the finite element model and then projected to the Gauss points via the :py:meth:`self.epsilon2()` method.
+
+

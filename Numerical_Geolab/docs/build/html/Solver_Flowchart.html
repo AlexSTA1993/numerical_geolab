@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2. Solver Flowchart &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Linear and Bilinear forms in Numerical Geolab" href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" />
+    <link rel="prev" title="1. CAUCHY3D-DP" href="CAUCHY3D-DP%20material.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" title="1. Linear and Bilinear forms in Numerical Geolab"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CAUCHY3D-DP%20material.html" title="1. CAUCHY3D-DP"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Solver Flowchart</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="solver-flowchart">
+<span id="id1"></span><h1><span class="section-number">2. </span>Solver Flowchart<a class="headerlink" href="#solver-flowchart" title="Permalink to this heading">¶</a></h1>
+<p>Description of the solver object found in <a class="reference internal" href="ngeoFE.html#module-ngeoFE.solvers" title="ngeoFE.solvers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE.solvers</span></code></a></p>
+<a class="reference external image-reference" href="_images/image_4.svg"><img alt="Structure of classes" class="align-center" src="_images/image_4.svg" /></a>
+<p>Flowchart describing the implemented incremental Backward Euler solver (General incremental solution loop). The first increment of each analysis step starts by applying the total incremental displacement
+<img class="math" src="_images/math/f2e76cdb45707a0a7ea21c25b4c48036ad0de230.png" alt="\Delta U"/> dependent on the time increment <img class="math" src="_images/math/afcf61eb2dfc11313db0ffc828725c7ae58003d9.png" alt="\Delta t"/> and the total step time <img class="math" src="_images/math/4a5650dbc66b3f12b755fa6d24eb07052611dfa0.png" alt="t^f-t^0"/>. For the first increment, we zero the increment of the unknown vector <img class="math" src="_images/math/1f775e6445a2ac1b55ac895fc0fc44b65c0433dd.png" alt="u_i"/>.
+Thus the the first iteration of the vector of its spatial derivatives <img class="math" src="_images/math/3b6b5bd2d5c50bf3836b46dc672fc086646b6b5b.png" alt="\psi^0_i"/> is also zero. We use values of stress <img class="math" src="_images/math/13f5b716d67ca53e3dca618eb2a4c24b804a9b97.png" alt="{}^\text{m-1}g^\text{k+1}_i"/> and state variables
+<img class="math" src="_images/math/1a96021ac90cfc4cbaba05303694c23d790fec1d.png" alt="{}^\text{m-1}\chi^\text{k+1}_i"/> from the previously converged increment and the loading factor math:<cite>Delta U</cite> for the formation of the residual. The iterative global Newton-Raphson procedure
+for the minimization of the residual happens inside LOOP 2. After the Newton-Raphson procedure has successfully converged a new increment m+1 begins.
+We update the stress Voigt vector, <img class="math" src="_images/math/a375f8d7df6e13f9e39c94f17df7426a0a817ebc.png" alt="{}^\text{m+1}g^\text{0}_i"/>, the state variable vector, <img class="math" src="_images/math/2a469782714c37c30c43c7b1f747cec2f4071fce.png" alt="{}^\text{m-1}\chi^\text{0}_i"/>, the solution vector, <img class="math" src="_images/math/f3206f5dc8ccb33df48125bbe89eeea5249aa1e9.png" alt="{}^\text{m+1}u_i"/>, and advance the analysis time
+<img class="math" src="_images/math/f1b05d2d674facfce25083bc11c23126dc81d48d.png" alt="{}^\text{m+1}t"/>.</p>
+<a class="reference external image-reference" href="_images/image_42.svg"><img alt="Structure of classes" class="align-center" src="_images/image_42.svg" /></a>
+<p>Flowchart describing the custom implemented Backward Euler solver. Loop 3: The iterative update. After the residual at the current
+iteration has been evaluated and the new iteration, <img class="math" src="_images/math/174195ab21e94f57186b077f1d7a08034c0b1be1.png" alt="du_i"/>, for the unknown vector is found, we update the increment of the
+unknown quantities <img class="math" src="_images/math/4c5ec40204ba52052ad279fe410883a1809a0e21.png" alt="\Delta u_i"/>, thus providing the new increment of the generalized strain vector <img class="math" src="_images/math/a76b82438fb3a8b7ed3b68035a76bc0cbdd226bd.png" alt="\Delta \psi^{t+\Delta t}_i"/>.
+Next, we insert this together with the state variables at the previous iteration <img class="math" src="_images/math/2e7aaebd1f39d3a9c77393a35ff4359267d2ae32.png" alt="\chi^{k}_i"/> to the material algorithm in order to obtain
+the stress and state variables vectors at the current iteration <img class="math" src="_images/math/f212d49688b237453c57e0b6db09c2abba8c1828.png" alt="{}^\text{m}g^{t+\Delta t}_i,{}^\text{m}\chi^{t+\Delta t}_i"/> and the
+updated material moduli, <img class="math" src="_images/math/f5e78d4d96e6f12802e5ba23d3ee9e006e801431.png" alt="{}^\text{m}D^{t+\Delta t}_{ij}"/>. If the material algorithm has converged successfully and the global Newton-Raphson
+procedure has not reached the iteration limit for the minimization of the residual, we used the updated stress, state variables vectors
+and material moduli, <img class="math" src="_images/math/702447bef18c5ecf8152ea14669b56daf14af756.png" alt="{}^\text{m}g^\text{k+1}_i,{}^\text{m}\chi^\text{k+1}_i"/> ,for the construction of the tangent stiffness matrix
+<img class="math" src="_images/math/17b2ff276b8a7686da41e6aec3a13a0784d74705.png" alt="{}^\text{m}A^\text{k+1}_{ij},{}^\text{m}D^\text{k+1}_{ij}"/> and the residual vector <img class="math" src="_images/math/d060ebf5ec7d790358c2b0934250bd7061588dcf.png" alt="{}^\text{m}b^\text{k+1}_{i}"/>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CAUCHY3D-DP%20material.html"
+                          title="previous chapter"><span class="section-number">1. </span>CAUCHY3D-DP</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html"
+                          title="next chapter"><span class="section-number">1. </span>Linear and Bilinear forms in Numerical Geolab</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" title="1. Linear and Bilinear forms in Numerical Geolab"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CAUCHY3D-DP%20material.html" title="1. CAUCHY3D-DP"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Solver Flowchart</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>

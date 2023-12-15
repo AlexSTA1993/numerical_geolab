@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3. Definitionof Boundary Conditions &#8212; Numerical Geolab .1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Linear and Bilinear forms in Numerical Geolab" href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" />
+    <link rel="prev" title="2. Solver Flowchart" href="Solver_Flowchart.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" title="1. Linear and Bilinear forms in Numerical Geolab"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Solver_Flowchart.html" title="2. Solver Flowchart"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Definitionof Boundary Conditions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="definitionof-boundary-conditions">
+<span id="definition-of-boundary-conditions"></span><h1><span class="section-number">3. </span>Definitionof Boundary Conditions<a class="headerlink" href="#definitionof-boundary-conditions" title="Permalink to this heading">¶</a></h1>
+<p>An important aspect for any finite element model, is the implementation  of the boundary conditions. In the input file script,
+the user provides a nested list specifying a) the region where the boundary condition is to be applied, b) the type of boundary
+condition to use, c) the degree of freedom to constrain and finally, d) the final value of the boundary condition at the end of each step.
+This is done inside the <a class="reference internal" href="Viscoplasticity_Application_3.html#set_bcs" title="set_bcs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_bcs()</span></code></a> in the input file. The definition takes the following form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bcs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">region_id</span><span class="p">,[</span><span class="n">bc_type</span><span class="p">,[</span><span class="n">dof</span><span class="p">],</span><span class="n">value</span><span class="p">]]]</span>
+</pre></div>
+</div>
+<p>The arguments of the list are the following:</p>
+<ul class="simple">
+<li><p><code class="xref py py-const docutils literal notranslate"><span class="pre">region_id</span></code>: Region of the boundary where the boundary condition is applied.</p></li>
+<li><p><code class="xref py py-const docutils literal notranslate"><span class="pre">{bc_type}</span></code>: Type of the boundary condition specified.</p></li>
+<li><p><code class="xref py py-const docutils literal notranslate"><span class="pre">[dof]</span></code>: Degree of freedom affected by the boundary condition.</p></li>
+<li><p><code class="xref py py-const docutils literal notranslate"><span class="pre">value</span></code>: Target value of the degree of freedom at the end of the analysis.</p></li>
+</ul>
+<p>The following values for the arguments can then be specified:
+The <code class="xref py py-const docutils literal notranslate"><span class="pre">region_id</span></code> takes as a value an integer specifying the region of the boundary it is referring to.</p>
+<p>The <code class="xref py py-const docutils literal notranslate"><span class="pre">bc_type</span></code> takes as a value an integer specifying the type of the boundary condition.
+The user can choose from the following implemented types, namely:</p>
+<ul class="simple">
+<li><p>0: Dirichlet boundary condition, increasing proportionally to the step time.</p></li>
+<li><p>1: Neumann boundary condition, increasing proportionally to the step time.</p></li>
+<li><p>2: Dirichlet boundary condition, set at the beginning of the step and kept constant.</p></li>
+<li><p>3: Neumann boundary condition, set at the beginning of the step and kept constant.</p></li>
+<li><p>5: Robin boundary condition, set at the beginning of the step and kept constant.</p></li>
+<li><p>6: Neumann boundary condition normal to the boundary surface, increasing proportionally to the analysis step.</p></li>
+<li><p>7: Neumann boundary condition normal to the boundary surface, set at the beginning of the step and kept constant.</p></li>
+</ul>
+<p>The <code class="xref py py-const docutils literal notranslate"><span class="pre">dof</span></code> variable takes as a value an integer, specifying the component of the vectorspace, in the framework of FEniCS,
+that will be constrained in the specified <code class="xref py py-const docutils literal notranslate"><span class="pre">region_id</span></code>. The vectorspace of the problem is specified by the user during the
+finite element definition. The dictionary containing the map between integer value and type of boundary condition can be found inside
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">UserFEproblem()</span></code>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Solver_Flowchart.html"
+                          title="previous chapter"><span class="section-number">2. </span>Solver Flowchart</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html"
+                          title="next chapter"><span class="section-number">1. </span>Linear and Bilinear forms in Numerical Geolab</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Linear_and_Bilinear_forms_in_Numerical%20Geolab.html" title="1. Linear and Bilinear forms in Numerical Geolab"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Solver_Flowchart.html" title="2. Solver Flowchart"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numerical Geolab .1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Definitionof Boundary Conditions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ioannis Stefanou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.0.
+    </div>
+  </body>
+</html>
