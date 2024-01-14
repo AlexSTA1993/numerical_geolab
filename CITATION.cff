@@ -11,5 +11,5 @@ title: "Numerical Geolab: nGeo"
 version: 1.0.0
 identifiers:
   - type: doi
-    value: -
-date-released: 2023-12-12
+    value: 10.5281/zenodo.10507779
+date-released: 2024-01-14
