@@ -20,7 +20,7 @@ from ngeoFE.materials import UserMaterial
 import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
-from numpy.core.tests.test_getlimits import assert_ma_equal
+
 from _operator import itemgetter
 #from dolfin.cpp.mesh import MeshFunction
 

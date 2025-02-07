@@ -3,23 +3,19 @@ Created on Nov 5, 2018
 
 @author: Alexandros Stathas
 
-Contains unit tests of ngeoFE applied to Cauchy continua in 1D linear elasticity
-
+Contains unit tests of ngeoFE applied to Cauchy continuum in 1D linear elasticity
 '''
+
 import sys
 import os
 import unittest
-from ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Drucker_Prager_App_1 import Cauchy2DFEformulation, Cauchy2DFEproblem
-
-from dolfin import *
-
-from dolfin.cpp.io import HDF5File
-
 import pickle
 import numpy as np
-
+from dolfin import *
+from dolfin.cpp.io import HDF5File
 from ngeoFE_unittests import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
+from ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Drucker_Prager_App_1 import Cauchy2DFEformulation, Cauchy2DFEproblem
 
 reference_data_path = ngeo_parameters.reference_data_path    
 

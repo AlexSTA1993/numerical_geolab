@@ -9,10 +9,6 @@ print(sys.path)
 # sys.path.insert(0,'/home/alexandrosstathas/eclipse-workspace/eclise-virtualenv/lib/python3.8/site-packages/')
 import matplotlib#import 
 
-# import os
-# os.environ['PKG_CONFIG_PATH']='/home/astathas2019/Alexsta_dev/lib/pkgconfig'
-# print('hello!!!',os.environ['PKG_CONFIG_PATH'])
-
 from dolfin import *
 import time
 import numpy as np

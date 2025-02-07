@@ -4,11 +4,6 @@ Created on Sep 11, 2018
 @author: Ioannis Stefanou
 '''
 
-'''
-Created on Sep 11, 2018
-
-@author: Ioannis Stefanou
-'''
 import numpy as np
 from ngeoFE.materials import UserMaterial
 from math import sqrt

@@ -1,12 +1,12 @@
 '''
 Created on Nov 25, 2019
 
-@author: alexandrosstathas
+@author: Alexandros Stathas
 '''
 
-env_lib=['/usr/lib/x86_64-linux-gnu/lapack/liblapack.so']
+env_lib = ['/usr/lib/x86_64-linux-gnu/lapack/liblapack.so']
 
-umat_lib_path='./../../numerical_geolab_materials/UMATERIALS/'
+umat_lib_path = '/path_to_numerical/numerical_geolab/numerical_geolab_materials/UMATERIALS/'
                 
 reference_data_path = "./reference_data/"
 

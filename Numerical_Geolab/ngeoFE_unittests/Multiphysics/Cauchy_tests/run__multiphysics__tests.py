@@ -10,14 +10,14 @@ import unittest
 def test_all():
     
     testmodules = [
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests',
-'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0'
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroelasticity_tests_0',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_0',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Hydroplasticity_tests_1',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_DP_Thermo_Hydro_plasticity_tests_1',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermo_Hydro_plasticity_tests_0',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoelasticity_tests_0',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_ThermoHydroelasticity_tests',
+        'ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.Tests.Cauchy3D_Thermoplasticity_tests_0'
         ]
     
     suite = unittest.TestSuite()

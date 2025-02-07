@@ -214,8 +214,8 @@ class CosseratTHM1DFEproblem(UserFEproblem):
             super().__init__()
             
         def inside(self, x, on_boundary):
-            rreg=1.*self.w/(1.*np.float(self.nw))
-            lreg=-1.*self.w/(1.*np.float(self.nw))
+            rreg=1.*self.w/(1.*float(self.nw))
+            lreg=-1.*self.w/(1.*float(self.nw))
             return between(x[0], (lreg,rreg))
 
     class Gauss_point_Querry2(SubDomain):

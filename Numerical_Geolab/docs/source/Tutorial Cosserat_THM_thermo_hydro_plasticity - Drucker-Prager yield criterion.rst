@@ -266,8 +266,8 @@ Monitoring stress and state variables at the Gauss points
             super().__init__()
             
         def inside(self, x, on_boundary):
-            rreg=1.*self.w/(1.*np.float(self.nw))
-            lreg=-1.*self.w/(1.*np.float(self.nw))
+            rreg=1.*self.w/(1.*float(self.nw))
+            lreg=-1.*self.w/(1.*float(self.nw))
             print(rreg,lreg)
             # return x[0] >= 1./2.-1./80. and between(x[1], (-0.1,0.1))
             return between(x[0], (lreg,rreg))

@@ -1,0 +1,10 @@
+*.pyc
+*.h5
+*.xdmf
+*/__pycache__/*
+/jitfailure-ffc_form_*/
+*.cproject
+*.project
+*.pydevproject
+*.settings/*
+*.vscode/*
