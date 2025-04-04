@@ -50,7 +50,7 @@ For a Cauchy continuum, the strong form of the momentum, energy and mass balance
    \end{align*}
 
 |    
- where :math:`\Delta f_i` is the incremental vector field of volumic forces acting on the structure under consideration. We also provide the form of the Drucker Prager yielding criterion for the description of the elastoplastic behavior of the granular material (:math:`F(\sigma_{ij},P)`).
+ where :math:`\Delta f_i` is the incremental vector field of volumic forces acting on the structure under consideration. We also provide the form of the Drucker–Prager yielding criterion for the description of the elastoplastic behavior of the granular material (:math:`F(\sigma_{ij},P)`).
  Here :math:`J_2(\sigma_{ij})` is the second invariant of the stress tensor and :math:`\tan\phi` is the friction angle of the granular geomaterial.
   In numerical Geolab the positive stresses are the ones that provoke tension in the structure (:math:`\sigma_{ij}>0` in tension). The parameters 
   :math:`c_{th},\;c_{hy}` [:math:`\text{mm}^2\text{/s}`]  are the thermal and hydraulic diffusivity of the fault gouge material respectively. The parameter 

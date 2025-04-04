@@ -19,7 +19,7 @@ import numpy as np
 from functools import reduce
 from dolfin import *
 from dolfin.cpp.io import HDF5File
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 from ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_THM_ThermoHydroelasticity_0 import THM3D_FEformulation, THM3D_FEproblem
 

@@ -14,7 +14,7 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 import os
 from _operator import itemgetter
@@ -91,7 +91,7 @@ class Cauchy1DFEproblem(UserFEproblem):
         fd=MeshFunction("size_t", mesh, mesh.topology().dim()-1)
         return mesh,cd,fd
     
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         
         def __init__(self,h):
             self.h=h
@@ -122,14 +122,14 @@ class Cauchy1DFEproblem(UserFEproblem):
         imperfection.mark(subdomains, 1) 
         return subdomains
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry2= self.Gauss_point_Querry(self.h) #This takes all Gauss point along the line
-        GaussDomainQuerry2.mark(GaussDomain,1)
+        GaussDomainQuery2= self.Gauss_point_Query(self.h) #This takes all Gauss point along the line
+        GaussDomainQuery2.mark(GaussDomain,1)
         return GaussDomain
 
     

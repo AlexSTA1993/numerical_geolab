@@ -28,7 +28,7 @@ from _operator import itemgetter
 
 warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 
 class THM3D_FEformulation(FEformulation):
     '''

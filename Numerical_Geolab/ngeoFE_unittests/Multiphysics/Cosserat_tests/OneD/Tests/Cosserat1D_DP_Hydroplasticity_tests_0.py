@@ -4,7 +4,7 @@ Created on Mai 30, 2022
 @author: Alexandros Stathas
 
 Contains unit tests of ngeoFE applied to Cosserat continua in 3D Hydroplasticity with a 
-Drucker Prager yield criterion. Check yield limit for different pressure and yielding under isochoric deformation.
+Drucker–Prager yield criterion. Check yield limit for different pressure and yielding under isochoric deformation.
 
 Checks:
 -Convergence
@@ -24,7 +24,7 @@ from dolfin.cpp.io import HDF5File
 import pickle
 import numpy as np
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 

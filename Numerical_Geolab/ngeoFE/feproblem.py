@@ -67,7 +67,7 @@ class UserFEproblem():
         # Set indices for history output from residual
         self.histories=self.history_output()
         #Set indices for state variables output at the Gauss points #ALEX 19/05/2022
-        self.Gausspointsquerry=self.create_Gauss_point_querry_domain(self.mesh)
+        self.Gausspointsquery=self.create_Gauss_point_query_domain(self.mesh)
                
         self.svars_histories=self.history_svars_output()
         # print(self.svars_histories)
@@ -78,7 +78,7 @@ class UserFEproblem():
             # If periodic boundary conditions are defined
             self.feobj=UserFEobject(self.mesh,self.feform,self.subdomains,self.boundaries,self.genprops,self.bcs,self.comm,self.pbcs,self.keep_previous,self.large_displacements)
         except AttributeError:   
-            self.feobj=UserFEobject(self.mesh,self.feform,self.subdomains,self.boundaries,self.genprops,self.bcs,self.comm,symbolic_histories=self.histories,Gausspointsquerry=self.Gausspointsquerry,symbolic_svars_histories=self.svars_histories,large_displacements=self.large_displacements)
+            self.feobj=UserFEobject(self.mesh,self.feform,self.subdomains,self.boundaries,self.genprops,self.bcs,self.comm,symbolic_histories=self.histories,Gausspointsquery=self.Gausspointsquery,symbolic_svars_histories=self.svars_histories,large_displacements=self.large_displacements)
         # Initializes state variables vector
         self.set_initial_conditions()
         # Creates Incremental Solver object
@@ -163,9 +163,9 @@ class UserFEproblem():
         """
         pass
     
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
-        creates separate Gauss querry domain for extraction of appropriate svars degrees of freedom from FunctionSpace Vsvars
+        creates separate Gauss query domain for extraction of appropriate svars degrees of freedom from FunctionSpace Vsvars
         """
         pass
     
@@ -255,7 +255,7 @@ class UserFEobject(FEobject):
     :type large_displacements: Indicates that large displacements are calculated with the ALE method
     :param large_displacements: Logical
     """
-    def __init__(self,mesh,feform,subdomains,boundaries,generalprops,symbolic_bcs,comm,pbc=None,keep_previous=False,symbolic_histories=None,Gausspointsquerry=None,symbolic_svars_histories=None,large_displacements=False):
+    def __init__(self,mesh,feform,subdomains,boundaries,generalprops,symbolic_bcs,comm,pbc=None,keep_previous=False,symbolic_histories=None,Gausspointsquery=None,symbolic_svars_histories=None,large_displacements=False):
 
         self.description="put your description"
         self.pbc=pbc
@@ -274,7 +274,7 @@ class UserFEobject(FEobject):
         self.symbolic_history=symbolic_histories
         self.set_history_output_indices()
         #Set state variables history output dofs
-        self.Gausspointsquerry=Gausspointsquerry
+        self.Gausspointsquery=Gausspointsquery
         
         self.symbolic_svars_history=symbolic_svars_histories
         self.set_svars_history_output_indices()
@@ -341,7 +341,7 @@ class UserFEobject(FEobject):
 
     def __get_BC_point_or_facet(self,region_id,sV,bc_value):
         """
-        Treats point, edge and with surface id BC's
+        Treats point, edge and with surface id BCs
         :param region_id: A list of values. If len(region_id)=1 indicates
              the appropriate boundary for the Dirichlet condition to be applied. Else if len(region_id)=2 then
              A point generalized displacement will be applied.
@@ -451,7 +451,7 @@ class UserFEobject(FEobject):
             else:
                 sV=self.Vsvars.sub(bc_dof[0]).sub(bc_dof[1])
                 
-            marked_cells = SubsetIterator(self.Gausspointsquerry, region_id)
+            marked_cells = SubsetIterator(self.Gausspointsquery, region_id)
 
             for cell_no in marked_cells:
                 self.svars_history_indices.append(sV.dofmap().cell_dofs(cell_no.index())[0])
@@ -461,7 +461,7 @@ class UserFEobject(FEobject):
 
     def initBCs(self):
         """
-        Initialize and set boundary conditions (marks regions and set BC's)
+        Initialize and set boundary conditions (marks regions and set BCs)
         :ivar symbolic_bcs: bcs defined in set_bcs()
         :ivar DCbcs0: list of Dirichlet boundary conditions given by Dolfin module
         :ivar DCbcs: list of Dirichlet boundary conditions given by Dolfin module has to be reinitialized \
@@ -544,7 +544,7 @@ class UserFEobject(FEobject):
         DCbcs=self.DCbcs; NMbcs=self.NMbcs; RBbcs=self.RBbcs; NMnbcs=self.NMnbcs;
         dt=t_current-t_old
         if self.symbolic_bcs==None: return
-        # Update Dirichlet BC's      
+        # Update Dirichlet BCs      
         for i in range(len(DCbcs)):
             if DCbcs[i].type==0: # Proportional Dirichlet
                 DCbcs[i].dvalue=dt*DCbcs[i].target_value/(t_final-t_init)
@@ -552,7 +552,7 @@ class UserFEobject(FEobject):
             if DCbcs[i].type==2: # Instantaneous Dirichlet
                 DCbcs[i].BC.set_value(Constant(DCbcs[i].dvalue))
                 DCbcs[i].dvalue=0.
-        # Update Neumann BC's
+        # Update Neumann BCs
         for NM in NMbcs:
             if NM.type==1:
                 NM.value=NM.target_value*(t_current-t_init)/(t_final-t_init)
@@ -565,7 +565,7 @@ class UserFEobject(FEobject):
                 NM.BC.set_value(Constant(NM.value))
                 NM.dvalue=0.
             NM.BC.apply(NM.ti.vector())
-        # Update Robin BC's
+        # Update Robin BCs
         for RB in RBbcs:
             if RB.type==5:
                 RB.BC.set_value(Constant(RB.dvalue))

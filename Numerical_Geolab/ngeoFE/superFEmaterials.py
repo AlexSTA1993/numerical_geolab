@@ -289,7 +289,7 @@ class SuperFEMaterial():
 
         def set_bcs(self):
             """
-            Pin point right top corner dof's equalt to zero
+            Pin point right top corner dofs equal to zero
 
             .. todo:: 
                 * Add micromorphic
@@ -391,7 +391,7 @@ class SuperFEMaterial():
 
         def map(self, x, y):
             '''
-            Override FEniCS method to map dof's at point x to point y
+            Override FEniCS method to map dofs at point x to point y
 
             :param x: source coordinates
             :param y: target coordinates

@@ -25,7 +25,7 @@ The file begins as follows:
    import numpy as np
    from ngeoFE.feproblem import UserFEproblem, General_FEproblem_properties
    from ngeoFE.fedefinitions import FEformulation
-   from ngeoFE_unittests import ngeo_parameters
+   from ngeoFE import ngeo_parameters
    from ngeoFE_unittests import plotting_params 
    ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Mechanics/reference_data/'
    import os # allows for easier handling of paths
@@ -125,7 +125,7 @@ in order to define a region, in which the Gauss points are monitored. The follow
 
 .. code-block:: python
    
-   class Gauss_point_Querry(SubDomain):
+   class Gauss_point_Query(SubDomain):
    
       def inside(self, x, on_boundary):
          h=1.0 #layer's height
@@ -229,14 +229,14 @@ This value is a number indicating which material parameters need to be taken int
 
 .. code-block:: python
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns Gauss region number 0 everywhere
-        GaussDomainQuerry= Gauss_point_Querry()
-        GaussDomainQuerry.mark(GaussDomain,1) # marks the Gauss region be applying the number 1 at the selected nodes.
+        GaussDomainQuery= Gauss_point_Query()
+        GaussDomainQuery.mark(GaussDomain,1) # marks the Gauss region be applying the number 1 at the selected nodes.
         return GaussDomain
 
 | We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software. 
@@ -343,7 +343,7 @@ We assign next the components of the state variables that need to be monitored a
         return hist_svars    
 
 The Gauss point specification works the same way as in set_bcs() and history_output(). In this example in the region (1) defined by the
-method create_Gauss_point_querry_domain(), we choose to monitor the vector component 21, which translates 
+method create_Gauss_point_query_domain(), we choose to monitor the vector component 21, which translates 
 to the elasto-visco-plastic multiplier :math:`\dot{\lambda}`. The mapping between VectorSpace and state variable components is given in the state variables material description
 (see reference needed).
 

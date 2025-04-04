@@ -15,7 +15,7 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 import os
@@ -160,7 +160,7 @@ class CosseratTHM1DFEproblem(UserFEproblem):
     Defines a user FE problem for given FE formulation
     """
     def __init__(self,FEformulation):
-        self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker Prager material"
+        self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker–Prager material"
         scale = 1.
         self.nw=100
         self.problem_step=0
@@ -207,7 +207,7 @@ class CosseratTHM1DFEproblem(UserFEproblem):
             tol = DOLFIN_EPS
             return on_boundary and near(x[self.xyz],self.param)    
             
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self,w,nw):
             self.w=w
             self.nw=nw
@@ -220,7 +220,7 @@ class CosseratTHM1DFEproblem(UserFEproblem):
             # return x[0] >= 1./2.-1./80. and between(x[1], (-0.1,0.1))
             return between(x[0], (lreg,rreg))
 
-    class Gauss_point_Querry2(SubDomain):
+    class Gauss_point_Query2(SubDomain):
         def __init__(self,w,nw):
             self.w=w
             self.nw=nw
@@ -231,16 +231,16 @@ class CosseratTHM1DFEproblem(UserFEproblem):
             return between(x[0], (-self.w/2,self.w/2))
 
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry2= self.Gauss_point_Querry2(self.w,self.nw) #This takes all Gauss point along the line
-        GaussDomainQuerry2.mark(GaussDomain,2)
-        GaussDomainQuerry= self.Gauss_point_Querry(self.w,self.nw)
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery2= self.Gauss_point_Query2(self.w,self.nw) #This takes all Gauss point along the line
+        GaussDomainQuery2.mark(GaussDomain,2)
+        GaussDomainQuery= self.Gauss_point_Query(self.w,self.nw)
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
 
     

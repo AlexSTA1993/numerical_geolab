@@ -13,7 +13,7 @@ import pickle
 import numpy as np
 from dolfin import *
 from dolfin.cpp.io import HDF5File
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 from ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Drucker_Prager_App_1 import Cauchy2DFEformulation, Cauchy2DFEproblem
 

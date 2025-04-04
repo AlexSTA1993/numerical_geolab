@@ -96,7 +96,7 @@ class Backward_Euler_Solver():
         :ivar feobj.deGP2: converged strain as projected from the initial displacement field
         :ivar deGP: strain increment
         :ivar aux_deGP: strain increment of auxilary fields
-        :ivar stress_t: current value of the problem stress tensor in Voight form
+        :ivar stress_t: current value of the problem stress tensor in Voigt form
         :ivar svars_t: current value of the material state variables
         :ivar dsde_tdt: current value of the problem stiffness tensor
         :ivar nill: value indicating that the material algorithm has converged (nill=0)
@@ -235,7 +235,8 @@ class Backward_Euler_Solver():
 
                 if self.feobj.large_displacements == True:
                     self.feobj.update_mesh(self.feobj.mesh,self.feobj.du)
-                if self.feobj.comm.Get_rank()==0: sts.PrintMsg("    |du|: "+str(ndu))
+                if self.feobj.comm.Get_rank()==0:
+                    sts.PrintMsg("    |du|: " + str(ndu) +  "    Residual: " + str(nRes))
                 # Calculate total strain increments at Gauss points
                 self.feobj.local_project(self.feobj.epsilon2(self.feobj.Du), self.feobj.Vstress, self.feobj.deGP2)
                 deGP=np.reshape(self.feobj.deGP2.vector().get_local(),(-1,self.feobj.p_nstr))

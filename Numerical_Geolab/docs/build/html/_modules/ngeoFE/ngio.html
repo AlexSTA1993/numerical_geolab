@@ -52,13 +52,13 @@
 
 <div class="viewcode-block" id="Msg"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.ngio.Msg">[docs]</a><span class="k">class</span> <span class="nc">Msg</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Print messages with colors</span>
+<span class="sd">    Print messages with colours</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Msg.__init__"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.ngio.Msg.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set color codes</span>
+<span class="sd">        Set colour codes</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RED&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1;31m&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colours</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RED&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1;31m&quot;</span><span class="p">,</span>
                        <span class="s2">&quot;BLUE&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1;34m&quot;</span><span class="p">,</span>
                        <span class="s2">&quot;CYAN&quot;</span><span class="p">:</span><span class="s2">&quot;033[1;36m&quot;</span><span class="p">,</span>
                        <span class="s2">&quot;GREEN&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;32m&quot;</span><span class="p">,</span>
@@ -67,24 +67,24 @@
                        <span class="s2">&quot;REVERSE&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[;7m&quot;</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">=</span><span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Msg.PrintMsg"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.ngio.Msg.PrintMsg">[docs]</a>    <span class="k">def</span> <span class="nf">PrintMsg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">message</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;RESET&quot;</span><span class="p">,</span><span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Msg.PrintMsg"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.ngio.Msg.PrintMsg">[docs]</a>    <span class="k">def</span> <span class="nf">PrintMsg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">message</span><span class="p">,</span><span class="n">colour</span><span class="o">=</span><span class="s2">&quot;RESET&quot;</span><span class="p">,</span><span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Print message in color and reset to default</span>
+<span class="sd">        Print message in colour and reset to default</span>
 
 <span class="sd">        :param message: message to display</span>
 <span class="sd">        :type message: string</span>
-<span class="sd">        :param color: style to use (RED,BLUE,CYAN,GREEN,RESET,BOLD,REVERSE)</span>
-<span class="sd">        :type color: string</span>
+<span class="sd">        :param colour: style to use (RED,BLUE,CYAN,GREEN,RESET,BOLD,REVERSE)</span>
+<span class="sd">        :type colour: string</span>
 <span class="sd">        :param replace: replace text in same line</span>
 <span class="sd">        :type replace: boolean</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span> <span class="k">return</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">color</span><span class="o">.</span><span class="n">upper</span><span class="p">()])</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="n">colour</span><span class="o">.</span><span class="n">upper</span><span class="p">()])</span>
         <span class="k">if</span> <span class="n">replace</span><span class="o">==</span><span class="kc">False</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="s2">&quot;RESET&quot;</span><span class="p">])</span></div></div>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colours</span><span class="p">[</span><span class="s2">&quot;RESET&quot;</span><span class="p">])</span></div></div>
 
 <div class="viewcode-block" id="FileExporter"><a class="viewcode-back" href="../../ngeoFE.html#ngeoFE.ngio.FileExporter">[docs]</a><span class="k">class</span> <span class="nc">FileExporter</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>

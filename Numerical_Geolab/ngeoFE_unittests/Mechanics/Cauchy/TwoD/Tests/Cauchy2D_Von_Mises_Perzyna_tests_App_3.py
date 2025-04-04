@@ -16,7 +16,7 @@ from ngeoFE_unittests.Mechanics.Cauchy.TwoD.BVP.Cauchy2D_Von_Mises_Perzyna_App_3
 import pickle
 import numpy as np
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 reference_data_path = ngeo_parameters.reference_data_path    

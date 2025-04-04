@@ -1,7 +1,7 @@
 .. _Definition_of Boundary_Conditions:
 
 ================================
-Definitionof Boundary Conditions
+Definition of Boundary Conditions
 ================================
 
 An important aspect for any finite element model, is the implementation  of the boundary conditions. In the input file script, 

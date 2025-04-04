@@ -22,7 +22,7 @@ Below we provide a list of the modules needed and a brief explanation.
      from ngeoFE.feproblem import UserFEproblem, General_FEproblem_properties
      from ngeoFE.fedefinitions import FEformulation
      from ngeoFE.materials import UserMaterial
-     from ngeoFE_unittests import ngeo_parameters
+     from ngeoFE import ngeo_parameters
      from ngeoFE_unittests import plotting_params 
      
      import os #allows easier manipulation of directories 
@@ -82,7 +82,7 @@ of the weak form.
         return element        
 | We note here that our problem is a 1D problem involving a micromorphic Cosserat continuum. Thus only 4 of the 18 strain and curvature components :math:`(\gamma_{11},\gamma_{12},\gamma_{21},\kappa_{31})` used for the equilibrium equations are needed.
  We note also that we provide the generalized Voigt notation for the unknown strains of the problem.
-In the code snippet above, we provide the finite element formulation for the problem at hand. This is a Mixed finite element that consist of a the displacement and the rotation field. We consider first order polynomials for the shape functions of the 
+In the code snippet above, we provide the finite element formulation for the problem at hand. This is a Mixed finite element that consist of the displacement field and the rotation field. We consider first order polynomials for the shape functions of the 
 displacement field and the rotation field. The class is initialized with 4 strain and curvature components and 1 Gauss point. The python function:
 
 .. py:method:: generalized_epsilon(v)
@@ -112,7 +112,7 @@ The finite element model is built inside a child class that inherits its methods
     Defines a user FE problem for given FE formulation
     """
     def __init__(self,FEformulation):
-        self.description="Example of 1D problem, Cosserat continuum with Drucker Prager material"
+        self.description="Example of 1D problem, Cosserat continuum with Drucker–Prager material"
         scale = 1.
         self.problem_step=0
         self.Pressure_loading = 0.*200./3.*scale
@@ -199,7 +199,7 @@ analysis. We restrict the region of interest to 1 element. Therefore, one Gauss 
  
 .. code-block:: python
             
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self,w,nw):
             self.w=w
             self.nw=nw
@@ -212,14 +212,14 @@ Finally, we use the methods :meth:`Meshfunction` and :meth:`mark` in order to re
  
 .. code-block:: python
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry= self.Gauss_point_Querry(self.w,self.nw)
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery= self.Gauss_point_Query(self.w,self.nw)
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
 
 | Using the same logic, we continue by marking the boundaries of the model based on the :class:`Boundary` class we defined earlier.

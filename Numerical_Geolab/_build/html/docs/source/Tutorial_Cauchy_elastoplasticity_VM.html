@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material &#8212; Numerical Geolab 1 documentation</title>
+    <title>1. Simple shear of a 2D Cauchy layer with Von-Mises elastoplastic strain hardening material &#8212; Numerical Geolab 1 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -30,8 +30,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="simple-shear-of-a-2d-cacuhy-layer-with-von-mises-elastoplastic-strain-hardening-material">
-<h1>1. Simple shear of a 2D Cacuhy layer with Von-Mises elastoplastic strain hardening material<a class="headerlink" href="#simple-shear-of-a-2d-cacuhy-layer-with-von-mises-elastoplastic-strain-hardening-material" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="simple-shear-of-a-2d-cauchy-layer-with-von-mises-elastoplastic-strain-hardening-material">
+<h1>1. Simple shear of a 2D Cauchy layer with Von-Mises elastoplastic strain hardening material<a class="headerlink" href="#simple-shear-of-a-2d-cauchy-layer-with-von-mises-elastoplastic-strain-hardening-material" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial we will study a 2D Cauchy layer elastop-plastic layer with strain hardening under simple shear.
 In this tutorial we provide the basic structure of a script file in the framework of Numerical Geolab.
 Here we will study model formulation and analysis execution.</p>
@@ -107,7 +107,7 @@ of the weak form.</p>
 </div>
 <div class="line-block">
 <div class="line">We note here that our problem is a plain strain 2D problem involving a classical Cauchy continuum. Thus only 3 of the 6 strain components <span class="math notranslate nohighlight">\((\gamma_{11},\gamma_{22},\gamma_{12})\)</span> used for the equilibrium equations are needed.
-We note also that we provide the Voight notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <span class="math notranslate nohighlight">\((\gamma_{12}=2\epsilon_{12})\)</span>.</div>
+We note also that we provide the Voigt notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <span class="math notranslate nohighlight">\((\gamma_{12}=2\epsilon_{12})\)</span>.</div>
 </div>
 <p>In code snippet above, we provide the finite element formulation for the problem at hand. The class is initialized with 3 strain components and 1 Gauss point. The python function:</p>
 <dl class="method">
@@ -116,7 +116,7 @@ We note also that we provide the Voight notation for the unknown strains of the 
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voight formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
 </div>
 <dl class="method">
 <dt id="create_element">

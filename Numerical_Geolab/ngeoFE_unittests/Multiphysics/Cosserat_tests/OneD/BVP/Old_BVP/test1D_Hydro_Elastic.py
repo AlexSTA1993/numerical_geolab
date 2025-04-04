@@ -24,7 +24,7 @@ from dolfin.cpp.io import HDF5File
 from _operator import itemgetter
 #from dolfin.cpp.mesh import MeshFunction
 # from ngeoFE_unittests.Multiphysics import ngeo_parameters
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 # ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Multiphysics/reference_data/'
 
 warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)

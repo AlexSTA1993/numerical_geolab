@@ -12,7 +12,7 @@ from math import sqrt
 import unittest
 import pickle
 import matplotlib.pyplot as plt
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 
 reference_data_path = ngeo_parameters.reference_data_path   
 
@@ -64,7 +64,7 @@ class Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         '''
-        Run a load path for Drucker Prager Material
+        Run a load path for Drucker–Prager Material
         '''
         cls.notfirsttime = True
         # Set the material

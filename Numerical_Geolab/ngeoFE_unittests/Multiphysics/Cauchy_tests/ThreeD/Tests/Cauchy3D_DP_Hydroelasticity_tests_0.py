@@ -16,7 +16,7 @@ import unittest
 import pickle
 import numpy as np
 from dolfin import *
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 from ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_DP_HM_Hydroelasticity_0 import THM3D_FEformulation, THM3D_FEproblem
 

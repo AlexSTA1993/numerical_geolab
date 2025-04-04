@@ -129,7 +129,7 @@ of the weak form.</p>
 <div class="line">We note here that our problem is a 1D problem involving a micromorphic Cosserat continuum. Thus only 4 of the 18 strain and curvature components <img class="math" src="_images/math/340f7f47a5437962712abe66e8820705987ba726.png" alt="(\gamma_{11},\gamma_{12},\gamma_{21},\kappa_{31})"/> used for the equilibrium equations are needed.
 We note also that we provide the generalized Voigt notation for the unknown strains of the problem.</div>
 </div>
-<p>In the code snippet above, we provide the finite element formulation for the problem at hand. This is a Mixed finite element that consist of a the displacement and the rotation field. We consider first order polynomials for the shape functions of the
+<p>In the code snippet above, we provide the finite element formulation for the problem at hand. This is a Mixed finite element that consist of the displacement field and the rotation field. We consider first order polynomials for the shape functions of the
 displacement field and the rotation field. The class is initialized with 4 strain and curvature components and 1 Gauss point. The python function:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="generalized_epsilon">
@@ -162,7 +162,7 @@ The finite element model is built inside a child class that inherits its methods
 <span class="sd">Defines a user FE problem for given FE formulation</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">FEformulation</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example of 1D problem, Cosserat continuum with Drucker Prager material&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Example of 1D problem, Cosserat continuum with Drucker–Prager material&quot;</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">problem_step</span><span class="o">=</span><span class="mi">0</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">Pressure_loading</span> <span class="o">=</span> <span class="mf">0.</span><span class="o">*</span><span class="mf">200.</span><span class="o">/</span><span class="mf">3.</span><span class="o">*</span><span class="n">scale</span>
@@ -236,7 +236,7 @@ This value is a number indicating which material parameters need to be taken int
 finds the points of the domain whose coordinate is close to the value set by the <code class="xref py py-const docutils literal notranslate"><span class="pre">param</span></code> variable.</p>
 <p>We use the same definition to define the Gauss points selection class that we will inquire for results after the end of the
 analysis. We restrict the region of interest to 1 element. Therefore, one Gauss point will be considered</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Query</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">nw</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">=</span><span class="n">w</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nw</span><span class="o">=</span><span class="n">nw</span>
@@ -247,14 +247,14 @@ analysis. We restrict the region of interest to 1 element. Therefore, one Gauss 
 </pre></div>
 </div>
 <p>Finally, we use the methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">Meshfunction()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">mark()</span></code> in order to return the Gauss point that is of interest.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_query_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create subdomains by marking regions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
     <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gauss_point_Querry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nw</span><span class="p">)</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">GaussDomainQuery</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gauss_point_Query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nw</span><span class="p">)</span>
+    <span class="n">GaussDomainQuery</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">GaussDomain</span>
 </pre></div>
 </div>
@@ -555,7 +555,7 @@ postprocessed by a third party application (e.g. Paraview).</p>
 <p>The FEproblem() class of Numerical Geolab allows for great flexibility in choosing the solver parameters with which an analysis can be performed.
 Below a set of parameters can be passed as attributes to the solver for controlling the frequency of writing output (my_FEproblem.slv.incmodulo),
 the tolerance (my_FEproblem.slv.convergence_tol), the maximum increment size (my_FEproblem.slv.dtmax), the maximum analysis time
-(my_FEproblem.slv.tmax) and the maximum number of increments (my_FEproblem.slv.nincmax=50). We intorduce these parameters of the solution procedure
+(my_FEproblem.slv.tmax) and the maximum number of increments (my_FEproblem.slv.nincmax=50). We introduce these parameters of the solution procedure
 in the <code class="xref py py-meth docutils literal notranslate"><span class="pre">give_me_solver_params()</span></code> method.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">give_me_solver_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scale_t</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">scale_t</span> <span class="o">=</span> <span class="n">scale_t</span>

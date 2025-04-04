@@ -13,7 +13,7 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 import os
@@ -55,7 +55,7 @@ class Cauchy2DFEproblem(UserFEproblem):
     Defines a user FE problem for given FE formulation
     """
     def __init__(self,FEformulation):
-        self.description="Example of 2D plane strain problem, Cauchy continuum with Drucker Prager material"
+        self.description="Example of 2D plane strain problem, Cauchy continuum with Drucker–Prager material"
         self.Normal_loading_eff=-200
         self.Normal_loading_total=-200
         self.problem_step=0
@@ -105,7 +105,7 @@ class Cauchy2DFEproblem(UserFEproblem):
         def inside(self, x, on_boundary):
             return x[1] < -0.49 and on_boundary
     
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self,w,nw,h,ny):
             self.w=w
             self.nw=nw
@@ -127,14 +127,14 @@ class Cauchy2DFEproblem(UserFEproblem):
         return subdomains
 
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry= self.Gauss_point_Querry(self.w,self.nw,self.h,self.ny)
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery= self.Gauss_point_Query(self.w,self.nw,self.h,self.ny)
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
     
     def mark_boundaries(self,boundaries):
