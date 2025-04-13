@@ -4,18 +4,13 @@ Created on Sep 11, 2018
 @author: Ioannis Stefanou
 '''
 
-'''
-Created on Sep 11, 2018
-
-@author: Ioannis Stefanou
-'''
 import numpy as np
 from ngeoFE.materials import UserMaterial
 from math import sqrt
 import unittest
 import pickle
 import matplotlib.pyplot as plt
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 # ngeo_parameters='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Materials/reference_data/'
 ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Materials/reference_data/'
 
@@ -54,7 +49,7 @@ class Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         '''
-        Run a load path for Drucker Prager Material
+        Run a load path for Drucker–Prager Material
         '''
         cls.notfirsttime=True
         env_lib=ngeo_parameters.env_lib        #umat_lib='./libplast_Cauchy3D-DP.so'
@@ -129,7 +124,7 @@ class Test(unittest.TestCase):
         
     def test_stresses(self):
         '''
-        Tests Drucker Prager material (stresses)
+        Tests Drucker–Prager material (stresses)
         '''
         values= np.array(self.stress)
 #         with open("DP_stress_values.out", "wb") as fp:   #Pickling
@@ -148,7 +143,7 @@ class Test(unittest.TestCase):
         
     def test_total_deformations(self):
         '''
-        Tests Drucker Prager material (deformations)
+        Tests Drucker–Prager material (deformations)
         '''
         values= np.array(self.epsilon)
 #         with open("DP_epsilon_values.out", "wb") as fp:   #Pickling

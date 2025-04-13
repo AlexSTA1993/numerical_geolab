@@ -21,7 +21,7 @@ Below we provide a list of the modules needed and a brief explanation.
      from ngeoFE.feproblem import UserFEproblem, General_FEproblem_properties
      from ngeoFE.fedefinitions import FEformulation
      from ngeoFE.materials import UserMaterial
-     from ngeoFE_unittests import ngeo_parameters
+     from ngeoFE import ngeo_parameters
      from ngeoFE_unittests import plotting_params
      import os  # allows easier manipulation of directories
      import warnings

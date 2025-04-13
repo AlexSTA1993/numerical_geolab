@@ -138,7 +138,7 @@ class FEobject():
             self.usol (Function(self.V, name="Gen_Diplacements")): Define total solution. \n
             self.usol.interpolate(Constant(np.zeros(self.ndofs))):Initialize total solution to zero. \n
              __Ve (VectorElement("Quadrature", self.cell, degree=self.ns,dim=self.feform.p_nstr,quad_scheme='default')): Define a Vector Element whose interpolation function just adds the values of the corresponding stress component at the Gauss points.\n
-             For the material definition and subsequent analysis Voight-notation was used taking the components of the stress tensor as vectorial components.  \n
+             For the material definition and subsequent analysis Voigt-notation was used taking the components of the stress tensor as vectorial components.  \n
             self.Vstress = FunctionSpace(mesh,__Ve): Create the appropriate FunctionSpace. Due to the elements used ("Quadrature") the global interpolation function is Dirac discontinuous over each  Gauss point and each element such that the value of the prescribed integral\n
             in the value of the integrand itself. Therefore each element is characterized by number (ns) of different stress vectors -one per Gauss point- which add together for the numerical evaluation of the solution integral in the V FunctionSpace.\n
             __Ve (VectorElement("Quadrature", self.cell, degree=self.ns,dim=self.p_aux,quad_scheme='default')): Same as before for the evaluation of the auxillary fields.\n

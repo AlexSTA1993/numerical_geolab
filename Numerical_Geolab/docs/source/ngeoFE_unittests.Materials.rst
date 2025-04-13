@@ -76,14 +76,6 @@ ngeoFE\_unittests.Materials.DruckerPrager\_tests\_dokimi module
     :undoc-members:
     :show-inheritance:
 
-ngeoFE\_unittests.Materials.PClay\_tests module
------------------------------------------------
-
-.. automodule:: ngeoFE_unittests.Materials.PClay_tests
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 ngeoFE\_unittests.Materials.Perzyna\_Viscoplasticity\_Application1D module
 --------------------------------------------------------------------------
 

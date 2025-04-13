@@ -8,7 +8,7 @@ Numerical Geolab's documentation
 ================================
 .. image:: Numerical_Geolab/docs/source/_images/CoQuake_Banner2.png
    :alt: ERC-CoQuake project logo
-   :target: http://www.coquake.com
+   :target: http://www.coquake.eu
    :align: center
 
 About
@@ -18,9 +18,9 @@ About
 
 CoQuake project receives funding from the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant agreement No 757848 "Controlling earthQuakes").
 
-For more details visit: `CoQuake Project <http://www.coquake.com>`_
+For more details visit: `CoQuake Project <http://www.coquake.eu>`_
 
-Contact: `Ioannis Stefanou <http://istefanou1@gmail.com>`_
+Contact: Ioannis Stefanou ioannis [dot] stefanou [at] ensta [dot] fr
 
 The Finite Element module builts on : `FEniCS <https://fenicsproject.org>`_ (open-source, under `LGPLv3 <https://www.gnu.org/licenses/lgpl-3.0.en.html>`_). 
 
@@ -36,7 +36,7 @@ Direct download from source
 ...........................
 
 The project sources including Numerical_Geolab and numerical_geolab_materials are available on Github. 
-The user can download the project and add the modules Numerical_Geolab and numerical_geolab_materials to PYTHONPATH i.e:
+The user can download the project and add the modules Numerical_Geolab and numerical_geolab_materials to PYTHONPATH in their .bashrc file i.e:
    
 For Linux systems:
 
@@ -74,11 +74,32 @@ a) Open a terminal and change the user directory to /path/to/numerical_geolab/Nu
 
    $ cd /path/to/numerical_geolab/Numerical_Geolab/ngeoFE_unittests
 
-b) run the python module 0run_all_tests.py i.e.:
+b) Change the umat_lib_path variables to point to the user directory i.e.
+
+.. code-block:: python
+
+   umat_lib_path = '/path/to/numerical_geolab/numerical_geolab_materials/UMATERIALS/'
+
+The env_lib variable in this file is also set to the standard location in which the liblapack.so library is located, 
+but in the event the user has it in a nonstandard location, the user should change it accordingly.
+
+c) Run the python module 0run_all_tests.py (N.B. running all tests will take some time, indicatively approximately 45 minutes):
 
 .. code-block:: bash
 
    $ python3 0run_all_tests.py
+
+d) In the event that the all the folders are correctly set but on attempting to run the tests, the user encounters an error similar to
+.. code-block:: python
+
+   OSError: libgfortran.so.4: cannot open shared object file: No such file or directory
+
+The user should firstly ensure that libgfortran is installed (it almost certainly already is), and then navigate to the numerical_geolab_materials directory, ensure that the materials_path variable at the top of the makefile is path_to_numerical_geolab/numerical_geolab_materials/UMATERIALS and then type
+.. code-block:: bash
+
+   make
+
+This will rebuild the shared libraries in a way that is compatible with the user's version of libgfortran. The user can then rerun the tests.
 
 During the validation procedure numerical geolab can produce plots of specific analysis quantities intrinsic to the unittests inside the ngeoFE/reference_data file
 indicating the evolution. These include stress-strain, temperature-pressure, 
@@ -135,7 +156,7 @@ Construction of the variational formulation in nGeo
 Numerical Geolab Tutorials
 --------------------------
 
-List of available tutials (see also `Documentation <Numerical_Geolab/docs/build/html/index.html>`_).
+List of available tutorials (see also `Documentation <Numerical_Geolab/docs/build/html/index.html>`_).
 
 * Tutorial_Cauchy_elastoplasticity_VM
 * Tutorial_Cauchy_viscoplasticity_VM
@@ -155,6 +176,3 @@ Future contributions
 * Large displacements/deformations (at the moment use of the ALE module available in FEniCS)
 * Contact/Interfaces
 * Improve accuracy of diffusion in unit-tests (use of a centered finite difference algorithm for the time discretization)
-   
-
-

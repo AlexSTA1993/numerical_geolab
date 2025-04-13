@@ -6,34 +6,17 @@ Created on Jul 29, 2019
 BVP Hydroelasticity, sets initial conditions and pressure at the bottom of an insulated 3D cantilever.
 '''
 
-import os
-
-
-from dolfin import *
-import pickle
-import math
-import time
+import warnings
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.font_manager import FontProperties
-import matplotlib.gridspec as gridspec
-
-#
+from _operator import itemgetter
+from dolfin import *
+from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from ngeoFE.feproblem import UserFEproblem, General_FEproblem_properties
 from ngeoFE.fedefinitions import FEformulation
 from ngeoFE.materials import UserMaterial
-#
-import warnings
-from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
-from dolfin.cpp.io import HDF5File
-from numpy.core.tests.test_getlimits import assert_ma_equal
-from _operator import itemgetter
-#from dolfin.cpp.mesh import MeshFunction
+from ngeoFE import ngeo_parameters
 
 warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
-#from Parametric_Cosserat import Cosserat_1D_FEformulation
-
-from ngeoFE_unittests import ngeo_parameters
 
 
 class THM3D_FEformulation(FEformulation):
@@ -42,48 +25,48 @@ class THM3D_FEformulation(FEformulation):
     '''
     def __init__(self):
         # Number of stress/deformation components
-        self.p_nstr=6+3+3
+        self.p_nstr = 6 + 3 + 3
         # Number of Gauss points
-        self.ns=1
+        self.ns = 1
         # Number of auxiliary quantities at Gauss points
-        self.p_aux=2
+        self.p_aux = 2
         
-    def generalized_epsilon(self,v):
+    def generalized_epsilon(self, v):
         '''
         Set user's generalized deformation vector
         '''
         gde=[
-            Dx(v[0],0),              #gamma_11
-            Dx(v[1],1),              #gamma_22
-            Dx(v[2],2),              #gamma_22
-            Dx(v[1],2)+Dx(v[2],1),   #gamma_23
-            Dx(v[0],2)+Dx(v[2],0),   #gamma_13
-            Dx(v[0],1)+Dx(v[1],0),   #gamma_12
-            Dx(v[3],0),  #q_1 - pf
-            Dx(v[3],1),  #q_2 - pf
-            Dx(v[3],2),  #q_3 - pf
-            Dx(v[4],0),  #q_1 - temp
-            Dx(v[4],1),  #q_2 - temp
-            Dx(v[4],2),  #q_3 - temp
+            Dx(v[0], 0),                # gamma_11
+            Dx(v[1], 1),                # gamma_22
+            Dx(v[2], 2),                # gamma_22
+            Dx(v[1], 2) + Dx(v[2], 1),  # gamma_23
+            Dx(v[0], 2) + Dx(v[2], 0),  # gamma_13
+            Dx(v[0], 1) + Dx(v[1], 0),  # gamma_12
+            Dx(v[3], 0),                # q_1 - pf
+            Dx(v[3], 1),                # q_2 - pf
+            Dx(v[3], 2),                # q_3 - pf
+            Dx(v[4], 0),                # q_1 - temp
+            Dx(v[4], 1),                # q_2 - temp
+            Dx(v[4], 2),                # q_3 - temp
             ]
         return as_vector(gde)
     
-    def auxiliary_fields(self,v):
+    def auxiliary_fields(self, v):
         '''
         Set user's generalized deformation vector
         '''
-        auxgde=[
-        v[3],
-        v[4],
+        auxgde = [
+            v[3],
+            v[4],
             ]
         return as_vector(auxgde)
     
-    def setVarFormAdditionalTerms_Res(self,u,Du,v,svars,metadata,dt):
-        Res=0.
-        lstar=svars.sub(55-1)
-        bstar=svars.sub(56-1)
-        rhoC=svars.sub(57-1)
-        #HM terms
+    def setVarFormAdditionalTerms_Res(self, u, Du, v, svars, metadata, dt):
+        Res = 0.
+        lstar = svars.sub(55 - 1)
+        bstar = svars.sub(56 - 1)
+        rhoC = svars.sub(57 - 1)
+        # HM terms
         eps=self.generalized_epsilon(Du)
         eps_v=eps[0]+eps[1]+eps[2]
         virtual_pf=v[3]

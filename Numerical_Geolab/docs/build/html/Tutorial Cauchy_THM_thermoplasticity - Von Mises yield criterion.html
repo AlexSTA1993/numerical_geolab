@@ -279,7 +279,7 @@ This value is a number indicating which material parameters need to be taken int
 </div>
 <section id="monitoring-stress-and-state-variables-at-the-gauss-points">
 <h3><span class="section-number">5.5.3.1. </span>Monitoring stress and state variables at the Gauss points<a class="headerlink" href="#monitoring-stress-and-state-variables-at-the-gauss-points" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Query</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -287,14 +287,14 @@ This value is a number indicating which material parameters need to be taken int
         <span class="k">return</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span> <span class="ow">and</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span> <span class="ow">and</span> <span class="n">between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_query_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create subdomains by marking regions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
     <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns material/props number 0 everywhere</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gauss_point_Querry</span><span class="p">()</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">GaussDomainQuery</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gauss_point_Query</span><span class="p">()</span>
+    <span class="n">GaussDomainQuery</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">GaussDomain</span>
 </pre></div>
 </div>
@@ -437,7 +437,7 @@ all the vector components ([0],[1],[2],[3],[4]) of the force (1) and displacemen
 </pre></div>
 </div>
 <p>The Gauss point specification works the same way as in set_bcs() and history_output(). In this example in the region (1) defined by the
-method <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_Gauss_point_querry_domain</span></code>
+method <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_Gauss_point_query_domain</span></code>
 , we choose to monitor the above vector components, which translate to the stresses, increments of plastic strain pressure, temperature and normal total strains respectively.
 The mapping between the vector components of the <a class="reference external" href="https://fenicsproject.org/olddocs/dolfin/2019.1.0/python/_autogenerated/dolfin.cpp.function.html#dolfin.cpp.function.FunctionSpace" title="(in DOLFIN)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span> <span class="pre">space</span></code></a> and the state variable components is given in the corresponding <a class="reference internal" href="material_description_state_variables.html#material-description-of-state-variables"><span class="std std-ref">material table</span></a>.</p>
 </section>

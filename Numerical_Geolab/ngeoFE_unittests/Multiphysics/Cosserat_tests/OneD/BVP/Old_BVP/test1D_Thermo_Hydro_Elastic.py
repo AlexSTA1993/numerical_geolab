@@ -21,10 +21,10 @@ from ngeoFE.materials import UserMaterial
 import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
-from numpy.core.tests.test_getlimits import assert_ma_equal
+
 from _operator import itemgetter
 #from dolfin.cpp.mesh import MeshFunction
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 # ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Multiphysics/reference_data/'
 
 warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)

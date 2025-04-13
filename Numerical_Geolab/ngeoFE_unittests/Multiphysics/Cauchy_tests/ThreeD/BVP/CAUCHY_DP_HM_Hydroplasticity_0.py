@@ -20,14 +20,14 @@ from ngeoFE.materials import UserMaterial
 import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
-from numpy.core.tests.test_getlimits import assert_ma_equal
+
 from _operator import itemgetter
 #from dolfin.cpp.mesh import MeshFunction
 
 warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
 #from Parametric_Cosserat import Cosserat_1D_FEformulation
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 import os
 
 
@@ -206,7 +206,7 @@ class THM3D_FEproblem(UserFEproblem):
         subdomains.set_all(0) #assigns material/props number 0 everywhere
         return subdomains
     
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self):
             super().__init__()
 
@@ -214,14 +214,14 @@ class THM3D_FEproblem(UserFEproblem):
             return between(x[0], (-0.5,0.5)) and between(x[1], (-0.5,0.5)) and between(x[2], (-0.5,0.5))
 
     
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry= self.Gauss_point_Querry()
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery= self.Gauss_point_Query()
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
     
     class Boundary(SubDomain):

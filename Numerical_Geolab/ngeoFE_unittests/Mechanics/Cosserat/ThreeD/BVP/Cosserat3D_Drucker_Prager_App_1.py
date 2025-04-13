@@ -15,7 +15,7 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 import os
@@ -80,7 +80,7 @@ class Cosserat3DFEproblem(UserFEproblem):
     Defines a user FE problem for given FE formulation
     """
     def __init__(self,FEformulation):
-        self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker Prager material"
+        self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker–Prager material"
         scale = 1.
         self.problem_step=0
         self.Pressure_loading = 0.*200./3.*scale
@@ -131,7 +131,7 @@ class Cosserat3DFEproblem(UserFEproblem):
             tol = DOLFIN_EPS
             return on_boundary and near(x[self.xyz],self.param)    
             
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self,h1,h2,h3,nx,ny,nz):
             self.h1=h1
             self.h2=h2
@@ -145,14 +145,14 @@ class Cosserat3DFEproblem(UserFEproblem):
             # return x[0] >= 1./2.-1./80. and between(x[1], (-0.1,0.1))
             return between(x[0], (-self.h1/(self.nx),self.h1/(self.nx))) and between(x[1], (-self.h2/(self.ny),self.h2/(self.ny))) and between(x[2], (-self.h3/(self.nz),self.h3/(self.nz)))
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry= self.Gauss_point_Querry(self.h1,self.h2,self.h3,self.nx,self.ny,self.nz)
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery= self.Gauss_point_Query(self.h1,self.h2,self.h3,self.nx,self.ny,self.nz)
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
 
     

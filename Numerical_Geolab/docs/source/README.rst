@@ -7,7 +7,7 @@ Numerical Geolab's documentation
 ================================
 .. image:: _Numerical_Geolab/docs/source/images/CoQuake_Banner2.png
    :alt: ERC-CoQuake project logo
-   :target: http://www.coquake.com
+   :target: http://www.coquake.eu
    :align: center
 
 About
@@ -17,7 +17,7 @@ About
 
 CoQuake project receives funding from the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant agreement No 757848 "Controlling earthQuakes").
 
-For more details visit: `CoQuake Project <http://www.coquake.com>`_
+For more details visit: `CoQuake Project <http://www.coquake.eu>`_
 
 Contact: `Ioannis Stefanou <http://istefanou1@gmail.com>`_
 

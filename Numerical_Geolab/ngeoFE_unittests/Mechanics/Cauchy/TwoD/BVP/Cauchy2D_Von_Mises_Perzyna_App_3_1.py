@@ -9,10 +9,6 @@ print(sys.path)
 # sys.path.insert(0,'/home/alexandrosstathas/eclipse-workspace/eclise-virtualenv/lib/python3.8/site-packages/')
 import matplotlib#import 
 
-# import os
-# os.environ['PKG_CONFIG_PATH']='/home/astathas2019/Alexsta_dev/lib/pkgconfig'
-# print('hello!!!',os.environ['PKG_CONFIG_PATH'])
-
 from dolfin import *
 import time
 import numpy as np
@@ -23,7 +19,7 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 # ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Mechanics/reference_data/'
 import os
@@ -113,7 +109,7 @@ class Cauchy2DFEproblem(UserFEproblem):
         fd=MeshFunction("size_t", mesh, mesh.topology().dim()-1)
         return mesh,cd,fd
     
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         
         def __init__(self,h):
             self.h=h
@@ -144,24 +140,24 @@ class Cauchy2DFEproblem(UserFEproblem):
         imperfection.mark(subdomains, 1) 
         return subdomains
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry2= self.Gauss_point_Querry(self.h) #This takes all Gauss point along the line
-        GaussDomainQuerry2.mark(GaussDomain,1)
+        GaussDomainQuery2= self.Gauss_point_Query(self.h) #This takes all Gauss point along the line
+        GaussDomainQuery2.mark(GaussDomain,1)
         return GaussDomain
 
-    # def create_Gauss_point_querry_domain(self,mesh):
+    # def create_Gauss_point_query_domain(self,mesh):
     #     """
     #     Create subdomains by marking regions
     #     """
     #     GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
     #     GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-    #     GaussDomainQuerry= self.Gauss_point_Querry(self.imp)
-    #     GaussDomainQuerry.mark(GaussDomain,1)
+    #     GaussDomainQuery= self.Gauss_point_Query(self.imp)
+    #     GaussDomainQuery.mark(GaussDomain,1)
     #     return GaussDomain
 
     

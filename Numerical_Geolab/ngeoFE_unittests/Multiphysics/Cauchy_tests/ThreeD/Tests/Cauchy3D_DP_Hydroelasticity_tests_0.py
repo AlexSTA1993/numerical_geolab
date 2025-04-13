@@ -3,38 +3,32 @@ Created on Nov 5, 2018
 
 @author: Alexandros Stathas
 
-Contains unit tests of ngeoFE applied to Cauchy continua in 3D Hydroelasticity.
+Contains unit tests of ngeoFE applied to Cauchy continuum in 3D Hydroelasticity.
 Checks:
--Convergence
--Generalised force displacement values
--Steady state displacement values
--Diffusion time test
+ - Convergence
+ - Generalised force displacement values
+ - Steady state displacement values
+ - Diffusion time test
 '''
 import sys
 import os
-
 import unittest
-from ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_DP_HM_Hydroelasticity_0 import THM3D_FEformulation,THM3D_FEproblem
-
-from dolfin import *
-
-# from dolfin.cpp.io import HDF5File
-
 import pickle
 import numpy as np
-
-from ngeoFE_unittests import ngeo_parameters
+from dolfin import *
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
+from ngeoFE_unittests.Multiphysics.Cauchy_tests.ThreeD.BVP.CAUCHY_DP_HM_Hydroelasticity_0 import THM3D_FEformulation, THM3D_FEproblem
 
 reference_data_path = ngeo_parameters.reference_data_path   
 
 # Check if the environment variable or command-line argument is set to activate plots
-activate_plots = False
-
 if 'RUN_TESTS_WITH_PLOTS' in os.environ and os.environ['RUN_TESTS_WITH_PLOTS'].lower() == 'true':
     activate_plots = True
 elif len(sys.argv) > 1 and sys.argv[1].lower() == 'with_plots':
     activate_plots = True
+else:
+    activate_plots = False
 
 class Test(unittest.TestCase):
     @classmethod
@@ -42,13 +36,13 @@ class Test(unittest.TestCase):
         '''
         Run FE analysis example
         '''
-        cls.notfirsttime=True
-        cls.my_FEformulation=THM3D_FEformulation()
+        cls.notfirsttime = True
+        cls.my_FEformulation = THM3D_FEformulation()
         
-        #first slow loading procedure
-        cls.my_FEproblem1=THM3D_FEproblem(cls.my_FEformulation)
+        # First the slow loading procedure
+        cls.my_FEproblem1 = THM3D_FEproblem(cls.my_FEformulation)
         cls.my_FEproblem1.give_me_solver_params(scale_t=1.)
-        cls.converged1=cls.my_FEproblem1.run_analysis_procedure(reference_data_path) 
+        cls.converged1 = cls.my_FEproblem1.run_analysis_procedure(reference_data_path) 
         
     def test_execution(self):
         '''
@@ -65,7 +59,7 @@ class Test(unittest.TestCase):
         values_gen_force1 = self.my_FEproblem1.array_gen_force
         values_gen_disp1 = self.my_FEproblem1.array_gen_disp
 
-        values1=np.concatenate((values_time1, values_gen_disp1, values_gen_force1), axis=1)
+        values1 = np.concatenate((values_time1, values_gen_disp1, values_gen_force1), axis=1)
 
         # with open(reference_data_path+"Cauchy3D_DP_THM_Hydroelasticity.out", "wb") as fp:   #Pickling
         #     pickle.dump(values1,fp)        

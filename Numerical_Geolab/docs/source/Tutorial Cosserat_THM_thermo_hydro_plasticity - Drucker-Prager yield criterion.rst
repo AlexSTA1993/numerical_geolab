@@ -29,7 +29,7 @@ The file begins as follows:
    from ngeoFE.feproblem import UserFEproblem, General_FEproblem_properties
    from ngeoFE.fedefinitions import FEformulation
    from ngeoFE.materials import UserMaterial
-   from ngeoFE_unittests import ngeo_parameters
+   from ngeoFE import ngeo_parameters
    from ngeoFE_unittests import plotting_params 
    import os # allows for easier handling of paths
    from _operator import itemgetter # allows for transformation of lists to iterables, usefull for the definition of boundary conditions
@@ -179,7 +179,7 @@ the childclass :py:meth:`CosseratTHM1DFEproblem(UserFEproblem)<ngeoFE_unittests.
        Defines a user FE problem for given FE formulation
        """
        def __init__(self,FEformulation):
-           self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker Prager material"
+           self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker–Prager material"
            scale = 1.
            self.w=1.
            self.nw=1
@@ -259,29 +259,29 @@ Monitoring stress and state variables at the Gauss points
 
 .. code-block:: python
 
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self,w,nw):
             self.w=w
             self.nw=nw
             super().__init__()
             
         def inside(self, x, on_boundary):
-            rreg=1.*self.w/(1.*np.float(self.nw))
-            lreg=-1.*self.w/(1.*np.float(self.nw))
+            rreg=1.*self.w/(1.*float(self.nw))
+            lreg=-1.*self.w/(1.*float(self.nw))
             print(rreg,lreg)
             # return x[0] >= 1./2.-1./80. and between(x[1], (-0.1,0.1))
             return between(x[0], (lreg,rreg))
 
 .. code-block:: python
     
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry= self.Gauss_point_Querry(self.w,self.nw)
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery= self.Gauss_point_Query(self.w,self.nw)
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
 
 | We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different instances of the :class:`VectorFunctionSpace()` class of the FEniCs software. 
@@ -591,7 +591,7 @@ We assign next the components of the state variables that need to be monitored a
         return hist_svars    
 
 The Gauss point specification works the same way as in set_bcs() and history_output(). In this example in the region (1) defined by the
-method :py:meth:`create_Gauss_point_querry_domain<ngeoFE_unittests.Multiphysics.Cosserat_tests.OneD.BVP.Cosserat1D_Drucker_Prager_Thermo_Hydro_Plasticity.CosseratTHM1DFEproblem.create_Gauss_point_querry_domain()>`
+method :py:meth:`create_Gauss_point_query_domain<ngeoFE_unittests.Multiphysics.Cosserat_tests.OneD.BVP.Cosserat1D_Drucker_Prager_Thermo_Hydro_Plasticity.CosseratTHM1DFEproblem.create_Gauss_point_query_domain()>`
 , we choose to monitor the above vector components, which translate to the stresses, increments of plastic strain pressure, temperature and normal total strains respectively.
 The mapping between the vector components of the :py:class:`Function space<dolfin.cpp.function.FunctionSpace>` and the state variable components is given in the corresponding :ref:`material table<material description of state variables>`.
 

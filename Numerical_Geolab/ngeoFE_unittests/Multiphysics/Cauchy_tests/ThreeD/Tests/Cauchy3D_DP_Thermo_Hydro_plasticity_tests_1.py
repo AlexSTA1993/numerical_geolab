@@ -4,7 +4,7 @@ Created on Mai 30, 2022
 @author: Alexandros Stathas
 
 Contains unit tests of ngeoFE applied to Cauchy continua in 3D Thermo-Hydroplasticity with a 
-Drucker Prager yield criterion. Check softening behavior due to pore fluid pressure increase due to thermal
+Drucker–Prager yield criterion. Check softening behavior due to pore fluid pressure increase due to thermal
 pressurization. The unit cube is under 1D compression.
 
 Checks:
@@ -26,7 +26,7 @@ from dolfin.cpp.io import HDF5File
 import pickle
 import numpy as np
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 reference_data_path = ngeo_parameters.reference_data_path    

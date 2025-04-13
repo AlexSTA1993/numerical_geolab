@@ -33,7 +33,7 @@
   <div class="section" id="viscoplastity-application-3">
 <h1>2.3. Viscoplastity Application 3:<a class="headerlink" href="#viscoplastity-application-3" title="Permalink to this headline">¶</a></h1>
 <p>In this application we will study the shear strain response of the viscoplastic layer during strain localization.
-In order to provoke strain localization inside the Cauchy viscous layer, we will intorduce a material imperfection.
+In order to provoke strain localization inside the Cauchy viscous layer, we will introduce a material imperfection.
 It has been already discussed in the literature cite(DeBorst, Needleman) and more recently in cite(Stefanou),
 that strain localization takes place in the presence of strain softening. It has been proven that in the case of a Cauchy elastoplastic
 layer strain softening is responsible for mesh dependence in the numerical finite element analysis, in that strain will localize in the smallest possible mesh dimension
@@ -98,7 +98,7 @@ of the weak form.</p>
 </div>
 <div class="line-block">
 <div class="line">We note here that our problem is a plain strain 2D problem involving a classical Cauchy continuum. Thus only 3 of the 6 strain components <span class="math notranslate nohighlight">\((\gamma_{11},\gamma_{22},\gamma_{12})\)</span> used for the equilibrium equations are needed.
-We note also that we provide the Voight notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <span class="math notranslate nohighlight">\((\gamma_{12}=2\epsilon_{12})\)</span>.</div>
+We note also that we provide the Voigt notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <span class="math notranslate nohighlight">\((\gamma_{12}=2\epsilon_{12})\)</span>.</div>
 </div>
 <p>In code snippet above, we provide the finite element formulation for the problem at hand. The class is initialized with 3 strain components and 1 Gauss point. The python function:</p>
 <dl class="method">
@@ -107,7 +107,7 @@ We note also that we provide the Voight notation for the unknown strains of the 
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voight formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
 </div>
 <dl class="method">
 <dt id="create_element">
@@ -221,13 +221,13 @@ provide the mesh object, the interior domain and the boundary domains. The follo
 <a class="reference internal image-reference" href="../../_images/Cauchy_simple_shear_solid.png"><img alt="alternate text" src="../../_images/Cauchy_simple_shear_solid.png" style="width: 400px; height: 200px;" /></a>
 <p class="caption"><span class="caption-text">Image of the rectangular mesh produced by RectangleMesh(). The domain was exported with the help of the third party software Paravew.</span></p>
 </div>
-<div class="section" id="defining-subdomains-of-interest-imperfection-and-gauss-points-querry-domains">
-<h4>2.3.2.2.1. Defining subdomains of interest: Imperfection and Gauss points querry domains<a class="headerlink" href="#defining-subdomains-of-interest-imperfection-and-gauss-points-querry-domains" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="defining-subdomains-of-interest-imperfection-and-gauss-points-query-domains">
+<h4>2.3.2.2.1. Defining subdomains of interest: Imperfection and Gauss points query domains<a class="headerlink" href="#defining-subdomains-of-interest-imperfection-and-gauss-points-query-domains" title="Permalink to this headline">¶</a></h4>
 <p>In this application we need to show the effect of the imprefection thickness on the localization width of the specimen and its elasto-viscoplastic response.
 We will also show that the response of the specimen during shearing under quasistatic conditions with strain softening and strain rate hardening remains mesh independent, in the sense that
 all the element inside the imperfection band exhibit uniform strain, which is greater that the zero strain outside the imperfection domain. For this
-we need to make both the Imperfection and the Gauss point querry domains dependent on the imperfection size previously defined as a parameter.
-In this case we will define the <code class="xref py py-class docutils literal notranslate"><span class="pre">Imperfection()</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Gauss_point_Querry()</span></code> classes inside the problem definition</p>
+we need to make both the Imperfection and the Gauss point query domains dependent on the imperfection size previously defined as a parameter.
+In this case we will define the <code class="xref py py-class docutils literal notranslate"><span class="pre">Imperfection()</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Gauss_point_Query()</span></code> classes inside the problem definition</p>
 <blockquote>
 <div>and we will provide the imperfection attribute already provided during the instantiation of the problem.</div></blockquote>
 <div class="section" id="imperfection-definition">
@@ -253,7 +253,7 @@ In this case we will define the <code class="xref py py-class docutils literal n
 <h5>2.3.2.2.1.2. Monitoring stress and state variables at the Gauss points<a class="headerlink" href="#monitoring-stress-and-state-variables-at-the-gauss-points" title="Permalink to this headline">¶</a></h5>
 <p>In this application we will present a way to extract state variable quantities from the Gauss points of the Finite element model. This is done again by application of the :py:class`SubDomain()` class
 in order to define a region, in which the Gauss points are monitored. The following code defines a centered interval in the middle of the layer surrounding the applied imperfection:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Query</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">imp</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imp</span><span class="o">=</span><span class="n">imp</span>
@@ -296,14 +296,14 @@ The numbers 0 and 1 used in the labels, indicate which material parameters are n
 <p class="last">IMPORTANT
 We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_query_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create subdomains by marking regions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
     <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns Gauss region number 0 everywhere</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="n">Gauss_point_Querry</span><span class="p">()</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># marks the Gauss region be applying the number 1 at the selected nodes.</span>
+    <span class="n">GaussDomainQuery</span><span class="o">=</span> <span class="n">Gauss_point_Query</span><span class="p">()</span>
+    <span class="n">GaussDomainQuery</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># marks the Gauss region be applying the number 1 at the selected nodes.</span>
     <span class="k">return</span> <span class="n">GaussDomain</span>
 </pre></div>
 </div>
@@ -401,7 +401,7 @@ second component ([1]) of the force (1) and displacement (0) fields respectively
 </pre></div>
 </div>
 <p>The Gauss point specification works the same way as in set_bcs() and history_output(). In this example in the region (1) defined by the
-method create_Gauss_point_querry_domain(), we choose to monitor the vector component 21, which translates
+method create_Gauss_point_query_domain(), we choose to monitor the vector component 21, which translates
 to the elasto-visco-plastic multiplier <span class="math notranslate nohighlight">\(\dot{\lambda}\)</span>. The mapping between VectorSpace and state variable components is given in the state variables material description
 (see reference needed).</p>
 </div>

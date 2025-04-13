@@ -12,7 +12,7 @@ from ngeoFE_unittests.Mechanics.Cauchy.ThreeD.BVP.Cauchy3D_Von_Mises_Perzyna_App
 import pickle
 import numpy as np
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 

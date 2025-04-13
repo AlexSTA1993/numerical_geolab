@@ -15,7 +15,7 @@ from ufl.operators import Dx
 from ufl.tensors import as_vector
 from ufl.finiteelement.mixedelement import VectorElement
 
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 
 reference_data_path = ngeo_parameters.reference_data_path   
 

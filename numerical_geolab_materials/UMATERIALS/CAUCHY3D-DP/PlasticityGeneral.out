@@ -1,0 +1,780 @@
+"NOSURF"
+"NF=1"
+"FSURF"
+"RF(NORDER(1))=\"DBLE(PROPS(11))\"*(\"STR_TDT(1)\" + \"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(0.3333333333333333)*(\"DBLE(PROPS(14))\"*\"RQ(1)\" + \
+DBLE(1)) + \"DBLE(PROPS(12))\"*DBLE(-1)*(\"DBLE(PROPS(15))\"*\"RQ(1)\" + \
+DBLE(1)) + DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(0.5)"
+"DFDS"
+"RFS(1,NORDER(1))=\"DBLE(PROPS(11))\"*DBLE(0.3333333333333333)*(\"DBLE(PROPS(\
+14))\"*\"RQ(1)\" + DBLE(1)) + DBLE(0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFS(2,NORDER(1))=\"DBLE(PROPS(11))\"*DBLE(0.3333333333333333)*(\"DBLE(PROPS(\
+14))\"*\"RQ(1)\" + DBLE(1)) + DBLE(0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFS(3,NORDER(1))=\"DBLE(PROPS(11))\"*DBLE(0.3333333333333333)*(\"DBLE(PROPS(\
+14))\"*\"RQ(1)\" + DBLE(1)) + DBLE(0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFS(4,NORDER(1))=\"STR_TDT(4)\"*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFS(5,NORDER(1))=\"STR_TDT(5)\"*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFS(6,NORDER(1))=\"STR_TDT(6)\"*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"DGDS"
+"RGS(1,NORDER(1))=\"DBLE(PROPS(13))\"*DBLE(0.3333333333333333)*(\"DBLE(PROPS(\
+14))\"*\"RQ(1)\" + DBLE(1)) + DBLE(0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGS(2,NORDER(1))=\"DBLE(PROPS(13))\"*DBLE(0.3333333333333333)*(\"DBLE(PROPS(\
+14))\"*\"RQ(1)\" + DBLE(1)) + DBLE(0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGS(3,NORDER(1))=\"DBLE(PROPS(13))\"*DBLE(0.3333333333333333)*(\"DBLE(PROPS(\
+14))\"*\"RQ(1)\" + DBLE(1)) + DBLE(0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGS(4,NORDER(1))=\"STR_TDT(4)\"*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGS(5,NORDER(1))=\"STR_TDT(5)\"*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGS(6,NORDER(1))=\"STR_TDT(6)\"*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"DFDSS"
+"RFSS(1,1,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))**DBLE(2)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(1,2,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(1,3,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(1,4,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(1,5,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(1,6,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(2,1,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(2,2,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))**DBLE(2)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(2,3,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(2)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(2,4,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(2,5,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(2,6,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(3,1,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(3,2,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(2)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(3,3,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))**DBLE(2)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(3,4,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(3,5,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(3,6,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(4,1,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(4,2,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(4,3,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(4,4,NORDER(1))=\"STR_TDT(4)\"**DBLE(2)*DBLE(-3)*DBLE(3)**DBLE(0.5)*(\"S\
+TR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(4,5,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(5)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(4,6,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(5,1,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(5,2,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(5,3,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(5,4,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(5)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(5,5,NORDER(1))=\"STR_TDT(5)\"**DBLE(2)*DBLE(-3)*DBLE(3)**DBLE(0.5)*(\"S\
+TR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RFSS(5,6,NORDER(1))=\"STR_TDT(5)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(6,1,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(6,2,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(6,3,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(6,4,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(6,5,NORDER(1))=\"STR_TDT(5)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RFSS(6,6,NORDER(1))=\"STR_TDT(6)\"**DBLE(2)*DBLE(-3)*DBLE(3)**DBLE(0.5)*(\"S\
+TR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"DGDSS"
+"RGSS(1,1,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))**DBLE(2)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(1,2,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(1,3,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(1,4,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(1,5,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(1,6,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(2,1,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(2,2,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))**DBLE(2)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(2,3,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(2)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(2,4,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(2,5,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(2,6,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(3,1,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(3,2,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(2)\"*DBLE(2))*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(-0.5)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(3,3,NORDER(1))=DBLE(-0.25)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))**DBLE(2)*DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) \
++ \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(-0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(3,4,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(3,5,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(3,6,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(4,1,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(4,2,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(4,3,NORDER(1))=\"STR_TDT(4)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(4,4,NORDER(1))=\"STR_TDT(4)\"**DBLE(2)*DBLE(-3)*DBLE(3)**DBLE(0.5)*(\"S\
+TR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(4,5,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(5)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(4,6,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(5,1,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(5,2,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(5,3,NORDER(1))=\"STR_TDT(5)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(5,4,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(5)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(5,5,NORDER(1))=\"STR_TDT(5)\"**DBLE(2)*DBLE(-3)*DBLE(3)**DBLE(0.5)*(\"S\
+TR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"RGSS(5,6,NORDER(1))=\"STR_TDT(5)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(6,1,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(6,2,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(6,3,NORDER(1))=\"STR_TDT(6)\"*DBLE(-0.5)*(\"STR_TDT(1)\"*DBLE(-1) + \
+\"STR_TDT(2)\"*DBLE(-1) + \
+\"STR_TDT(3)\"*DBLE(2))*DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \
+\"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(6,4,NORDER(1))=\"STR_TDT(4)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(6,5,NORDER(1))=\"STR_TDT(5)\"*\"STR_TDT(6)\"*DBLE(-3)*DBLE(3)**DBLE(0.5\
+)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5)"
+"RGSS(6,6,NORDER(1))=\"STR_TDT(6)\"**DBLE(2)*DBLE(-3)*DBLE(3)**DBLE(0.5)*(\"S\
+TR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \"STR_TDT(3)\"**DBLE(2) + \
+\"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \"STR_TDT(1)\"*(\"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(-1) + (\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) \
++ \"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-1.5) + \
+DBLE(3)**DBLE(0.5)*(\"STR_TDT(1)\"**DBLE(2) + \"STR_TDT(2)\"**DBLE(2) + \
+\"STR_TDT(3)\"**DBLE(2) + \"STR_TDT(2)\"*\"STR_TDT(3)\"*DBLE(-1) + \
+\"STR_TDT(1)\"*(\"STR_TDT(2)\" + \"STR_TDT(3)\")*DBLE(-1) + \
+(\"STR_TDT(4)\"**DBLE(2) + \"STR_TDT(5)\"**DBLE(2) + \
+\"STR_TDT(6)\"**DBLE(2))*DBLE(3))**DBLE(-0.5)"
+"DEL"
+"DEL(1,1)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(1.3333333333333333)"
+"DEL(1,2)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(-0.6666666666666666)"
+"DEL(1,3)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(-0.6666666666666666)"
+"DEL(2,1)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(-0.6666666666666666)"
+"DEL(2,2)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(1.3333333333333333)"
+"DEL(2,3)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(-0.6666666666666666)"
+"DEL(3,1)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(-0.6666666666666666)"
+"DEL(3,2)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(-0.6666666666666666)"
+"DEL(3,3)=\"DBLE(PROPS(1))\" + \"DBLE(PROPS(2))\"*DBLE(1.3333333333333333)"
+"DEL(4,4)=\"DBLE(PROPS(2))\""
+"DEL(5,5)=\"DBLE(PROPS(2))\""
+"DEL(6,6)=\"DBLE(PROPS(2))\""
+"NOHARD"
+"NH=1"
+"HQ"
+"RHQ(1,NORDER(1))=DBLE(1)"
+"HQQ"
+"HQS"
+"GQS"
+"RGQS(1,1,NORDER(1))=\"DBLE(PROPS(13))\"*\"DBLE(PROPS(14))\"*DBLE(0.333333333\
+3333333)"
+"RGQS(1,2,NORDER(1))=\"DBLE(PROPS(13))\"*\"DBLE(PROPS(14))\"*DBLE(0.333333333\
+3333333)"
+"RGQS(1,3,NORDER(1))=\"DBLE(PROPS(13))\"*\"DBLE(PROPS(14))\"*DBLE(0.333333333\
+3333333)"
+"FQ"
+"RFQ(1,NORDER(1))=\"DBLE(PROPS(12))\"*\"DBLE(PROPS(15))\"*DBLE(-1) + \
+\"DBLE(PROPS(11))\"*\"DBLE(PROPS(14))\"*(\"STR_TDT(1)\" + \"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(0.3333333333333333)"
+"EEL"
+"EEL(1)=\"DBLE(PROPS(2))\"**DBLE(-1)*(\"STR_TDT(2)\" + \"STR_TDT(3)\" + \
+\"STR_TDT(1)\"*DBLE(-2))*DBLE(-0.16666666666666666) + \
+\"DBLE(PROPS(1))\"**DBLE(-1)*(\"STR_TDT(1)\" + \"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(0.1111111111111111)"
+"EEL(2)=\"DBLE(PROPS(2))\"**DBLE(-1)*(\"STR_TDT(1)\" + \"STR_TDT(3)\" + \
+\"STR_TDT(2)\"*DBLE(-2))*DBLE(-0.16666666666666666) + \
+\"DBLE(PROPS(1))\"**DBLE(-1)*(\"STR_TDT(1)\" + \"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(0.1111111111111111)"
+"EEL(3)=\"DBLE(PROPS(2))\"**DBLE(-1)*(\"STR_TDT(1)\" + \"STR_TDT(2)\" + \
+\"STR_TDT(3)\"*DBLE(-2))*DBLE(-0.16666666666666666) + \
+\"DBLE(PROPS(1))\"**DBLE(-1)*(\"STR_TDT(1)\" + \"STR_TDT(2)\" + \
+\"STR_TDT(3)\")*DBLE(0.1111111111111111)"
+"EEL(4)=\"DBLE(PROPS(2))\"**DBLE(-1)*\"STR_TDT(4)\""
+"EEL(5)=\"DBLE(PROPS(2))\"**DBLE(-1)*\"STR_TDT(5)\""
+"EEL(6)=\"DBLE(PROPS(2))\"**DBLE(-1)*\"STR_TDT(6)\""
+"SEL"
+"STRESS(1)=\"DBLE(PROPS(1))\"*(\"EEL(1)\" + \"EEL(2)\" + \"EEL(3)\") + \
+\"DBLE(PROPS(2))\"*DBLE(0.6666666666666666)*(\"EEL(2)\"*DBLE(-1) + \
+\"EEL(3)\"*DBLE(-1) + \"EEL(1)\"*DBLE(2))"
+"STRESS(2)=\"DBLE(PROPS(1))\"*(\"EEL(1)\" + \"EEL(2)\" + \"EEL(3)\") + \
+\"DBLE(PROPS(2))\"*(\"EEL(1)\" + \"EEL(3)\" + \
+\"EEL(2)\"*DBLE(-2))*DBLE(-0.6666666666666666)"
+"STRESS(3)=\"DBLE(PROPS(1))\"*(\"EEL(1)\" + \"EEL(2)\" + \"EEL(3)\") + \
+\"DBLE(PROPS(2))\"*(\"EEL(1)\" + \"EEL(2)\" + \
+\"EEL(3)\"*DBLE(-2))*DBLE(-0.6666666666666666)"
+"STRESS(4)=\"DBLE(PROPS(2))\"*\"EEL(4)\""
+"STRESS(5)=\"DBLE(PROPS(2))\"*\"EEL(5)\""
+"STRESS(6)=\"DBLE(PROPS(2))\"*\"EEL(6)\""
+"DEELDB"
+"DEELDB(1,1)=DBLE(0)"
+"DEELDB(2,1)=DBLE(0)"
+"DEELDB(3,1)=DBLE(0)"
+"DEELDB(4,1)=DBLE(0)"
+"DEELDB(5,1)=DBLE(0)"
+"DEELDB(6,1)=DBLE(0)"
+"VISCP"
+"RVISC(1)=\"DBLE(PROPS(19))\""
+"SCALES"
+"SC_STRESSES=(/1., 1., 1., 1., 1., 1./)"
+"SC_FSURF=(/1./)"
+"SC_LAMBDAS=(/1./)"
+"SC_HARDENING=(/1./)"
+"NOSTR"
+"NO_STR=6"

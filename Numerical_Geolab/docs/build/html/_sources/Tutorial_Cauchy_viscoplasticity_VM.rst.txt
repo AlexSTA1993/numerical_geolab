@@ -1,5 +1,5 @@
 ============================================================================================
-Simple shear of a 2D Cacuhy layer with Von-Mises yield criterion and Perzyna viscoplasticity
+Simple shear of a 2D Cauchy layer with Von-Mises yield criterion and Perzyna viscoplasticity
 ============================================================================================
 
 In this series of tutorials, we will validate the Cauchy, Perzyna viscoplasticity law available in Numerical Geolab. We will study three applications in order to evaluate the 

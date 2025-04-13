@@ -15,12 +15,11 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 
 import os
 from _operator import itemgetter
-# from tkinter.constants import NW
 
 warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
 
@@ -30,119 +29,118 @@ class CosseratTHM1DFEformulation(FEformulation):
     '''
     def __init__(self):
         # Number of stress/deformation components
-        self.p_nstr=4+1+1
+        self.p_nstr = 4 + 1 + 1
         # Number of Gauss points
-        self.ns=1
+        self.ns = 1
         # Number of auxiliary quantities at gauss points
-        self.p_aux=3
+        self.p_aux = 3
 
     
-    def generalized_epsilon(self,v):
+    def generalized_epsilon(self, v):
         """
         Set user's generalized deformation vector
         """
-        scale_u=1./1000.
-        gde=[
-            Dx(v[0],0)*scale_u,#gamma_11
-            v[2]*scale_u,                    #gamma_12
-            Dx(v[1],0)*scale_u-v[2]*scale_u,         #gamma_21
-            Dx(v[2],0)*scale_u,              #kappa_31
-            Dx(v[3],0),              #qhy_11
-            Dx(v[4],0),              #qth_11
+        scale_u = 1./1000.
+        gde = [
+            Dx(v[0], 0)*scale_u,               # gamma_11
+            v[2]*scale_u,                      # gamma_12
+            Dx(v[1], 0)*scale_u-v[2]*scale_u,  # gamma_21
+            Dx(v[2], 0)*scale_u,               # kappa_31
+            Dx(v[3], 0),                       # qhy_11
+            Dx(v[4], 0),                       # qth_11
             ]
         return as_vector(gde)
 
-    def auxiliary_fields(self,v):
+    def auxiliary_fields(self, v):
         '''
         Set user's generalized deformation vector
         '''
-        auxgde=[
-        v[3],
-        v[4],
-        v[0]
+        auxgde = [
+            v[3],
+            v[4],
+            v[0]
             ]
         return as_vector(auxgde)
     
-    def setVarFormAdditionalTerms_Res(self,u,Du,v,svars,metadata,dt):
-        Res=0.
-        lstar=svars.sub(103-1)
-        bstar=svars.sub(104-1)
-        rhoC=svars.sub(105-1)
-        #HM terms
-        eps=self.generalized_epsilon(Du)
-        eps_v=eps[0]
-        virtual_pf=v[3]
+    def setVarFormAdditionalTerms_Res(self, u, Du, v, svars, metadata, dt):
+        Res = 0.
+        lstar = svars.sub(103 - 1)
+        bstar = svars.sub(104 - 1)
+        rhoC = svars.sub(105 - 1)
+
+        # HM terms
+        eps = self.generalized_epsilon(Du)
+        eps_v = eps[0]
+        virtual_pf = v[3]
+        Res += -(1./dt)*(1./bstar)*dot(eps_v, virtual_pf)*dx(metadata=metadata) 
              
-        Res+=-(1./dt)*(1./bstar)*dot(eps_v,virtual_pf)*dx(metadata=metadata) 
-             
-        #TM terms
-        virtual_Temp=v[4]
-        for i in range(1,18):
-            Res+= + (1./dt)*(1./rhoC)*svars.sub(i-1)*svars.sub(76+i-1)*virtual_Temp*dx(metadata=metadata)
-        #HT terms
+        # TM terms
+        virtual_Temp = v[4]
+        for i in range(1, 18):
+            Res += (1./dt)*(1./rhoC)*svars.sub(i - 1)*svars.sub(76 + i - 1)*virtual_Temp*dx(metadata=metadata)
+        # HT terms
         DTemp=Du[4]
-        Res+= +(1./dt)*(lstar/bstar)*dot(DTemp,virtual_pf)*dx(metadata=metadata)
-           
+        Res += (1./dt)*(lstar/bstar)*dot(DTemp, virtual_pf)*dx(metadata=metadata)
         return Res
     
-    def setVarFormAdditionalTerms_Jac(self,u,Du,v,svars,metadata,dt,ddsdde):
-        Jac=0.
-        lstar=svars.sub(101+2-1)
-        bstar=svars.sub(102+2-1)
-        rhoC=svars.sub(103+2-1)
-        alfa=svars.sub(104+2-1)
-        #HM terms
-        eps=self.generalized_epsilon(u) #needs u (trial function, because it takes derivatives in terms of u and not Du for calculating the Jacobian.
-        eps_vol=eps[0]
-        virtual_pf=v[3]
-        Jac+=+(1./dt)*(1./bstar)*dot(eps_vol,virtual_pf)*dx(metadata=metadata)
+    def setVarFormAdditionalTerms_Jac(self, u, Du, v, svars, metadata, dt, ddsdde):
+        Jac = 0.
+        lstar = svars.sub(101 + 2 - 1)
+        bstar = svars.sub(102 + 2 - 1)
+        rhoC = svars.sub(103 + 2 - 1)
+        alfa = svars.sub(104 + 2 - 1)
+        # HM terms
+        eps = self.generalized_epsilon(u)  # Needs u (trial function, because it takes derivatives in terms of u and not Du for calculating the Jacobian.
+        eps_vol = eps[0]
+        virtual_pf = v[3]
+        Jac += (1./dt)*(1./bstar)*dot(eps_vol, virtual_pf)*dx(metadata=metadata)
          
-        #MH terms
-        pf=u[3] #same as before
-        virtual_eps=self.generalized_epsilon(v)
-        virtual_eps_vol=virtual_eps[0]
-        Jac+=-(1./dt)*dt*dot(pf,virtual_eps_vol)*dx(metadata=metadata)
+        # MH terms
+        pf = u[3]  # Same as before
+        virtual_eps = self.generalized_epsilon(v)
+        virtual_eps_vol = virtual_eps[0]
+        Jac += -(1./dt)*dt*dot(pf, virtual_eps_vol)*dx(metadata=metadata)
                  
-        #HT terms
+        # HT terms
         temperature = u[4]
-        Jac+=-(1./dt)*(lstar/bstar)*dot(temperature,virtual_pf)*dx(metadata=metadata)
+        Jac +=-(1./dt)*(lstar/bstar)*dot(temperature, virtual_pf)*dx(metadata=metadata)
                 
-        #TH terms Alexandros
-        avector=np.zeros(self.p_nstr)
-        avector[0]=1.;
-        eps_temp=alfa*temperature*as_vector(avector)
-        eps_temp_vol=eps_temp[0]#+eps_temp[1]+eps_temp[2]
-        #MT terms
-        Jac+=-(1./dt)*dt*inner(dot(ddsdde,eps_temp),virtual_eps)*dx(metadata=metadata) #changed sign
+        # TH terms Alexandros
+        avector = np.zeros(self.p_nstr)
+        avector[0] = 1.;
+        eps_temp = alfa*temperature*as_vector(avector)
+        eps_temp_vol = eps_temp[0]#+eps_temp[1]+eps_temp[2]
+
+        # MT terms
+        Jac += -(1./dt)*dt*inner(dot(ddsdde, eps_temp), virtual_eps)*dx(metadata=metadata) #changed sign
                 
-        #TM terms due to thermal expansion and plastic deformation
-        virtual_temp=v[4]
+        # TM terms due to thermal expansion and plastic deformation
+        virtual_temp = v[4]
         
-        #change in Jacobian terms
-        
-        eps_eff=eps+eps_temp
-        deps_plastic=[]
-        for i in range(0,self.p_nstr):
-            deps_plastic.append(svars.sub(77-1+i))
+        # Change in Jacobian terms
+        eps_eff = eps + eps_temp
+        deps_plastic = []
+        for i in range(0, self.p_nstr):
+            deps_plastic.append(svars.sub(77 - 1 + i))
           
-        deps_plastic=as_vector(deps_plastic)
-        Jac+=-(1./dt)*dt*(1./rhoC)*inner(dot(ddsdde,eps_eff),deps_plastic)*virtual_temp*dx(metadata=metadata)
-        #TM terms due to fluid pressure and plastic deforamtion, i.e. thermal pressurization 
-        deps_plastic_vol=deps_plastic[0]
-        Jac+=+(1./dt)*dt*(1./rhoC)*pf*deps_plastic_vol*virtual_temp*dx(metadata=metadata)
+        deps_plastic = as_vector(deps_plastic)
+        Jac += -(1./dt)*dt*(1./rhoC)*inner(dot(ddsdde, eps_eff), deps_plastic)*virtual_temp*dx(metadata=metadata)
+        # TM terms due to fluid pressure and plastic deforamtion, i.e. thermal pressurization 
+        deps_plastic_vol = deps_plastic[0]
+        Jac += (1./dt)*dt*(1./rhoC)*pf*deps_plastic_vol*virtual_temp*dx(metadata=metadata)
              
-        #TM Alexandros
-        Jac+=(1./dt)*dt*(1./rhoC)*inner(dot(ddsdde,eps_temp),deps_plastic)*virtual_temp*dx(metadata=metadata)
+        # TM Alexandros
+        Jac +=(1./dt)*dt*(1./rhoC)*inner(dot(ddsdde, eps_temp), deps_plastic)*virtual_temp*dx(metadata=metadata)
         return Jac
    
-    def create_element(self,cell):
+    def create_element(self, cell):
         """
         Set desired element
         """
-        self.degree=1
-        element1=VectorElement("Lagrange",cell,degree=self.degree,dim=2)
-        element2=FiniteElement("Lagrange",cell,degree=self.degree)
-        element3=VectorElement("Lagrange",cell,degree=self.degree,dim=2)
+        self.degree = 1
+        element1 = VectorElement("Lagrange", cell,degree=self.degree, dim=2)
+        element2 = FiniteElement("Lagrange", cell,degree=self.degree)
+        element3 = VectorElement("Lagrange", cell,degree=self.degree, dim=2)
 
         element=MixedElement([element1,element2,element3])
         return element
@@ -151,11 +149,10 @@ class CosseratTHM1DFEformulation(FEformulation):
         """   
         Set left hand side derivative coefficients
         """
-#         return as_vector([0.,0.,0.,1000.,1000.])
-        scale_p=1.
-        scale_t=1.
-#         scale=1./1000.
-        return as_vector([0.,0.,0.,1.*scale_p,1.*scale_t])
+        # Return as_vector([0.,0.,0.,1000.,1000.])
+        scale_p = 1.
+        scale_t = 1.
+        return as_vector([0., 0., 0., 1.*scale_p, 1.*scale_t])
     
           
 class CosseratTHM1DFEproblem(UserFEproblem):
@@ -163,7 +160,7 @@ class CosseratTHM1DFEproblem(UserFEproblem):
     Defines a user FE problem for given FE formulation
     """
     def __init__(self,FEformulation):
-        self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker Prager material"
+        self.description="Example of 2D plane strain problem, Cosserat continuum with Drucker–Prager material"
         scale = 1.
         self.nw=100
         self.problem_step=0
@@ -210,20 +207,20 @@ class CosseratTHM1DFEproblem(UserFEproblem):
             tol = DOLFIN_EPS
             return on_boundary and near(x[self.xyz],self.param)    
             
-    class Gauss_point_Querry(SubDomain):
+    class Gauss_point_Query(SubDomain):
         def __init__(self,w,nw):
             self.w=w
             self.nw=nw
             super().__init__()
             
         def inside(self, x, on_boundary):
-            rreg=1.*self.w/(1.*np.float(self.nw))
-            lreg=-1.*self.w/(1.*np.float(self.nw))
+            rreg=1.*self.w/(1.*float(self.nw))
+            lreg=-1.*self.w/(1.*float(self.nw))
             print(rreg,lreg)
             # return x[0] >= 1./2.-1./80. and between(x[1], (-0.1,0.1))
             return between(x[0], (lreg,rreg))
 
-    class Gauss_point_Querry2(SubDomain):
+    class Gauss_point_Query2(SubDomain):
         def __init__(self,w,nw):
             self.w=w
             self.nw=nw
@@ -234,16 +231,16 @@ class CosseratTHM1DFEproblem(UserFEproblem):
             return between(x[0], (-self.w/2,self.w/2))
 
 
-    def create_Gauss_point_querry_domain(self,mesh):
+    def create_Gauss_point_query_domain(self,mesh):
         """
         Create subdomains by marking regions
         """
         GaussDomain = MeshFunction("size_t", mesh, mesh.topology().dim())
         GaussDomain.set_all(0) #assigns material/props number 0 everywhere
-        GaussDomainQuerry2= self.Gauss_point_Querry2(self.w,self.nw) #This takes all Gauss point along the line
-        GaussDomainQuerry2.mark(GaussDomain,2)
-        GaussDomainQuerry= self.Gauss_point_Querry(self.w,self.nw)
-        GaussDomainQuerry.mark(GaussDomain,1)
+        GaussDomainQuery2= self.Gauss_point_Query2(self.w,self.nw) #This takes all Gauss point along the line
+        GaussDomainQuery2.mark(GaussDomain,2)
+        GaussDomainQuery= self.Gauss_point_Query(self.w,self.nw)
+        GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
 
     
@@ -444,13 +441,12 @@ class CosseratTHM1DFEproblem(UserFEproblem):
         mats=[]
         # load material #1
         
-        env_lib=ngeo_parameters.env_lib        
-        umat_lib_path= ngeo_parameters.umat_lib_path
-        umat_lib = umat_lib_path+'/COSSERAT3D-THM/libplast_Cosserat3D-THM.so'
-        umat_id=1      # if many materials exist in the same library
-        mat=UserMaterial(env_lib,umat_lib,umat_id)
-        mat.props=self.set_material_1_properties()
-        #
+        env_lib = ngeo_parameters.env_lib        
+        umat_lib_path = ngeo_parameters.umat_lib_path
+        umat_lib = umat_lib_path + '/COSSERAT3D-THM/libplast_Cosserat3D-THM.so'
+        umat_id = 1      # if many materials exist in the same library
+        mat = UserMaterial(env_lib, umat_lib, umat_id)
+        mat.props = self.set_material_1_properties()
         mats.append(mat)
         return mats
     

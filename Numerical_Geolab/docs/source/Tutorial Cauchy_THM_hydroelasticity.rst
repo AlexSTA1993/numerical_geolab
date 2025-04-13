@@ -26,7 +26,7 @@ The file begins as follows:
    from ngeoFE.feproblem import UserFEproblem, General_FEproblem_properties
    from ngeoFE.fedefinitions import FEformulation
    from ngeoFE.materials import UserMaterial
-   from ngeoFE_unittests import ngeo_parameters
+   from ngeoFE import ngeo_parameters
    from ngeoFE_unittests import plotting_params 
    import os # allows for easier handling of paths
    from _operator import itemgetter # allows for transformation of lists to iterables, usefull for the definition of boundary conditions

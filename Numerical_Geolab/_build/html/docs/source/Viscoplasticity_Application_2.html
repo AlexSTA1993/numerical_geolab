@@ -96,7 +96,7 @@ of the weak form.</p>
 </div>
 <div class="line-block">
 <div class="line">We note here that our problem is a plain strain 2D problem involving a classical Cauchy continuum. Thus only 3 of the 6 strain components <span class="math notranslate nohighlight">\((\gamma_{11},\gamma_{22},\gamma_{12})\)</span> used for the equilibrium equations are needed.
-We note also that we provide the Voight notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <span class="math notranslate nohighlight">\((\gamma_{12}=2\epsilon_{12})\)</span>.</div>
+We note also that we provide the Voigt notation for the unknown strains of the problem, therefore, the engineering strain notation for the shear strain needs to be used <span class="math notranslate nohighlight">\((\gamma_{12}=2\epsilon_{12})\)</span>.</div>
 </div>
 <p>In code snippet above, we provide the finite element formulation for the problem at hand. The class is initialized with 3 strain components and 1 Gauss point. The python function:</p>
 <dl class="method">
@@ -105,7 +105,7 @@ We note also that we provide the Voight notation for the unknown strains of the 
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voight formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
 </div>
 <dl class="method">
 <dt id="create_element">
@@ -156,7 +156,7 @@ The value x[i] indicates the spatial coordinate <span class="math notranslate no
 <h3>2.2.2.2. Monitoring stress and state variables at the Gauss points<a class="headerlink" href="#monitoring-stress-and-state-variables-at-the-gauss-points" title="Permalink to this headline">¶</a></h3>
 <p>In this application we will present a way to extract state variable quantities from the Gauss points of the Finite element model. This is done again by application of the SubDomain() class
 in order to define a region, in which the Gauss points are monitored. The following codeb defines a rectangular region near the free surface of the layer:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Querry</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Gauss_point_Query</span><span class="p">(</span><span class="n">SubDomain</span><span class="p">):</span>
 
    <span class="k">def</span> <span class="nf">inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">on_boundary</span><span class="p">):</span>
       <span class="n">h</span><span class="o">=</span><span class="mf">1.0</span> <span class="c1">#layer&#39;s height</span>
@@ -246,14 +246,14 @@ This value is a number indicating which material parameters need to be taken int
 </div>
 <blockquote>
 <div>We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_querry_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_query_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create subdomains by marking regions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">GaussDomain</span> <span class="o">=</span> <span class="n">MeshFunction</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
     <span class="n">GaussDomain</span><span class="o">.</span><span class="n">set_all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#assigns Gauss region number 0 everywhere</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">=</span> <span class="n">Gauss_point_Querry</span><span class="p">()</span>
-    <span class="n">GaussDomainQuerry</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># marks the Gauss region be applying the number 1 at the selected nodes.</span>
+    <span class="n">GaussDomainQuery</span><span class="o">=</span> <span class="n">Gauss_point_Query</span><span class="p">()</span>
+    <span class="n">GaussDomainQuery</span><span class="o">.</span><span class="n">mark</span><span class="p">(</span><span class="n">GaussDomain</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># marks the Gauss region be applying the number 1 at the selected nodes.</span>
     <span class="k">return</span> <span class="n">GaussDomain</span>
 </pre></div>
 </div>
@@ -359,7 +359,7 @@ second component ([1]) of the force (1) and displacement (0) fields respectively
 </pre></div>
 </div>
 <p>The Gauss point specification works the same way as in set_bcs() and history_output(). In this example in the region (1) defined by the
-method create_Gauss_point_querry_domain(), we choose to monitor the vector component 21, which translates
+method create_Gauss_point_query_domain(), we choose to monitor the vector component 21, which translates
 to the elasto-visco-plastic multiplier <span class="math notranslate nohighlight">\(\dot{\lambda}\)</span>. The mapping between VectorSpace and state variable components is given in the state variables material description
 (see reference needed).</p>
 </div>

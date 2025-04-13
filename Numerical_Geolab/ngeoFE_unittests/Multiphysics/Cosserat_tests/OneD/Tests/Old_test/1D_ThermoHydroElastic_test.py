@@ -6,7 +6,7 @@ Created on Dec 6, 2019
 
 import unittest
 from ngeoFE_unittests.Multiphysics.Cosserat_tests.OneD.BVP.test1D_Thermo_Hydro_Elastic import THM1D_FEformulation, THM1D_FEproblem
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 # ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Multiphysics/reference_data/'
 
 

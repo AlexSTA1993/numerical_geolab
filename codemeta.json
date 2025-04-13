@@ -1,0 +1,84 @@
+{
+    "@context": "https://w3id.org/codemeta/3.0",
+    "type": "SoftwareSourceCode",
+    "applicationCategory": "Mechanics",
+    "author": [
+        {
+            "id": "https://orcid.org/0000-0002-4552-7717",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "IMSIA (UMR 9219), CNRS, EDF, CEA, ENSTA Paris, Institut Polytechnique de Paris, Palaiseau, France"
+            },
+            "email": "ioannis.stefanou@ensta.fr",
+            "familyName": "Stefanou",
+            "givenName": "Ioannis"
+        },
+        {
+            "id": "https://orcid.org/0000-0001-8468-9842",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "Institut für Konstruktiver Ingenieurbau, Universität für Bodenkultur Wien, Vienna, Austria"
+            },
+            "email": "alexandros.stathas@boku.ac.at",
+            "familyName": "Stathas",
+            "givenName": "Alexandros"
+        }
+    ],
+    "codeRepository": "https://github.com/AlexSTA1993/numerical_geolab",
+    "contributor": [
+        {
+            "id": "https://orcid.org/0000-0001-8899-6700",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "Univ. Grenoble Alpes, Inria, CNRS, Grenoble INP, Institute of Engineering, LJK, Grenoble, France"
+            },
+            "email": "filippo.masi@inria.fr",
+            "familyName": "Masi",
+            "givenName": "Filippo"
+        },
+        {
+            "id": "https://orcid.org/0000-0003-2510-137X",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "Navier, ENPC, Institut Polytechnique de Paris, Univ Gustave Eiffel, CNRS, Marne-la-Vallée, France"
+            },
+            "email": "nicholas-anton.collins-craft@enpc.fr",
+            "familyName": "Collins-Craft",
+            "givenName": "Nicholas Anton"
+        },
+        {
+            "id": "https://orcid.org/0000-0003-1279-6870",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "Technical University of Clausthal, Clausthal-Zellerfeld, Germany"
+            },
+            "email": "eleni.gerolymatou@tu-clausthal.de",
+            "familyName": "Gerolymatou",
+            "givenName": "Eleni"
+        }
+    ],
+    "dateCreated": "2016-08-08",
+    "datePublished": "2023-12-12",
+    "description": "Numerical Geolab is a software to integrate numerical models in solid mechanics using the finite element framework FEniCS",
+    "funder": {
+        "type": "Organization",
+        "name": "European Research Council"
+    },
+    "license": "https://spdx.org/licenses/GPL-3.0-only",
+    "name": "Numerical Geolab",
+    "operatingSystem": "Linux",
+    "programmingLanguage": [
+        "Python",
+        "Fortran",
+        "Mathematica"
+    ],
+    "softwareRequirements": "Python 3.10, FEniCS",
+    "version": "1.0.1",
+    "developmentStatus": "inactive",
+    "funding": "ERC Starting Grant number 757848 \"Controlling earthQuakes\""
+}

@@ -13,7 +13,7 @@ from ngeoFE.fedefinitions import FEformulation
 from ngeoFE.materials import UserMaterial
 from dolfin.cpp.io import HDF5File
 from sympy.sets.tests.test_sets import test_union_boundary_of_joining_sets
-from ngeoFE_unittests import ngeo_parameters
+from ngeoFE import ngeo_parameters
 from ngeoFE_unittests import plotting_params 
 import os
 from _operator import itemgetter
