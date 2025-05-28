@@ -25,7 +25,7 @@ from ngeoFE_unittests import plotting_params
 from _operator import itemgetter
 
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy2DFEformulation(FEformulation):
     '''

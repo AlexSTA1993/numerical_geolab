@@ -94,7 +94,7 @@ Here <img class="math" src="_images/math/b573fb3986756a11f5c808c000d6ead99d927a2
 <h2><span class="section-number">5.1.2. </span>Weak form of the system of coupled THM equations<a class="headerlink" href="#weak-form-of-the-system-of-coupled-thm-equations" title="Permalink to this heading">¶</a></h2>
 <p>As is the case with the examples describing the mechanical behavior of a structure, in order to perform an analysis with FEniCS we need to
 provide the weak form of the above non-linear system of coupled partial differential equations <a class="reference internal" href="#equation-tp-system-pdes">Eq.5.1.2</a>. Following the Galerkin procedure,
-applying a test vector field respecting the problem’s initial and boundary conditions, with the help of the <code class="xref py py-class docutils literal notranslate"><span class="pre">TestFunction()</span></code> class in FEniCs,
+applying a test vector field respecting the problem’s initial and boundary conditions, with the help of the <code class="xref py py-class docutils literal notranslate"><span class="pre">TestFunction()</span></code> class in FEniCS,
 performing <a class="reference external" href="https://en.wikipedia.org/wiki/Integration_by_parts">integration by parts</a> and applying the <a class="reference external" href="https://en.wikipedia.org/wiki/Divergence_theorem">Divergence Theorem</a> theorem:</p>
 <div class="math" id="equation-tp-system-pdes">
 <p><span class="eqno">(5.1.2)<a class="headerlink" href="#equation-tp-system-pdes" title="Permalink to this equation">¶</a></span><img src="_images/math/f18c301d895eb3019142d4c2df318cd475af253d.png" alt="\begin{align*}

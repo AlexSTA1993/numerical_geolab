@@ -20,7 +20,7 @@ import os
 from _operator import itemgetter
 
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy1DFEformulation(FEformulation):
     '''
@@ -104,22 +104,22 @@ class Cauchy1DFEproblem(UserFEproblem):
         """
         Sets an imperfection
         """
-        def __init__(self,imp):
-            self.imp=imp
+        def __init__(self, imp):
+            self.imp = imp
             SubDomain.__init__(self)
             
         def inside(self, x, on_boundary):
             return between(x[0], (-self.imp, self.imp))
 
     
-    def create_subdomains(self,mesh):
+    def create_subdomains(self, mesh):
         """
         Create subdomains by marking regions
         """
         subdomains = MeshFunction("size_t", mesh, mesh.topology().dim())
         subdomains.set_all(0) #assigns material/props number 0 everywhere
         imperfection = self.Imperfection(self.imp)
-        imperfection.mark(subdomains, 1) 
+        imperfection.mark(subdomains, 1)
         return subdomains
 
     def create_Gauss_point_query_domain(self,mesh):

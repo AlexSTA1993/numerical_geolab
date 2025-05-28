@@ -53,10 +53,10 @@ Below we provide a list of the modules needed and a brief explanation.</p>
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">The dolfin package needs to be loaded since the classes used by Numerical Geolab inherit from the basic classes of the dolfin package, which is part of the FeniCs software. (Important)</div>
+<div class="line">The dolfin package needs to be loaded since the classes used by Numerical Geolab inherit from the basic classes of the dolfin package, which is part of the FEniCS software. (Important)</div>
 <div class="line">We import the time module for monitoring time during the analysis.</div>
 <div class="line">We import numpy in order to manipulate the analysis results and insert the materioal parameters.</div>
-<div class="line">We continue by importing the numerical geolab modules that wrap around FeniCs functionality:(Important)</div>
+<div class="line">We continue by importing the numerical geolab modules that wrap around FEniCS functionality:(Important)</div>
 </div>
 <ul class="simple">
 <li>from ngeoFE.feproblem we import the classes of UserFeproblem() and General_FEproblem_properties() that will transform our series of commands to a problem understood by dolfin</li>
@@ -116,7 +116,7 @@ We note also that we provide the Voigt notation for the unknown strains of the p
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FEniCS documentation. The python function:</div>
 </div>
 <dl class="method">
 <dt id="create_element">
@@ -124,7 +124,7 @@ We note also that we provide the Voigt notation for the unknown strains of the p
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FeniCs.</div>
+<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FEniCS.</div>
 </div>
 <p>We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.</p>
 </div>

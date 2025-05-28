@@ -20,7 +20,7 @@ from _operator import itemgetter
 
 import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy2DFEformulation(FEformulation):
     '''

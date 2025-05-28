@@ -258,7 +258,7 @@ This value is a number indicating which material parameters need to be taken int
 
 .. admonition:: IMPORTANT NOTE
 
-    We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:
+    We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based on the FEniCS software:
 
 
 Monitoring stress and state variables at the Gauss points
@@ -285,7 +285,7 @@ Monitoring stress and state variables at the Gauss points
         GaussDomainQuery.mark(GaussDomain,1)
         return GaussDomain
 
-| We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software. 
+| We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCS software. 
 We note here that the Gauss point definition is done on the cells of the Finite Element mesh and not on the boundary facets. This is done because the Gauss points are on the
 interior of the domain and use of the nodal selection algorithm inside the Numerical Geolab module :py:mod:`ngeoFE.feproblem` (see method :py:meth:`ngeoFE.feproblem.UserFEobject.set_history_output_indices`) 
 returns an empty set. The method :py:meth:`ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices` needs to be called -internally- instead.

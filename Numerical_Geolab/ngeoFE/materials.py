@@ -5,7 +5,7 @@ Created on Aug 3, 2018, updated on Feb 4, 2025
 '''
 from ctypes import CDLL, byref, POINTER, RTLD_GLOBAL, c_double, c_int
 import numpy as np
-from juliacall import Main as jl
+import juliacall
 
 
 class UserMaterial():
@@ -91,7 +91,7 @@ class UserJuliaMaterial():
     """
     Material class with a user material subroutine that is called from a Julia file
     """
-    def __init__(self, env_lib, umat_lib, umat_id):
+    def __init__(self, env_lib, umat_lib, umat_parameters, umat_id):
         """
         Load Julia material. Env lib is a dummy variable for compatibility with the previous class
         :param env_lib: environment libraries filenames with path
@@ -101,9 +101,19 @@ class UserJuliaMaterial():
         :param umat_id: material id
         :type umat_id: integer
         """
+        # First read in the umat library
+        with open(umat_lib, encoding="utf-8") as f:
+            data = f.readlines()
+            # Write the umat parameters to the first line of the file
+            data[0] = "include(\"" + umat_parameters + "\")\n"
+        # Write the modified data back to the file
+        with open(umat_lib, 'w', encoding="utf-8") as f:
+            f.writelines(data)
         # Load the material library
         umat_lib_string = 'include("' + umat_lib + '")'
-        jl.seval(umat_lib_string)
+        jl = juliacall.newmodule(umat_lib)
+        self.jl = jl  # Store the Julia module
+        self.jl.seval(umat_lib_string)
         # Convert the umat_id to a Julia variable
         jl_umat_id = jl.convert(jl.Int64, umat_id)
         self.umat_id = jl_umat_id
@@ -132,9 +142,9 @@ class UserJuliaMaterial():
         """
 
         # Convert the type flag to a Julia variable
-        C_type_flag = jl.convert(jl.Int, 0)
+        C_type_flag = self.jl.convert(self.jl.Int, 0)
 
         # Call the material library
-        C_type_flag = jl.seval('usermaterial_')(self.umat_id, stressGP_t, deGP, svarsGP_t, dsdeGP_t, dt, GP_id, aux_deGP, C_type_flag)
+        C_type_flag = self.jl.seval('usermaterial_')(self.umat_id, stressGP_t, deGP, svarsGP_t, dsdeGP_t, dt, GP_id, aux_deGP, C_type_flag)
         __NILL = c_int(C_type_flag)
         return __NILL.value

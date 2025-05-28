@@ -7,12 +7,6 @@ from ngeoFE.materials import UserMaterial
 # from dolfin.cpp.function import near
 from ufl.tensors import as_scalar
 from sympy.physics.tests.test_paulialgebra import sigma1
-
-'''
-Created on Aug 7, 2018
-
-@author: Ioannis Stefanou
-'''
 from dolfin import *
 import numpy as np
 #
@@ -24,7 +18,7 @@ from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarnin
 # from dolfin.cpp.io import HDF5File
 # from dolfin.cpp.mesh import MeshFunction, SubDomain, UnitSquareMesh
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 
 class SuperFEMaterial():
@@ -396,187 +390,40 @@ class SuperFEMaterial():
             :param x: source coordinates
             :param y: target coordinates
             '''
-            if len(self.a)==1:
+            if len(self.a) == 1:
                 if near(x[0], self.bb.r_x):
                     y[0] = x[0] - self.a[0]
-            elif len(self.a)==2:
-                #return if it is on (1,1) corner
+            elif len(self.a) == 2:
+                # return if it is on (1, 1) corner
                 if near(x[0], self.bb.r_x) and near(x[1], self.bb.t_y):
                     y[0] = x[0] - self.a[0]
                     y[1] = x[1] - self.a[1]
-                #return if it is on the right boudary
+                # return if it is on the right boudary
                 elif near(x[0], self.bb.r_x):
                     y[0] = x[0] - self.a[0]
                     y[1] = x[1]
-                #return if it is on the top boudary
+                # return if it is on the top boudary
                 elif near(x[1], self.bb.t_y):
                     y[0] = x[0]
                     y[1] = x[1] - self.a[1]
-            elif len(self.a)==3:
-                #return if it is on (1,1,1) corner
+            elif len(self.a) == 3:
+                # return if it is on (1,1,1) corner
                 if near(x[0], self.bb.r_x) and near(x[1], self.bb.t_y) and near(x[2], self.bb.b_z):
                     y[0] = x[0] - self.a[0]
                     y[1] = x[1] - self.a[1]
                     y[2] = x[2] - self.a[2]
-                #return if it is on the right boudary
+                # return if it is on the right boudary
                 elif near(x[0], self.bb.r_x):
                     y[0] = x[0] - self.a[0]
                     y[1] = x[1]
                     y[2] = x[2]
-                #return if it is on the top boudary
+                # return if it is on the top boudary
                 elif near(x[1], self.bb.t_y):
                     y[0] = x[0]
                     y[1] = x[1] - self.a[1]
                     y[2] = x[2]
-                #return if it is on the top boudary
+                # return if it is on the top boudary
                 elif near(x[2], self.bb.b_z):
                     y[0] = x[0]
                     y[1] = x[1]
                     y[2] = x[2] - self.a[2]
-
-
-
-
-#                 # Plot solution
-#             import matplotlib.pyplot as plt
-#              
-#             #x = np.linspace(-.5, .5, 25)
-#             #y = np.linspace(-1., 1., 50)
-#             #X, Y = np.meshgrid(x, y)
-#             #Z=
-#             #plt.contour(X, Y, Z, 20, cmap='RdGy');
-#             plt.xlabel("$x_1$")
-#             plt.ylabel("$x_2$")
-# #             
-#             plot(self.FEproblems[GP_id].mesh)
-#             p=plot(self.FEproblems[GP_id].feobj.usol[0], title="$u_1$")
-#             #p.set_cmap('RdGy')
-#             #p.set_clim(0.0, 1.0)
-#             plt.colorbar(p);
-#             plt.show()
-#             #plt.savefig("demo.png")
-#              
-#             plot(self.FEproblems[GP_id].mesh)
-#             p=plot(self.FEproblems[GP_id].feobj.usol[1], title="$u_2$")
-#             #p.set_cmap('RdGy')
-#             #p.set_clim(0.0, 1.0)
-#             plt.colorbar(p);
-#             plt.show()
-#             #plt.savefig("demo.png")
-#              
-#              
-#             #plot(my_FEproblem.mesh)
-#             Pavg=FunctionSpace(self.FEproblems[GP_id].mesh,"DG",0)
-#             p=plot(project(self.FEproblems[GP_id].feobj.sigma2[0],Pavg))#, title="$\sigma_{22}$")
-#             print(self.FEproblems[GP_id].feobj.sigma2.vector().get_local())
-#             #p.set_cmap('RdGy')
-#             p.set_clim(0.0, .4)
-#             plt.colorbar(p);
-#             plt.show()
-#             #plt.savefig("demo.png")
-#             #plot(my_FEproblem.mesh)
-#             Pavg=FunctionSpace(self.FEproblems[GP_id].mesh,"DG",0)
-#             p=plot(project(self.FEproblems[GP_id].feobj.sigma2[1],Pavg))#, title="$\sigma_{22}$")
-#             print(self.FEproblems[GP_id].feobj.sigma2.vector().get_local())
-#             #p.set_cmap('RdGy')
-#             p.set_clim(0.0, .4)
-#             plt.colorbar(p);
-#             plt.show()
-#             #plt.savefig("demo.png")
-
-
-#         def create_boundary_subdomains(self,mesh):
-#             """
-#             Mark points for imposing BC to avoid rigid body motions
-#             """
-#             subdomains = MeshFunction("size_t", mesh, 1)
-#             subdomains.set_all(0) #assigns material/props number 0 everywhere
-#             _corner_1=self._corner_1(self.periodicityvector,self.boundingbox)
-#             _corner_1.mark(subdomains, 1) #assigns material/props number 1 to corner 1
-#             if len(self.periodicityvector)==1: return subdomains
-#             _corner_2=self._corner_2(self.periodicityvector,self.boundingbox)
-#             _corner_2.mark(subdomains, 2) #assigns material/props number 2 to corner 2
-#             if len(self.periodicityvector)==2: return subdomains 
-#             _corner_3=self._corner_3(self.periodicityvector,self.boundingbox)
-#             _corner_3.mark(subdomains, 3) #assigns material/props number 3 to corner 3
-#             return subdomains
-#
-#         class _corner_1(SubDomain):
-#             """
-#             Gets left, bottom, foreground corner
-#             """
-#             def __init__(self,periodicityvector,boundingbox):
-#                 SubDomain.__init__(self)
-#                 self.periodicityvector = periodicityvector
-#                 self.boundingbox = boundingbox
-#                 
-#             def inside(self, x, on_boundary):
-#                 if len(self.periodicityvector)==1:
-#                     return bool(near(x[0], self.boundingbox.l_x))
-#                 elif len(self.periodicityvector)==2:
-#                     return bool(near(x[0], self.boundingbox.l_x) and near(x[1], self.boundingbox.b_y)) 
-#                 elif len(self.periodicityvector==3):
-#                     return bool(near(x[0], self.boundingbox.l_x) and near(x[1], self.boundingbox.b_y) and near(x[2], self.boundingbox.f_z))
-#         
-#         class _corner_2(SubDomain):
-#             """
-#             Gets right, bottom, foreground corner
-#             """
-#             def __init__(self,periodicityvector,boundingbox):
-#                 SubDomain.__init__(self)
-#                 self.periodicityvector = periodicityvector
-#                 self.boundingbox = boundingbox
-# 
-#             def inside(self, x, on_boundary):
-#                 if len(self.periodicityvector)==2:
-#                     return bool(near(x[0], self.boundingbox.r_x) and near(x[1], self.boundingbox.b_y)) 
-#                 elif len(self.periodicityvector)==3:
-#                     return bool(near(x[0], self.boundingbox.r_x) and near(x[1], self.boundingbox.b_y) and near(x[2], self.boundingbox.f_z))
-#         
-#         class _corner_3(SubDomain):
-#             """
-#             Gets right, bottom, background corner
-#             """
-#             def __init__(self,periodicityvector,boundingbox):
-#                 SubDomain.__init__(self)
-#                 self.periodicityvector = periodicityvector
-#                 self.boundingbox = boundingbox
-#             
-#             def inside(self, x, on_boundary): 
-#                 if len(self.periodicityvector)==3:
-#                     return bool(near(x[0], self.boundingbox.r_x) and near(x[1], self.boundingbox.b_y) and near(x[2], self.boundingbox.b_z))
-
-#         def set_bcs(self):
-#             """
-#             Set boundary conditions to avoid rigid body movements (elementary cell is cosidered as Cauchy)
-#             """
-#             #[topology_id,[dof,value]]
-#             if len(self.periodicityvector)==1:
-#                 bcs=[[1,[0,0.]]]
-#             elif len(self.periodicityvector)==2:
-#                 bcs=[
-#                     [1,[0,0.]],
-#                     [1,[1,0.]],
-#                     [2,[1,0.]]
-#                     ]
-#             elif len(self.periodicityvector)==3:
-#                 bcs=[
-#                     [1,[0,0.]],
-#                     [1,[1,0.]],
-#                     [1,[2,0.]],
-#                     [2,[1,0.]],
-#                     [3,[1,0.]]
-#                     ]
-#             bcs=[]
-#             return bcs    
-
-#             meshfile="/mnt/f/DEVELOPMENT/GMSHFENICS/test2D_1.h5"
-#             mesh = Mesh()
-#             hdf = HDF5File(mesh.mpi_comm(), meshfile, "r")
-#             hdf.read(mesh, "/mesh", False)
-#             #cd = CellFunction("size_t", mesh) #deprecated
-#             cd=MeshFunction("size_t", mesh, mesh.topology().dim())
-#             hdf.read(cd, "/cd")
-#             #fd = FacetFunction("size_t", mesh) #deprecated
-#             fd=MeshFunction("size_t", mesh, mesh.topology().dim()-1)
-#             hdf.read(fd, "/fd")

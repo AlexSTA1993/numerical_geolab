@@ -15,7 +15,7 @@ from ngeoFE.materials import UserMaterial
 from ngeoFE import ngeo_parameters
 
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 
 class Cosserat1DFEformulation(FEformulation):

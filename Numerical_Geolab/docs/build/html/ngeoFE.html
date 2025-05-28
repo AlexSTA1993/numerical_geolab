@@ -220,7 +220,7 @@ __Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=p_nsvars,qua
 <p>self.svars2_prev (Function(self.Vsvars)): previous state variables vector of last total converged increment.</p>
 <p>self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment.</p>
 <p>self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem.</p>
-<p>self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)</p>
+<p>self.metadata (str): FEniCS-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)</p>
 <p>Values used for integration at the Gauss points: {“quadrature_degree”:self.ns,”quadrature_scheme”:”default”}</p>
 <p>self.comm=comm</p>
 <p>self.history_indices_ti (int): Indicates the degrees of freedom for which we wish to separately save their force output (e.g traction on a boundary node).  
@@ -486,7 +486,7 @@ __Ve (VectorElement(“Quadrature”, self.cell, degree=self.ns,dim=p_nsvars,qua
 <p>self.svars2_prev (Function(self.Vsvars)): previous state variables vector of last total converged increment.</p>
 <p>self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment.</p>
 <p>self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem.</p>
-<p>self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)</p>
+<p>self.metadata (str): FEniCS-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)</p>
 <p>Values used for integration at the Gauss points: {“quadrature_degree”:self.ns,”quadrature_scheme”:”default”}</p>
 <p>self.comm=comm</p>
 <p>self.history_indices_ti (int): Indicates the degrees of freedom for which we wish to separately save their force output (e.g traction on a boundary node).  

@@ -17,7 +17,7 @@ import time
 
 
 #from dolfin.cpp.mesh import MeshFunction, IntervalMesh, SubDomain
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 # import time
 # import math

@@ -8,3 +8,10 @@ This update includes:
  - Additional files to conform to the best standards of academic software attribution
  - Removal of features and models that are under active development from the main branch
  - General clean-ups and corrections throughout
+
+## Version 1.0.2
+ 
+This update includes:
+ - The capacity to call material models through the new UserJuliaMaterial
+ - Complete suppression of the deprecation warnings related to the element quadrature, as this was not in fact deprecated in legacy FEniCS
+ - Miscellaneous spelling corrections

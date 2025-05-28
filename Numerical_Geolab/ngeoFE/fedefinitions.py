@@ -163,7 +163,7 @@ class FEobject():
             self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment. \n
             self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem. \n
 
-            self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)\n
+            self.metadata (str): FEniCS-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)\n
             Values used for integration at the Gauss points: {"quadrature_degree":self.ns,"quadrature_scheme":"default"}\n
 
             self.comm=comm\n
@@ -238,7 +238,7 @@ class FEobject():
         # for problems we need to keep the previous state (e.g. SuperMaterials)
         self.keep_previous=keep_previous
         if self.keep_previous==True:
-            self.sigma2_prev = Function(self.Vstress) #:previous stress matrixof last total converged increment
+            self.sigma2_prev = Function(self.Vstress) #:previous stress matrix of last total converged increment
             self.svars2_prev = Function(self.Vsvars)
             self.dsde2_prev = Function(self.Vdsde)
             self.usol_prev = Function(self.V)

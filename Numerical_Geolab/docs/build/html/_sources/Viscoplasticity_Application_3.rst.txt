@@ -83,11 +83,11 @@ In code snippet above, we provide the finite element formulation for the problem
 
 .. py:method:: generalized_epsilon(v)
    
-| presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:
+| presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FEniCS documentation. The python function:
 
 .. py:method:: create_element(cell)
    
-| sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FeniCs.
+| sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FEniCS.
 We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.
 
 Boundary identification
@@ -203,7 +203,7 @@ provide the mesh object, the interior domain and the boundary domains. The follo
 
 Defining subdomains of interest: Imperfection and Gauss points query domains
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In this application we need to show the effect of the imprefection thickness on the localization width of the specimen and its elasto-viscoplastic response.
+In this application we need to show the effect of the imperfection thickness on the localization width of the specimen and its elasto-viscoplastic response.
 We will also show that the response of the specimen during shearing under quasistatic conditions with strain softening and strain rate hardening remains mesh independent, in the sense that
 all the element inside the imperfection band exhibit uniform strain, which is greater that the zero strain outside the imperfection domain. For this
 we need to make both the Imperfection and the Gauss point query domains dependent on the imperfection size previously defined as a parameter. 
@@ -274,7 +274,7 @@ The numbers 0 and 1 used in the labels, indicate which material parameters are n
 
 .. warning::
    IMPORTANT
-   We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:
+   We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based on the FEniCS software:
 
 
 .. code-block:: python
@@ -289,7 +289,7 @@ The numbers 0 and 1 used in the labels, indicate which material parameters are n
         GaussDomainQuery.mark(GaussDomain,1) # marks the Gauss region be applying the number 1 at the selected nodes.
         return GaussDomain
 
-| We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software. 
+| We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCS software. 
 We note here that the Gauss point definition is done on the cells of the Finite Element mesh and not on the boundary facets. This is done because the Gauss points are on the
 interior of the domain and use of the nodal selection algorithm inside the Numerical Geolab module :py:mod:`ngeoFE.feproblem` 
 (see method :py:meth:`ngeoFE.feproblem.UserFEobject.set_history_output_indices`) 

@@ -23,7 +23,7 @@ reference_data_path = "./results/"
 ### Decomment to deactivate QuadratureRepresentationDeprecationWarning prints
 import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 # Define FE model dimensions (x, y, z)
 lx, ly, lz = 10., 10., 20.

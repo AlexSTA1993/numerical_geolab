@@ -26,7 +26,7 @@ import os
 from _operator import itemgetter
 
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy2DFEformulation(FEformulation):
     '''

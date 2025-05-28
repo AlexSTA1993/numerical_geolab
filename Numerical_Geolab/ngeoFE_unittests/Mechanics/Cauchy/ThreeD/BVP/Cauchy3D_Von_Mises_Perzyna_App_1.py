@@ -19,7 +19,7 @@ from ngeoFE_unittests import plotting_params
 import os
 from _operator import itemgetter
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy3DFEformulation(FEformulation):
     '''

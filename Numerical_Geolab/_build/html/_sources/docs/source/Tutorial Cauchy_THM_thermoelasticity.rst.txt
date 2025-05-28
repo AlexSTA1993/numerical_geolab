@@ -253,7 +253,7 @@ This value is a number indicating which material parameters need to be taken int
 
 .. admonition:: IMPORTANT NOTE
 
-    We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:
+    We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based on the FEniCS software:
 
 Boundary identification
 -----------------------

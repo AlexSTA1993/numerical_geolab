@@ -34,7 +34,7 @@ from _operator import itemgetter
 #from dolfin.cpp.mesh import MeshFunction
 # from dolfin.cpp.mesh import MeshFunction
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy1DFEformulation(FEformulation):
     '''

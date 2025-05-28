@@ -22,7 +22,7 @@ import os
 from _operator import itemgetter
 # from tkinter.constants import NW
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy1DFEformulation(FEformulation):
     '''

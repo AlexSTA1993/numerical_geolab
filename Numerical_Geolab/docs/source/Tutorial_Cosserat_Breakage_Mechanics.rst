@@ -28,7 +28,7 @@ Below we provide a list of the modules needed and a brief explanation.
      from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
      from dolfin.cpp.io import HDF5File
      from operator import itemgetter
-     warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+     warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 | The dolfin package needs to be loaded since the classes used by Numerical Geolab inherit from the basic classes of the :ref:`dolfin` package, which is part of the :ref:`FEniCS project`.
 

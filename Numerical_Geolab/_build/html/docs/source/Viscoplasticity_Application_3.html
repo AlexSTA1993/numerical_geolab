@@ -107,7 +107,7 @@ We note also that we provide the Voigt notation for the unknown strains of the p
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FEniCS documentation. The python function:</div>
 </div>
 <dl class="method">
 <dt id="create_element">
@@ -115,7 +115,7 @@ We note also that we provide the Voigt notation for the unknown strains of the p
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FeniCs.</div>
+<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FEniCS.</div>
 </div>
 <p>We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.</p>
 <div class="section" id="boundary-identification">
@@ -223,7 +223,7 @@ provide the mesh object, the interior domain and the boundary domains. The follo
 </div>
 <div class="section" id="defining-subdomains-of-interest-imperfection-and-gauss-points-query-domains">
 <h4>2.3.2.2.1. Defining subdomains of interest: Imperfection and Gauss points query domains<a class="headerlink" href="#defining-subdomains-of-interest-imperfection-and-gauss-points-query-domains" title="Permalink to this headline">¶</a></h4>
-<p>In this application we need to show the effect of the imprefection thickness on the localization width of the specimen and its elasto-viscoplastic response.
+<p>In this application we need to show the effect of the imperfection thickness on the localization width of the specimen and its elasto-viscoplastic response.
 We will also show that the response of the specimen during shearing under quasistatic conditions with strain softening and strain rate hardening remains mesh independent, in the sense that
 all the element inside the imperfection band exhibit uniform strain, which is greater that the zero strain outside the imperfection domain. For this
 we need to make both the Imperfection and the Gauss point query domains dependent on the imperfection size previously defined as a parameter.
@@ -294,7 +294,7 @@ The numbers 0 and 1 used in the labels, indicate which material parameters are n
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">IMPORTANT
-We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:</p>
+We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based on the FEniCS software:</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_query_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -308,7 +308,7 @@ We need also to initialize the Gauss point monitoring subdomain, when state vari
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software.</div>
+<div class="line">We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCS software.</div>
 </div>
 <p>We note here that the Gauss point definition is done on the cells of the Finite Element mesh and not on the boundary facets. This is done because the Gauss points are on the
 interior of the domain and use of the nodal selection algorithm inside the Numerical Geolab module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE.feproblem</span></code>

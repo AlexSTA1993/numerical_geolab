@@ -132,7 +132,7 @@ class UserFEproblem():
 
     def create_subdomains(self,mesh):
         """
-        Create subdomains by marking regions. If no subdomains, set subdomain id=0 everywhere. 
+        Create subdomains by marking regions. If no subdomains, set subdomain id=0 everywhere.
         Subdomains define regions with different properties in the problem
 
         :param mesh: Domain dolfin mesh
@@ -146,7 +146,7 @@ class UserFEproblem():
         """
         Mark boundary domains if not marked by mesh file
 
-        :param boundaries: dolfin MeshFunction of mesh order ndim-1 marked with boundary ids 
+        :param boundaries: dolfin MeshFunction of mesh order ndim-1 marked with boundary ids
         :type boundaries: MeshFunction
         """
         pass
@@ -171,7 +171,7 @@ class UserFEproblem():
     
     def history_svars_output(self):
         """
-        Used to get output of svars at selected Gauss point 
+        Used to get output of svars at selected Gauss point
         """
         pass
     
@@ -183,7 +183,7 @@ class UserFEproblem():
 
         :param file: output hdmf filename for saving results (default: "" - no output)
         :param silent: messages display
-        :param summary: display incrementation summary 
+        :param summary: display incrementation summary
         :type file: string
         :type silent: boolean
         :type summary: boolean
@@ -194,7 +194,7 @@ class UserFEproblem():
 
     def plot_me(self):
         """
-        Used to plot selected quantities 
+        Used to plot selected quantities
         """
         pass
 
@@ -238,11 +238,11 @@ class UserFEobject(FEobject):
     :type feform: FEformulation
     :param subdomains: list of dolfin subdomains
     :type subdomains: SubDomain
-    :param boundaries: dolfin MeshFunction of mesh order ndim-1 marked with boundary ids 
+    :param boundaries: dolfin MeshFunction of mesh order ndim-1 marked with boundary ids
     :type boundaries: MeshFunction
     :param generalprops: general properties
-    :type generalprops: General_FEproblem_properties    
-    :param symbolic: symbolic, user input form of BCs 
+    :type generalprops: General_FEproblem_properties
+    :param symbolic: symbolic, user input form of BCs
     :type symbolic: list
     :param comm: parallel communicator
     :type comm: d.MPI.comm_world
@@ -285,9 +285,9 @@ class UserFEobject(FEobject):
 
     def update_mesh(self, mesh, displacement,minus=False):
         """
-        Function that utilizes the ALE module of dolfin to update the mesh after each iteration. 
+        Function that utilizes the ALE module of dolfin to update the mesh after each iteration.
         If the increment in total is not converged then it resets to the previously converged increment.
-        :param mesh: dolfin mesh.e    
+        :param mesh: dolfin mesh.e
         :type mesh: Mesh.
         :param displacement: displacement calculated at the specific iteration of the increment/ total displacement of the unconverged increment.
         :type displacement: dolfin Function.
@@ -321,7 +321,7 @@ class UserFEobject(FEobject):
 
     def init_Jac_res(self):
         """
-        Initialize the Jacobian and the residual through their respective variational forms. 
+        Initialize the Jacobian and the residual through their respective variational forms.
         Change between transient or quasistatic problems suitable for first derivative in time.
         ::* To do: add inertial variational formulation.
         :ivar dotv_coeffs(): if empty then quasistatic case.
@@ -333,7 +333,7 @@ class UserFEobject(FEobject):
         :type Res: numpy array of reals.
         """
         #Set variational forms
-        if self.dotv_coeffs()!=None:           
+        if self.dotv_coeffs()!=None:
             self.dt=Expression("dt",dt=0.,degree=1)
             self.Jac, self.Res = self.setVarFormTransient()
         else:
@@ -346,7 +346,7 @@ class UserFEobject(FEobject):
              the appropriate boundary for the Dirichlet condition to be applied. Else if len(region_id)=2 then
              A point generalized displacement will be applied.
              region_id[0]= the boundary where the condition will be applied
-             region_id[1]= nested list of the position [x1,x2,x3] of the applied displacement  
+             region_id[1]= nested list of the position [x1,x2,x3] of the applied displacement
             The position is given as argument via dolphin syntax inside the DirichletBC dolfin function.
             Alternatively region_id[1] can be given as a string in dolfin syntax.
         :type region_id: nested list 
@@ -406,15 +406,15 @@ class UserFEobject(FEobject):
             else:
                 sV=self.V.sub(bc_dof[0]).sub(bc_dof[1])
             BC=self.__get_BC_point_or_facet(region_id,sV,bc_value)
-            local_dofs_values=BC.get_boundary_values() #returns in local....... perversity  
+            local_dofs_values=BC.get_boundary_values() #returns in local....... perversity
             # Set Dirichlet Boundary Conditions
 
-            if self.symbolic_history[i][1][0]==0:                                  
+            if self.symbolic_history[i][1][0]==0:
 # initial position of history_indices_ui=[]
                 for lc_dof in local_dofs_values.keys():
                     if lc_dof<=len(lc_to_gl_dof): self.history_indices_ui.append(lc_dof)
             # Set Neumann Boundary Conditions  
-# initial position of history_indices_ti=[]d           
+# initial position of history_indices_ti=[]d
             elif self.symbolic_history[i][1][0]==1:
 
                 for lc_dof in local_dofs_values.keys():
@@ -447,7 +447,7 @@ class UserFEobject(FEobject):
                 if self.Vsvars.num_sub_spaces()>1:
                     sV=self.Vsvars.sub(bc_dof[0])
                 else:
-                    sV=self.Vsvars; bc_value=[bc_value] 
+                    sV=self.Vsvars; bc_value=[bc_value]
             else:
                 sV=self.Vsvars.sub(bc_dof[0]).sub(bc_dof[1])
                 
@@ -483,52 +483,57 @@ class UserFEobject(FEobject):
         pass the list of values to function __get_BC_point_or_facet(region_id,sV,bc_value)
         """
         
-        if self.symbolic_bcs==None: return
+        if self.symbolic_bcs == None:
+            return
         #reset at each step
-        self.DCbcs0=[]; self.DCbcs=[]; self.NMbcs=[]; self.RBbcs=[]; self.NMnbcs=[];
+        self.DCbcs0 = []
+        self.DCbcs = []
+        self.NMbcs = []
+        self.RBbcs = []
+        self.NMnbcs = []
         # get dofmap
         for i in range(len(self.symbolic_bcs)):
-            if self.symbolic_bcs[i][1][0]==6 or self.symbolic_bcs[i][1][0]==7:
-                region_id=self.symbolic_bcs[i][0]
-                bc_indices=self.symbolic_bcs[i][1][1]
-                bc_value=0.*self.symbolic_bcs[i][1][2]
+            if self.symbolic_bcs[i][1][0] == 6 or self.symbolic_bcs[i][1][0] == 7:
+                region_id = self.symbolic_bcs[i][0]
+                bc_indices = self.symbolic_bcs[i][1][1]
+                bc_value = 0.*self.symbolic_bcs[i][1][2]
             else: 
-                region_id=self.symbolic_bcs[i][0]
-                bc_dof=self.symbolic_bcs[i][1][1]
-                bc_value=0.*self.symbolic_bcs[i][1][2]
-                if len(bc_dof)==1:
-                    if self.V.num_sub_spaces()>1:
-                        sV=self.V.sub(bc_dof[0])
+                region_id = self.symbolic_bcs[i][0]
+                bc_dof = self.symbolic_bcs[i][1][1]
+                bc_value = 0.*self.symbolic_bcs[i][1][2]
+                if len(bc_dof) == 1:
+                    if self.V.num_sub_spaces() > 1:
+                        sV = self.V.sub(bc_dof[0])
                     else:
-                        sV=self.V; bc_value=[bc_value] 
+                        sV = self.V
+                        bc_value = [bc_value] 
                 else:
-                    sV=self.V.sub(bc_dof[0]).sub(bc_dof[1])
-                BC=self.__get_BC_point_or_facet(region_id,sV,bc_value)
+                    sV = self.V.sub(bc_dof[0]).sub(bc_dof[1])
+                BC = self.__get_BC_point_or_facet(region_id, sV, bc_value)
 
             # Set Dirichlet Boundary Conditions
-            if self.symbolic_bcs[i][1][0]==0 or self.symbolic_bcs[i][1][0]==2:                                  
-                nBC=BoC(self.symbolic_bcs[i],BC)
+            if self.symbolic_bcs[i][1][0] == 0 or self.symbolic_bcs[i][1][0] == 2:
+                nBC = BoC(self.symbolic_bcs[i], BC)
                 self.DCbcs.append(nBC)
                 # has to repeat because copy SWIG object does not function
-                BC=self.__get_BC_point_or_facet(region_id,sV,bc_value)
-                nBC=BoC(self.symbolic_bcs[i],BC)
+                BC = self.__get_BC_point_or_facet(region_id, sV, bc_value)
+                nBC = BoC(self.symbolic_bcs[i], BC)
                 self.DCbcs0.append(nBC)
-                #print("heloo!",self.DCbcs0)
             # Set Neumann Boundary Conditions     
-            elif self.symbolic_bcs[i][1][0]==1 or self.symbolic_bcs[i][1][0]==3:
-                NM=BoC(self.symbolic_bcs[i],BC)
-                NM.ti=Function(self.V)
+            elif self.symbolic_bcs[i][1][0] == 1 or self.symbolic_bcs[i][1][0] == 3:
+                NM = BoC(self.symbolic_bcs[i], BC)
+                NM.ti = Function(self.V)
                 self.NMbcs.append(NM)
             # Set Robin Boundary Conditions     
-            elif self.symbolic_bcs[i][1][0]==5:
-                RB=BoC(self.symbolic_bcs[i],BC)
-                RB.ks=Function(self.V)
+            elif self.symbolic_bcs[i][1][0] == 5:
+                RB = BoC(self.symbolic_bcs[i], BC)
+                RB.ks = Function(self.V)
                 self.RBbcs.append(RB)
             # Set Neumann boundary normal (pressure) Boundary Conditions     
-            elif self.symbolic_bcs[i][1][0]==6 or self.symbolic_bcs[i][1][0]==7:
-                NMn=BoC(self.symbolic_bcs[i],self.symbolic_bcs[i][1][0])
-                NMn.indices=bc_indices
-                NMn.p=Expression("value",degree=0, value=0.)
+            elif self.symbolic_bcs[i][1][0] == 6 or self.symbolic_bcs[i][1][0] == 7:
+                NMn = BoC(self.symbolic_bcs[i], self.symbolic_bcs[i][1][0])
+                NMn.indices = bc_indices
+                NMn.p = Expression("value", degree=0, value=0.)
                 self.NMnbcs.append(NMn)
         return
 
@@ -617,11 +622,11 @@ class UserFEobject(FEobject):
         """
         n=FacetNormal(self.mesh)
         #print(self.dt.values())
-        ds=Measure("ds", subdomain_data = self.boundaries)#,metadata=self.metadata      )
+        ds=Measure("ds", subdomain_data = self.boundaries)#,metadata=self.metadata)
 
         Jac = (1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.u)) , self.v)*dx(metadata=self.metadata)
         Jac+= (1./self.dt)*self.dt*inner(dot(self.to_matrix(self.dsde2) , self.epsilon2(self.u)),self.epsilon2(self.v))*dx(metadata=self.metadata)
-        Res = -(1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.Du)), self.v)*dx(metadata=self.metadata) 
+        Res = -(1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.Du)), self.v)*dx(metadata=self.metadata)
 
         Res+= -(1./self.dt)*self.dt*inner(self.sigma2,self.epsilon2(self.v))*dx(metadata=self.metadata)
 

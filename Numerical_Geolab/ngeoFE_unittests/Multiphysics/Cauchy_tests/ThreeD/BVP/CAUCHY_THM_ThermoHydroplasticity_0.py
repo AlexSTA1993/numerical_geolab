@@ -28,7 +28,7 @@ from dolfin.cpp.io import HDF5File
 from _operator import itemgetter
 #from dolfin.cpp.mesh import MeshFunction
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 from ngeoFE import ngeo_parameters
 

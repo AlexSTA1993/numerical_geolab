@@ -105,7 +105,7 @@ We note also that we provide the Voigt notation for the unknown strains of the p
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:</div>
+<div class="line">presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FEniCS documentation. The python function:</div>
 </div>
 <dl class="method">
 <dt id="create_element">
@@ -113,7 +113,7 @@ We note also that we provide the Voigt notation for the unknown strains of the p
 <dd></dd></dl>
 
 <div class="line-block">
-<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FeniCs.</div>
+<div class="line">sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FEniCS.</div>
 </div>
 <p>We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.</p>
 <div class="section" id="boundary-identification">
@@ -245,7 +245,7 @@ This value is a number indicating which material parameters need to be taken int
 <div class="line">IMPORTANT</div>
 </div>
 <blockquote>
-<div>We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:</div></blockquote>
+<div>We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based on the FEniCS software:</div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_Gauss_point_query_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mesh</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create subdomains by marking regions</span>
@@ -258,7 +258,7 @@ This value is a number indicating which material parameters need to be taken int
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software.</div>
+<div class="line">We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCS software.</div>
 </div>
 <p>We note here that the Gauss point definition is done on the cells of the Finite Element mesh and not on the boundary facets. This is done because the Gauss points are on the
 interior of the domain and use of the nodal selection algorithm inside the Numerical Geolab module <code class="xref py py-mod docutils literal notranslate"><span class="pre">ngeoFE.feproblem</span></code>

@@ -275,7 +275,7 @@ provide the mesh object, the interior domain and the boundary domains. The follo
 This value is a number indicating which material parameters need to be taken into account in each mesh region (see the corresponding method <a class="reference internal" href="#set-material-params">set_material_params()</a>).</p>
 <div class="admonition-important-note admonition">
 <p class="admonition-title">IMPORTANT NOTE</p>
-<p>We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based onthe FEniCs software:</p>
+<p>We need also to initialize the Gauss point monitoring subdomain, when state variable output is needed. We use the same method as in the case of material definition based on the FEniCS software:</p>
 </div>
 <section id="monitoring-stress-and-state-variables-at-the-gauss-points">
 <h3><span class="section-number">5.5.3.1. </span>Monitoring stress and state variables at the Gauss points<a class="headerlink" href="#monitoring-stress-and-state-variables-at-the-gauss-points" title="Permalink to this heading">¶</a></h3>
@@ -298,7 +298,7 @@ This value is a number indicating which material parameters need to be taken int
     <span class="k">return</span> <span class="n">GaussDomain</span>
 </pre></div>
 </div>
-<p>We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCs software.
+<p>We note here that this mark has nothing to do with marking of the materials or the boundaries, because it will be applied internally, to different VectorFunctionSpace() objects of the FEniCS software.
 We note here that the Gauss point definition is done on the cells of the Finite Element mesh and not on the boundary facets. This is done because the Gauss points are on the
 interior of the domain and use of the nodal selection algorithm inside the Numerical Geolab module <a class="reference internal" href="ngeoFE.html#module-ngeoFE.feproblem" title="ngeoFE.feproblem"><code class="xref py py-mod docutils literal notranslate"><span class="pre">feproblem</span></code></a> (see method <a class="reference internal" href="ngeoFE.html#ngeoFE.feproblem.UserFEobject.set_history_output_indices" title="ngeoFE.feproblem.UserFEobject.set_history_output_indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_history_output_indices()</span></code></a>) returns an empty set. The method <a class="reference internal" href="ngeoFE.html#ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices" title="ngeoFE.feproblem.UserFEobject.set_svars_history_output_indices"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_svars_history_output_indices()</span></code></a> needs to be called -internally- instead.</p>
 </section>

@@ -18,7 +18,7 @@ from ngeoFE_unittests import plotting_params
 
 from operator import itemgetter
 
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
 class Cauchy1DFEformulation(FEformulation):
     '''

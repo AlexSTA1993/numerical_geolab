@@ -65,7 +65,7 @@ Weak form of the system of coupled THM equations
  
 As is the case with the examples describing the mechanical behavior of a structure, in order to perform an analysis with FEniCS we need to 
 provide the weak form of the above non-linear system of coupled partial differential equations :eq:`TP_system_PDEs`. Following the Galerkin procedure,
-applying a test vector field respecting the problem's initial and boundary conditions, with the help of the :py:class:`TestFunction()` class in FEniCs,
+applying a test vector field respecting the problem's initial and boundary conditions, with the help of the :py:class:`TestFunction()` class in FEniCS,
 performing `integration by parts`_ and applying the `Divergence Theorem`_ theorem:
 
 .. _integration by parts: https://en.wikipedia.org/wiki/Integration_by_parts

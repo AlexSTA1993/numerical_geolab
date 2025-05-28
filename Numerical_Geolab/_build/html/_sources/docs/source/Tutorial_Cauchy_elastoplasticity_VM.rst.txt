@@ -27,10 +27,10 @@ Below we provide a list of the modules needed and a brief explanation.
      import os #allows easier manipulation of directories 
      
 
-| The dolfin package needs to be loaded since the classes used by Numerical Geolab inherit from the basic classes of the dolfin package, which is part of the FeniCs software. (Important)
+| The dolfin package needs to be loaded since the classes used by Numerical Geolab inherit from the basic classes of the dolfin package, which is part of the FEniCS software. (Important)
 | We import the time module for monitoring time during the analysis.
 | We import numpy in order to manipulate the analysis results and insert the materioal parameters.
-| We continue by importing the numerical geolab modules that wrap around FeniCs functionality:(Important)
+| We continue by importing the numerical geolab modules that wrap around FEniCS functionality:(Important)
 * from ngeoFE.feproblem we import the classes of UserFeproblem() and General_FEproblem_properties() that will transform our series of commands to a problem understood by dolfin
 * from ngeoFE.fedefinitions we import the class of FEformulation() that defines the vector of unknown derivatives to be used in the variational form solved by the dolfin package.
 * from ngeoFE.materials we import the UserMaterial() class where the material is specified. 
@@ -81,11 +81,11 @@ In code snippet above, we provide the finite element formulation for the problem
 
 .. py:method:: generalized_epsilon(v)
    
-| presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FeniCs documentation. The python function:
+| presents the derivatives of the vector components of the Testfunction according to the Voigt formulation. The notation used by the dolfin package indicates that Dx(v[i],j) is the derivative of the vector component (i) of the Testfunction (v), w.r.t. the spatial direction (j). The Testfunction is an object of the dolfin package available in the FEniCS documentation. The python function:
 
 .. py:method:: create_element(cell)
    
-| sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FeniCs.
+| sets the desired element from the dolfin library of finite elements. Here a two dimensional (dim=2) linear (degree=1) VectorElement() is used. The VectorElement() class is documented in the dolfin finite element package of FEniCS.
 We note here that the VectorElelement() class indicates that the components of the function space for each vector component are the same.
 
 Boundary identification

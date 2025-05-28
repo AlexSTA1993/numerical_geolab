@@ -28,7 +28,7 @@ from ngeoFE import ngeo_parameters
 # ngeo_parameters.reference_data_path='/home/alexandrosstathas/eclipse-workspace/numerical_geolab/Numerical_Geolab/ngeoFE_unittests/Multiphysics/reference_data/'
 
 # from 0test_cauchy1Dmat import svars
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 #from Parametric_Cosserat import Cosserat_1D_FEformulation
 
 class THM1D_FEformulation(FEformulation):

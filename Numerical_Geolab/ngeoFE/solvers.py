@@ -388,7 +388,7 @@ class Backward_Euler_Solver():
         :rtype nill: integer
         """
         for GP_id in range(int(deGP.size/self.feobj.p_nstr)):
-            nill = self.mats[domainidGP[GP_id]].usermatGP(stress_t[GP_id],deGP[GP_id],svars_t[GP_id],dsde_t[GP_id],dt,GP_id,aux_deGP[GP_id])
+            nill = self.mats[domainidGP[GP_id]].usermatGP(stress_t[GP_id], deGP[GP_id], svars_t[GP_id], dsde_t[GP_id], dt, GP_id, aux_deGP[GP_id])
             if nill==1:
                 return nill
         return 0

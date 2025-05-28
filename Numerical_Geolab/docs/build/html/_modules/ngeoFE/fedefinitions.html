@@ -202,7 +202,7 @@
 <span class="sd">            self.dsde2_prev (Function(self.Vdsde)): previous material tangent modulus vector of last total converged increment. \n</span>
 <span class="sd">            self.usol_prev (Function(self.V)): converged solution at the Gauss point at the previous increment from which the incremental procedure starts at the sub problem. \n</span>
 
-<span class="sd">            self.metadata (str): Fenics-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)\n</span>
+<span class="sd">            self.metadata (str): FEniCS-ufl flag it indicates to the program that access to the Gauss points in needed. Namely it instructs dolfin to perform numerical Gauss integration for calculating the integrals (Nowadays other algorithms may be more efficient especially when material non-linearity is not encountered)\n</span>
 <span class="sd">            Values used for integration at the Gauss points: {&quot;quadrature_degree&quot;:self.ns,&quot;quadrature_scheme&quot;:&quot;default&quot;}\n</span>
 
 <span class="sd">            self.comm=comm\n</span>

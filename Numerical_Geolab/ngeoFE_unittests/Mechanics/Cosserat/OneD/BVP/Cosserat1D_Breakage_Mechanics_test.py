@@ -11,7 +11,7 @@ import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
 from dolfin.cpp.io import HDF5File
 from operator import itemgetter
-warnings.simplefilter("once", QuadratureRepresentationDeprecationWarning)
+warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
  # Set the material values
 K = 13833.  # Bulk stiffness
