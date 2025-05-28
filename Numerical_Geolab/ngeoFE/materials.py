@@ -91,7 +91,7 @@ class UserJuliaMaterial():
     """
     Material class with a user material subroutine that is called from a Julia file
     """
-    def __init__(self, env_lib, umat_lib, umat_parameters, umat_id):
+    def __init__(self, env_lib, umat_lib, instance, umat_parameters, umat_id):
         """
         Load Julia material. Env lib is a dummy variable for compatibility with the previous class
         :param env_lib: environment libraries filenames with path
@@ -102,16 +102,16 @@ class UserJuliaMaterial():
         :type umat_id: integer
         """
         # First read in the umat library
-        with open(umat_lib, encoding="utf-8") as f:
+        with open(umat_lib + ".jl", encoding="utf-8") as f:
             data = f.readlines()
             # Write the umat parameters to the first line of the file
-            data[0] = "include(\"" + umat_parameters + "\")\n"
-        # Write the modified data back to the file
-        with open(umat_lib, 'w', encoding="utf-8") as f:
+            data[0] = "include(\"" + umat_parameters + "_" + str(instance) + ".jl\")\n"
+        # Write the modified data back to the file with the instance number to track the material
+        with open(umat_lib + "_" + str(instance) + ".jl", 'w', encoding="utf-8") as f:
             f.writelines(data)
         # Load the material library
-        umat_lib_string = 'include("' + umat_lib + '")'
-        jl = juliacall.newmodule(umat_lib)
+        umat_lib_string = 'include("' + umat_lib + '_' + str(instance) + '.jl")'
+        jl = juliacall.newmodule(umat_lib + '_' + str(instance) + '.jl')
         self.jl = jl  # Store the Julia module
         self.jl.seval(umat_lib_string)
         # Convert the umat_id to a Julia variable
