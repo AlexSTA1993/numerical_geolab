@@ -4,19 +4,14 @@ Created on Aug 27, 2018
 @author: Ioannis Stefanou
 '''
 from ngeoFE.materials import UserMaterial
-# from dolfin.cpp.function import near
 from ufl.tensors import as_scalar
 from sympy.physics.tests.test_paulialgebra import sigma1
 from dolfin import *
 import numpy as np
-#
 from ngeoFE.feproblem import UserFEproblem
 from ngeoFE.fedefinitions import FEformulation
-#
 import warnings
 from ffc.quadrature.deprecation import QuadratureRepresentationDeprecationWarning
-# from dolfin.cpp.io import HDF5File
-# from dolfin.cpp.mesh import MeshFunction, SubDomain, UnitSquareMesh
 
 warnings.simplefilter("ignore", QuadratureRepresentationDeprecationWarning)
 
@@ -25,31 +20,29 @@ class SuperFEMaterial():
     """
     Super material class
     """
-    def __init__(self,map_type):
+    def __init__(self, map_type):
         """
         Initialize supermaterial
 
         .. todo: check if the supermaterial object is stored locally at rank x proccess > It better shouldn't; I think it doesn't.
         """        
-        self.silent=True
-        self.FEformulation=self.SuperFEMaterialFEformulation()
-        self.FEproblems=[]
-        self.hom_expr=[]
-        self.map_type=map_type
+        self.silent = True
+        self.FEformulation = self.SuperFEMaterialFEformulation()
+        self.FEproblems = []
+        self.hom_expr = []
+        self.map_type = map_type
 
-    def get_stress_averages(self,GP_id,stressGP):
+    def get_stress_averages(self, GP_id, stressGP):
         '''
         Calculate average stresses
 
         .. todo: 
             Have to check if it is properly working in parallel
         '''
-        stressGP[:]=assemble(dot(
-            self.FEproblems[GP_id].feobj.sigma2
-            ,self.FEproblems[GP_id].cR_sigma)*dx).get_local()
+        stressGP[:] = assemble(dot(self.FEproblems[GP_id].feobj.sigma2, self.FEproblems[GP_id].cR_sigma)*dx).get_local()
         return
 
-    def get_dsde_averages(self,GP_id,dsdeGP):
+    def get_dsde_averages(self, GP_id, dsdeGP):
         '''
         Calculate average stiffness tensor (incremental)
 
@@ -57,36 +50,22 @@ class SuperFEMaterial():
 
         .. todo:: Set the correct expression for the C_hom
         '''
-        #II=np.identity(3).flatten()
-        #print(II)
-        dsdeGP[:]=assemble(dot(
-            self.FEproblems[GP_id].feobj.dsde2
-            ,self.FEproblems[GP_id].cR_dsde)*dx).get_local()
+        dsdeGP[:] = assemble(dot(self.FEproblems[GP_id].feobj.dsde2, self.FEproblems[GP_id].cR_dsde)*dx).get_local()
 
-    def plot_state(self,GP_id):
+    def plot_state(self, GP_id):
         import matplotlib.pyplot as plt
-        #plt.ion()
         plt.xlabel("$x_1$")
         font = {'size'   : 18}
         plt.rc('font', **font)
-        Pavg=FunctionSpace(self.FEproblems[GP_id].mesh,"DG",0)
-        #p=plot(self.FEproblems[GP_id].feobj.usol[0])#, label='$u_2$')
+        Pavg = FunctionSpace(self.FEproblems[GP_id].mesh, "DG", 0)
         plt.ylabel("$\sigma_{11}$")
-        p=plot(project(self.FEproblems[GP_id].feobj.sigma2[0],Pavg))#,label='$\sigma_88$')#, label='1')
-        #plt.colorbar(p);
-        #plt.legend()
+        p = plot(project(self.FEproblems[GP_id].feobj.sigma2[0], Pavg))
         plt.show()
         plt.ylabel("$u_1^{(1)}$")
-        #p=plot(project(self.FEproblems[GP_id].feobj.usol[1],Pavg))#,label='$\sigma_88$')#, label='1')
-        #print(self.FEproblems[GP_id].feobj.usol.vector().get_local())
-        p=plot(self.FEproblems[GP_id].feobj.usol[0])#,label='$\sigma_88$')#, label='1')
-        #plt.colorbar(p);
-        #plt.legend()
+        p = plot(self.FEproblems[GP_id].feobj.usol[0])
         plt.show()
 
-        #plt.colorbar(p);    
-
-    def usermatGP(self,stressGP_t,deGP,svarsGP_t,dsdeGP_t,dt,GP_id,aux_deGP=np.zeros(1)):
+    def usermatGP(self, stressGP_t, deGP, svarsGP_t, dsdeGP_t, dt, GP_id, aux_deGP=np.zeros(1)):
         """
         Super-user material at a Gauss point
 
@@ -98,65 +77,65 @@ class SuperFEMaterial():
         :param dt:
         """
         # Solve the auxiliary problem for the increment        
-        if GP_id>len(self.FEproblems)-1:
-            for i in range(GP_id-len(self.FEproblems)+1):
+        if GP_id > len(self.FEproblems) - 1:
+            for i in range(GP_id - len(self.FEproblems) + 1):
                 self.FEproblems.append(self.SuperFEMaterialFEproblem(self.FEformulation,self.map_type))        
 
-        t=svarsGP_t[0]
-        tmaterial=self.FEproblems[GP_id].slv.t
-        if tmaterial>t:
-            #this means that the solver requests a fresh increment in the material -> roll back to previous state
+        t = svarsGP_t[0]
+        tmaterial = self.FEproblems[GP_id].slv.t
+        if tmaterial > t:
+            # This means that the solver requests a fresh increment in the material -> roll back to previous state
             self.roll_back_to_previous_state(GP_id)
 
-        if dt!=0:
-            self.update_macro_epsilon(deGP,GP_id)
-            self.FEproblems[GP_id].slv.set_init_stress=True
-            #it will increment -> so save the current state
+        if dt != 0:
+            self.update_macro_epsilon(deGP, GP_id)
+            self.FEproblems[GP_id].slv.set_init_stress = True
+            # It will increment -> so save the current state
             self.save_state(GP_id)
         else:
-            self.FEproblems[GP_id].slv.set_init_stress=False
+            self.FEproblems[GP_id].slv.set_init_stress = False
 
-        self.FEproblems[GP_id].slv.tmax=t+dt
-        converged=self.FEproblems[GP_id].solve("",silent=self.silent)
+        self.FEproblems[GP_id].slv.tmax = t + dt
+        converged = self.FEproblems[GP_id].solve("", silent=self.silent)
 
-        if converged==True:
-            self.set_output_tdt(GP_id,stressGP_t,dsdeGP_t,svarsGP_t)
+        if converged == True:
+            self.set_output_tdt(GP_id, stressGP_t, dsdeGP_t, svarsGP_t)
             return 0
         else:
-            #roll back
+            # Roll back
             self.roll_back_to_previous_state(GP_id)
-            svarsGP_t[0]=self.FEproblems[GP_id].slv.t
+            svarsGP_t[0] = self.FEproblems[GP_id].slv.t
             return 1
 
-    def set_output_tdt(self,GP_id,stress_tdt,dsde_tdt,svars_tdt):
-        self.get_stress_averages(GP_id,stress_tdt)
-        self.get_dsde_averages(GP_id,dsde_tdt) # has to be calculated better
-        #other svars may be energies
-        svars_tdt[0]=self.FEproblems[GP_id].slv.t
+    def set_output_tdt(self, GP_id, stress_tdt, dsde_tdt, svars_tdt):
+        self.get_stress_averages(GP_id, stress_tdt)
+        self.get_dsde_averages(GP_id, dsde_tdt) # has to be calculated better
+        # Other svars may be energies
+        svars_tdt[0] = self.FEproblems[GP_id].slv.t
 
-    def save_state(self,GP_id):
-        #this might be slow as it involves a lot of copies -> optimization? pointers?
-        self.FEproblems[GP_id].slv.t_prev=self.FEproblems[GP_id].slv.t
-        #has to be a copy:
-        self.FEproblems[GP_id].t_eps_prev=self.FEproblems[GP_id].t_eps.copy()
+    def save_state(self, GP_id):
+        # This might be slow as it involves a lot of copies -> optimization? pointers?
+        self.FEproblems[GP_id].slv.t_prev = self.FEproblems[GP_id].slv.t
+        # has to be a copy:
+        self.FEproblems[GP_id].t_eps_prev = self.FEproblems[GP_id].t_eps.copy()
         self.FEproblems[GP_id].feobj.sigma2_prev.vector().set_local(self.FEproblems[GP_id].feobj.sigma2.vector().get_local())
         self.FEproblems[GP_id].feobj.svars2_prev.vector().set_local(self.FEproblems[GP_id].feobj.svars2.vector().get_local())
         self.FEproblems[GP_id].feobj.dsde2_prev.vector().set_local(self.FEproblems[GP_id].feobj.dsde2.vector().get_local())
         self.FEproblems[GP_id].feobj.usol_prev.vector().set_local(self.FEproblems[GP_id].feobj.usol.vector().get_local())
         return
 
-    def roll_back_to_previous_state(self,GP_id):
-        #this might be slow as it involves a lot of copies -> optimization? pointers?
-        self.FEproblems[GP_id].slv.t=self.FEproblems[GP_id].slv.t_prev
-        #has to be a copy:
-        self.FEproblems[GP_id].t_eps=self.FEproblems[GP_id].t_eps_prev.copy()
+    def roll_back_to_previous_state(self, GP_id):
+        # This might be slow as it involves a lot of copies -> optimization? pointers?
+        self.FEproblems[GP_id].slv.t = self.FEproblems[GP_id].slv.t_prev
+        # has to be a copy:
+        self.FEproblems[GP_id].t_eps = self.FEproblems[GP_id].t_eps_prev.copy()
         self.FEproblems[GP_id].feobj.sigma2.vector().set_local(self.FEproblems[GP_id].feobj.sigma2_prev.vector().get_local())
         self.FEproblems[GP_id].feobj.svars2.vector().set_local(self.FEproblems[GP_id].feobj.svars2_prev.vector().get_local())
         self.FEproblems[GP_id].feobj.dsde2.vector().set_local(self.FEproblems[GP_id].feobj.dsde2_prev.vector().get_local())
         self.FEproblems[GP_id].feobj.usol.vector().set_local(self.FEproblems[GP_id].feobj.usol_prev.vector().get_local())
         return
 
-    def update_macro_epsilon(self,eps,GP_id):
+    def update_macro_epsilon(self, eps, GP_id):
         '''
         Updates generalized strain increment
 
@@ -169,17 +148,14 @@ class SuperFEMaterial():
             * Generalize for 3D Cauchy
             * Add micromorphic
         '''
-        self.FEproblems[GP_id].t_eps=eps#np.add(self.FEproblems[GP_id].t_eps,eps)
-        #
-        if self.map_type=="Cauchy_1D_AUSSOIS_2019":
+        self.FEproblems[GP_id].t_eps = eps
+        if self.map_type == "Cauchy_1D_AUSSOIS_2019":
             self.FEproblems[GP_id].hom_expr.E_00 = self.FEproblems[GP_id].t_eps[0]
             self.FEproblems[GP_id].hom_expr.G_10 = self.FEproblems[GP_id].t_eps[1]            
-        elif self.map_type=="Cauchy_2D":
+        elif self.map_type == "Cauchy_2D":
             self.FEproblems[GP_id].hom_expr.E_00 = self.FEproblems[GP_id].t_eps[0]
             self.FEproblems[GP_id].hom_expr.E_11 = self.FEproblems[GP_id].t_eps[1]
             self.FEproblems[GP_id].hom_expr.G_01 = self.FEproblems[GP_id].t_eps[2]
-        #self.FEproblems[GP_id].feobj.u0.interpolate(self.FEproblems[GP_id].hom_expr) 
-        #self.FEproblems[GP_id].feobj.u0=self.FEproblems[GP_id].hom_expr
 
 
     class SuperFEMaterialFEformulation(FEformulation):
@@ -188,17 +164,17 @@ class SuperFEMaterial():
         '''
         def __init__(self):
             # Number of stress/deformation components
-            self.p_nstr=0
+            self.p_nstr = 0
             # Number of Gauss points
-            self.ns=0
+            self.ns = 0
 
-        def generalized_epsilon(self,v):
+        def generalized_epsilon(self, v):
             """
             Set user's generalized deformation vector
             """
             pass
 
-        def create_element(self,cell):
+        def create_element(self, cell):
             """
             Set desired element
             """
@@ -210,20 +186,19 @@ class SuperFEMaterial():
 
         Only orthogonal elementary cells are supported (no need for other geometries now)
         """
-        def __init__(self,FEformulation,map_type):
-            self.description="supermaterial description, Cauchy continuum"
-            self.map_type=map_type
+        def __init__(self, FEformulation, map_type):
+            self.description = "supermaterial description, Cauchy continuum"
+            self.map_type = map_type
             self.set_general_properties()
-            self.periodicityvector,self.boundingbox=self._set_periodicity(self.left_bottom_corner,self.right_top_corner)
-            self.pbcs=SuperFEMaterial.SuperFEMaterialPeriodicBoundary(self.periodicityvector,self.boundingbox)
-            self.keep_previous=True
+            self.periodicityvector, self.boundingbox = self._set_periodicity(self.left_bottom_corner, self.right_top_corner)
+            self.pbcs = SuperFEMaterial.SuperFEMaterialPeriodicBoundary(self.periodicityvector, self.boundingbox)
+            self.keep_previous = True
             super().__init__(FEformulation)
             self._init_micro_to_macro_mapping()
-            tmpRsigma=VectorFunctionSpace(self.feobj.mesh, 'R', 0,dim=self.feobj.p_nstr)
-            self.cR_sigma=TestFunction(tmpRsigma)
-            tmpRdsde=VectorFunctionSpace(self.feobj.mesh, 'R', 0,dim=self.feobj.p_nstr**2)
-            self.cR_dsde=TestFunction(tmpRdsde)
-            #self.boundaries=self.create_boundary_subdomains(self.mesh)
+            tmpRsigma = VectorFunctionSpace(self.feobj.mesh, 'R', 0, dim=self.feobj.p_nstr)
+            self.cR_sigma = TestFunction(tmpRsigma)
+            tmpRdsde = VectorFunctionSpace(self.feobj.mesh, 'R', 0, dim=self.feobj.p_nstr**2)
+            self.cR_dsde = TestFunction(tmpRdsde)
 
         def _init_micro_to_macro_mapping(self):
             '''
@@ -234,20 +209,18 @@ class SuperFEMaterial():
                 * Generalize for 3D Cauchy
                 * Add micromorphic
             '''
-            if self.map_type=="Cauchy_1D_AUSSOIS_2019":
-                expr= ("E_00*x[0]",".5*G_10*x[0]")
-                self.hom_expr = Expression(expr,element=self.feobj.element,E_00=0.,G_10=0.)
-                self.t_eps=np.array([0.,0.])
-            elif self.map_type=="Cauchy_2D":
-                expr= ("E_00*x[0]+.5*G_01*x[1]",".5*G_01*x[0]+E_11*x[1]")
-                #expr= ("x[0]","0.")
-                self.hom_expr = Expression(expr,element=self.feobj.element,E_00=0.,G_01=0.,E_11=0.)
-                self.t_eps=np.array([0.,0.,0.])
-            #    
-            self.feobj.u0=self.hom_expr
+            if self.map_type == "Cauchy_1D_AUSSOIS_2019":
+                expr = ("E_00*x[0]",".5*G_10*x[0]")
+                self.hom_expr = Expression(expr, element=self.feobj.element, E_00=0., G_10=0.)
+                self.t_eps = np.array([0., 0.])
+            elif self.map_type == "Cauchy_2D":
+                expr = ("E_00*x[0]+.5*G_01*x[1]",".5*G_01*x[0]+E_11*x[1]")
+                self.hom_expr = Expression(expr, element=self.feobj.element, E_00=0., G_01=0., E_11=0.)
+                self.t_eps = np.array([0., 0., 0.])
+            self.feobj.u0 = self.hom_expr
             return
 
-        def _set_periodicity(self,left_bottom_corner,right_top_corner):
+        def _set_periodicity(self, left_bottom_corner, right_top_corner):
             '''
             Get periodicity vector and bounding box 
 
@@ -257,23 +230,23 @@ class SuperFEMaterial():
             :type right_top_corner:
             :return:
             '''
-            # Set bounding box of the mesh (e.g. (e.g. [0., 1.] in 1D, [[0.,0.],[1.,1.]] in 2D, [[0.,0.,0.],[1.,1.,1.]] in 3D)
-            boundingbox=SuperFEMaterial.Bounding_box([left_bottom_corner,right_top_corner])
-            # Set periodicity vector (e.g. [1.] in 1D, [1.,1.] in 2D, [1.,1.,1.] in 3D)
-            periodicityvector=list(np.array(right_top_corner) - np.array(left_bottom_corner))
-            return periodicityvector,boundingbox
+            # Set bounding box of the mesh (e.g. (e.g. [0., 1.] in 1D, [[0., 0.], [1., 1.]] in 2D, [[0., 0., 0.], [1., 1., 1.]] in 3D)
+            boundingbox = SuperFEMaterial.Bounding_box([left_bottom_corner, right_top_corner])
+            # Set periodicity vector (e.g. [1.] in 1D, [1., 1.] in 2D, [1., 1., 1.] in 3D)
+            periodicityvector = list(np.array(right_top_corner) - np.array(left_bottom_corner))
+            return periodicityvector, boundingbox
 
         class pin_point(SubDomain):
-            def __init__(self,point):
-                self.pt=point
+            def __init__(self, point):
+                self.pt = point
                 super().__init__()
             def inside(self, x, on_boundary):
                 for i in range(len(self.pt)):
-                    a=+(x[i]-self.pt[i])**2
-                a=sqrt(a)
-                return a<=DOLFIN_EPS_LARGE and on_boundary
+                    a =+ (x[i] - self.pt[i])**2
+                a = sqrt(a)
+                return a <= DOLFIN_EPS_LARGE and on_boundary
 
-        def mark_boundaries(self,boundaries):
+        def mark_boundaries(self, boundaries):
             """
             Mark right top corner boundary point with id=10
             """
@@ -295,7 +268,7 @@ class SuperFEMaterial():
                         [10, [0, [1], 0.]], 
                         [10, [0, [2], 0.]],   
                         ]
-                bcs=bcs[0:len(self.right_top_corner)]
+                bcs = bcs[0:len(self.right_top_corner)]
             return bcs
 
         def set_general_properties(self):
@@ -334,14 +307,16 @@ class SuperFEMaterial():
              [[left_x,bottom_y,foreground_z],[right_x,top_y,background_z]]
              :type points: List
             '''
-            self.l_x=points[0][0]
-            self.r_x=points[1][0]
-            if len(points[0])==1: return
-            self.b_y=points[0][1]
-            self.t_y=points[1][1]
-            if len(points[0])==2: return
-            self.f_z=points[0][2]
-            self.b_z=points[1][2]
+            self.l_x = points[0][0]
+            self.r_x = points[1][0]
+            if len(points[0]) == 1:
+                return
+            self.b_y = points[0][1]
+            self.t_y = points[1][1]
+            if len(points[0]) == 2:
+                return
+            self.f_z = points[0][2]
+            self.b_z = points[1][2]
 
     class SuperFEMaterialPeriodicBoundary(SubDomain):
         '''
@@ -349,15 +324,17 @@ class SuperFEMaterial():
 
         I give credit to: Garth N. Wells see `FEniCS Q&A <https://fenicsproject.org/qa/262/possible-specify-more-than-one-periodic-boundary-condition/>`_
         '''
-        def __init__(self,periodicityvector,boundingbox):
+        def __init__(self, periodicityvector, boundingbox):
             SubDomain.__init__(self)
             self.a = periodicityvector
             self.bb = boundingbox
-            self.Lx=self.a[0]
-            if len(periodicityvector)==1: return
-            self.Ly=self.a[1]
-            if len(periodicityvector)==2: return
-            self.Lz=self.a[2]
+            self.Lx = self.a[0]
+            if len(periodicityvector) == 1:
+                return
+            self.Ly = self.a[1]
+            if len(periodicityvector) == 2:
+                return
+            self.Lz = self.a[2]
 
         def inside(self, x, on_boundary):
             '''
@@ -368,20 +345,20 @@ class SuperFEMaterial():
             :return: True if it belongs to the target domain
             :rtype: boolean 
             '''
-            # return True if on left boundary
-            if len(self.a)==1:
+            # Return True if on left boundary
+            if len(self.a) == 1:
                 return bool(near(x[0], self.bb.l_x) and on_boundary)
-            # return True if on left or bottom boundary AND NOT on one of the two corners (0, 1) and (1, 0)
-            elif len(self.a)==2:    
-                return bool(  (near(x[0], self.bb.l_x) or near(x[1], self.bb.b_y)) and 
-                        (not( (near(x[0], self.bb.l_x) and near(x[1], self.bb.t_y)) or 
-                              (near(x[0], self.bb.r_x) and near(x[1], self.bb.b_y)) ) ) and on_boundary)
-            # return True if on left, bottom or foreground boundary AND NOT on one of the three corners (0,1,0), (1,0,0) and (0,0,1)
-            elif len(self.a)==3:
-                return bool(  (near(x[0], self.bb.l_x) or near(x[1], self.bb.b_y) or near(x[2], self.bb.f_z)) and 
-                        (not( (near(x[0], self.bb.l_x) and near(x[1], self.bb.t_y) and near(x[2], self.bb.f_z)) or 
-                              (near(x[0], self.bb.r_x) and near(x[1], self.bb.b_y) and near(x[2], self.bb.f_z)) or
-                              (near(x[0], self.bb.l_x) and near(x[1], self.bb.b_y) and near(x[2], self.bb.b_z)) ) ) and on_boundary)
+            # Return True if on left or bottom boundary AND NOT on one of the two corners (0, 1) and (1, 0)
+            elif len(self.a) == 2:    
+                return bool((near(x[0], self.bb.l_x) or near(x[1], self.bb.b_y)) and 
+                        (not((near(x[0], self.bb.l_x) and near(x[1], self.bb.t_y)) or 
+                             (near(x[0], self.bb.r_x) and near(x[1], self.bb.b_y)))) and on_boundary)
+            # Return True if on left, bottom or foreground boundary AND NOT on one of the three corners (0, 1, 0), (1, 0, 0) and (0, 0, 1)
+            elif len(self.a) == 3:
+                return bool((near(x[0], self.bb.l_x) or near(x[1], self.bb.b_y) or near(x[2], self.bb.f_z)) and 
+                        (not((near(x[0], self.bb.l_x) and near(x[1], self.bb.t_y) and near(x[2], self.bb.f_z)) or 
+                             (near(x[0], self.bb.r_x) and near(x[1], self.bb.b_y) and near(x[2], self.bb.f_z)) or
+                             (near(x[0], self.bb.l_x) and near(x[1], self.bb.b_y) and near(x[2], self.bb.b_z)))) and on_boundary)
 
         def map(self, x, y):
             '''

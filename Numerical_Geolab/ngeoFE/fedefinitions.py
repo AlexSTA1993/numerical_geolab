@@ -5,10 +5,8 @@ Created on Aug 2, 2018
 """
 
 from dolfin import *
-
-#from dolfin.cpp.common import set_log_level
-#
 import numpy as np
+
 
 class FEformulation():
     """
@@ -16,13 +14,13 @@ class FEformulation():
     """
     def __init__(self):
         # Number of stress/deformation components
-        self.p_nstr=1
+        self.p_nstr = 1
         # Number of Gauss points
-        self.ns=1
+        self.ns = 1
         # Number of auxiliary quantities at gauss points
-        self.p_aux=self.ndofs
+        self.p_aux = self.ndofs
 
-    def generalized_epsilon(self,v):
+    def generalized_epsilon(self, v):
         """
         Set user's generalized deformation vector
 
@@ -31,7 +29,7 @@ class FEformulation():
         """
         pass
 
-    def auxiliary_fields(self,v):
+    def auxiliary_fields(self, v):
         """
         Set user's generalized deformation vector
 
@@ -40,7 +38,7 @@ class FEformulation():
         """
         return as_vector(v)
 
-    def create_element(self,cell):
+    def create_element(self, cell):
         """
         Set desired element
 
@@ -55,7 +53,7 @@ class FEformulation():
         """
         pass 
 
-    def setVarFormAdditionalTerms_Jac(self,u,Du,v,svars,metadata,dt,dsde):
+    def setVarFormAdditionalTerms_Jac(self, u, Du, v, svars, metadata, dt, dsde):
         """
         Set user's additional terms at variational form for Jacobian
 
@@ -74,10 +72,10 @@ class FEformulation():
 
         WARNING: the derivatives for calculating the Jacobian are made with the Trial function u and not with the Function Du.
         """
-        Jac=0 
+        Jac = 0 
         return Jac
 
-    def setVarFormAdditionalTerms_Res(self,u,Du,v,svars,metadata,dt):
+    def setVarFormAdditionalTerms_Res(self, u, Du, v, svars, metadata, dt):
         """
         Set user's additional terms at variational form for Residual
 
@@ -92,7 +90,7 @@ class FEformulation():
         :param dt: time increment
         :type dt: double
         """
-        Res=0 
+        Res = 0 
         return Res
 
 class FEobject():
@@ -112,7 +110,7 @@ class FEobject():
     :param pbc: periodic boundary conditions for supermaterial
     :type pbc: SuperFEMaterialPeriodicBoundary 
     """
-    def __init__(self,mesh,feform,p_nsvars,subdomains,comm,pbc=None,keep_previous=False):
+    def __init__(self, mesh, feform, p_nsvars, subdomains, comm, pbc=None, keep_previous=False):
         """
         Constructor
 
@@ -175,60 +173,59 @@ class FEobject():
             self.domainidGP (self.__init_domains(mesh,subdomains,self.ns)): List of the problems Gauss points for every subdomain defined.
         """
         # FEniCS parameters
-        #set_log_level(INFO)
         set_log_level(20)
         parameters["form_compiler"]["optimize"] = True
-#         parameters["form_compiler"]["cpp_optimize_flags"] = "-O3" # optimization flags for the C++ compiler
+        # parameters["form_compiler"]["cpp_optimize_flags"] = "-O3" # optimization flags for the C++ compiler
         # compatibility with current version only for 3D
-        if mesh.ufl_cell().cellname()=="tetrahedron" or mesh.ufl_cell().cellname()=="hexahedron":
+        if mesh.ufl_cell().cellname() == "tetrahedron" or mesh.ufl_cell().cellname() == "hexahedron":
             parameters["form_compiler"]["representation"] = 'quadrature'
         else:
             parameters["form_compiler"]["representation"] = 'quadrature'
-        self.p_nstr=feform.p_nstr #: No of components of the generalized stress vector
-        self.p_nsvars=p_nsvars #: No of components of state variables
+        self.p_nstr = feform.p_nstr #: No of components of the generalized stress vector
+        self.p_nsvars = p_nsvars #: No of components of state variables
         # Set generalized vector function
-        self.feform=feform #attribute of the kinematical formulation
+        self.feform = feform #attribute of the kinematical formulation
         # Set number of Gauss points
-        self.ns=feform.ns #:attribute of number of Gauss points
+        self.ns = feform.ns #:attribute of number of Gauss points
         # Set mesh
-        self.mesh=mesh #:attribute of the mesh
-        self.cell=mesh.ufl_cell().cellname()  #:indicates the topological dimension of the element used e.g "interval","triangle","tetrahedron"
+        self.mesh = mesh #:attribute of the mesh
+        self.cell = mesh.ufl_cell().cellname()  #:indicates the topological dimension of the element used e.g "interval","triangle","tetrahedron"
         # Create element 
-        self.element=self.feform.create_element(self.cell) #:creates the element with given topology, dimension, interpolation functions and integration order
+        self.element = self.feform.create_element(self.cell) #:creates the element with given topology, dimension, interpolation functions and integration order
         # Assign the element to the mesh
-        self.V=FunctionSpace(mesh, self.element, constrained_domain=self.pbc) #:Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.\ 
+        self.V = FunctionSpace(mesh, self.element, constrained_domain=pbc) #:Indicates the Function space: It is understood as an arbitrary function derived from the interpolation functions of all the elements assigned in mesh.\ 
         #:It takes into account local connections of the elements at common nodes and assigns the interpolation coefficients to be defined in the solution. 
         #: Keep a non-periodic space for the u0 (initial displacements)
-        self.V0=FunctionSpace(mesh, self.element) #:FunctionSpace used for an initial non-periodic field.\n
+        self.V0 = FunctionSpace(mesh, self.element) #:FunctionSpace used for an initial non-periodic field.\n
         # Define test functions (virtual velocities)
-        self.v=TestFunction(self.V) #:Test function of the variational formulation. \n
+        self.v = TestFunction(self.V) #:Test function of the variational formulation. \n
         # Get number of degrees of freedom
-        self.ndofs=np.shape(self.v)[0]
+        self.ndofs = np.shape(self.v)[0]
         # Get number of auxiliary fields
-        if hasattr(self.feform, 'p_aux')==False: self.feform.p_aux=self.ndofs
-        self.p_aux=self.feform.p_aux
+        if hasattr(self.feform, 'p_aux') == False:
+            self.feform.p_aux = self.ndofs
+        self.p_aux = self.feform.p_aux
         # Define trial functions (unknown generalized displacements)           
-        self.u=TrialFunction(self.V)          
+        self.u = TrialFunction(self.V)          
         # Define external generalized volumic forces and tractor 
-        self.f=Function(self.V)
-#         self.tn=[]
+        self.f = Function(self.V)
         # Define initial non-periodic generalized displacements
-        self.u0=Function(self.V0)
+        self.u0 = Function(self.V0)
         # Define solution increments and solution vectors
-        self.Du=Function(self.V)
-        self.du=Function(self.V)
-        self.usol=Function(self.V, name="Gen_Diplacements")
+        self.Du = Function(self.V)
+        self.du = Function(self.V)
+        self.usol = Function(self.V, name="Gen_Diplacements")
         # Initialize solution to zero 
         self.usol.interpolate(Constant(np.zeros(self.ndofs)))
         #
-        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns,dim=self.feform.p_nstr,quad_scheme='default') #P_NSTR components
-        self.Vstress = FunctionSpace(mesh,__Ve)
-        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns,dim=self.p_aux,quad_scheme='default') #P_AUX components
-        self.Vaux = FunctionSpace(mesh,__Ve)
-        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns,dim=p_nsvars,quad_scheme='default') #P_NSVARS components
-        self.Vsvars = FunctionSpace(mesh,__Ve)
-        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns,dim=self.feform.p_nstr*self.feform.p_nstr,quad_scheme='default') #P_NSTR**2 components
-        self.Vdsde = FunctionSpace(mesh,__Ve)
+        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns, dim=self.feform.p_nstr, quad_scheme='default') #P_NSTR components
+        self.Vstress = FunctionSpace(mesh, __Ve)
+        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns, dim=self.p_aux, quad_scheme='default') #P_AUX components
+        self.Vaux = FunctionSpace(mesh, __Ve)
+        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns, dim=p_nsvars, quad_scheme='default') #P_NSVARS components
+        self.Vsvars = FunctionSpace(mesh, __Ve)
+        __Ve = VectorElement("Quadrature", self.cell, degree=self.ns, dim=self.feform.p_nstr*self.feform.p_nstr, quad_scheme='default') #P_NSTR**2 components
+        self.Vdsde = FunctionSpace(mesh, __Ve)
         #
         self.sigma2 = Function(self.Vstress)
         self.deGP2 = Function(self.Vstress)
@@ -236,34 +233,27 @@ class FEobject():
         self.svars2 = Function(self.Vsvars)
         self.dsde2 = Function(self.Vdsde)
         # for problems we need to keep the previous state (e.g. SuperMaterials)
-        self.keep_previous=keep_previous
-        if self.keep_previous==True:
+        self.keep_previous = keep_previous
+        if self.keep_previous == True:
             self.sigma2_prev = Function(self.Vstress) #:previous stress matrix of last total converged increment
             self.svars2_prev = Function(self.Vsvars)
             self.dsde2_prev = Function(self.Vdsde)
             self.usol_prev = Function(self.V)
         #
-        self.metadata={"quadrature_degree":self.ns,"quadrature_scheme":"default"}
+        self.metadata = {"quadrature_degree": self.ns, "quadrature_scheme": "default"}
         #
-        self.comm=comm
+        self.comm = comm
         #
-        self.history_indices_ti=None
-        self.history_indices_ui=None
-        self.problem_history=[]
+        self.history_indices_ti = None
+        self.history_indices_ui = None
+        self.problem_history = []
 
-        self.svars_history_indices=None
-        self.problem_svars_history=[]
+        self.svars_history_indices = None
+        self.problem_svars_history = []
 
-#         #
-#         if self.dotv_coeffs()!=None:           
-#             self.dt=Expression("dt",dt=0.,degree=1)
-#             self.Jac, self.Res = self.setVarFormTransient()
-#         else:
-#             self.Jac, self.Res = self.setVarForm()            
-        #
-        self.domainidGP = self.__init_domains(mesh,subdomains,self.ns)
+        self.domainidGP = self.__init_domains(mesh, subdomains, self.ns)
 
-    def set_dt(self,dt):
+    def set_dt(self, dt):
         """
         Sets new dt to be consider in setVarForm_x
 
@@ -271,12 +261,12 @@ class FEobject():
         :type dt: double
         """
         try:
-            self.dt.dt=dt
+            self.dt.dt = dt
         except AttributeError:
             return 1
         return 0
 
-    def __init_domains(self,mesh,subdomains,ns):
+    def __init_domains(self, mesh,subdomains, ns):
         """
         Initializes subdomains for setting diffderent material properties (hidden)
 
@@ -291,19 +281,17 @@ class FEobject():
         """
 
         # Load domain ids to scalar functionspace
-        domainid  = Function(FunctionSpace(mesh, 'DG', 0)) #: Load domain ids to scalar functionspace
-        #temp = np.asarray(subdomains.array(), dtype=np.int32)
-        #domainid.vector()[:] = np.choose(temp, np.arange(len(props)))
+        domainid = Function(FunctionSpace(mesh, 'DG', 0)) #: Load domain ids to scalar functionspace
         domainid.vector()[:] = np.asarray(subdomains.array(), dtype=np.int32)
         # Space for id of domain and assignement of domain id at GPs
-        Ve = FiniteElement("Quadrature", self.cell, degree=ns,quad_scheme='default') #:Create the finite element with discontinuous interpolation functions whose nodes are at the Gauss points. 
+        Ve = FiniteElement("Quadrature", self.cell, degree=ns, quad_scheme='default') #:Create the finite element with discontinuous interpolation functions whose nodes are at the Gauss points. 
         Vdomain = FunctionSpace(mesh,Ve) #: Apply the Quadrature element to the whole of the domain
-        domain2=Function(Vdomain) #: A function that specifies the material of the particular Gauss point
+        domain2 = Function(Vdomain) #: A function that specifies the material of the particular Gauss point
         self.local_project(domainid, Vdomain, domain2) #: Projection of the material ids defined at the nodes of each element to its Gauss points.
-        domainidGP=domain2.vector().get_local() #: store the material label of each Gauss point in a vector  
+        domainidGP = domain2.vector().get_local() #: store the material label of each Gauss point in a vector  
         return domainidGP.astype("int")      
 
-    def local_project(self,v,V,u=None): #:V is the function space to project on, v is the funtion to be projected, u is the projected function
+    def local_project(self, v, V, u=None): #:V is the function space to project on, v is the funtion to be projected, u is the projected function
         """
         General projection function (used later for calculating values @ GPs
 
@@ -316,9 +304,9 @@ class FEobject():
         """
         dv = TrialFunction(V)
         v_ = TestFunction(V)
-        a_proj = inner(dv,v_)*dx(metadata=self.metadata)
-        b_proj = inner(v,v_)*dx(metadata=self.metadata)
-        solver = LocalSolver(a_proj,b_proj)
+        a_proj = inner(dv, v_)*dx(metadata=self.metadata)
+        b_proj = inner(v, v_)*dx(metadata=self.metadata)
+        solver = LocalSolver(a_proj, b_proj)
         solver.factorize()
         if u is None:
             u = Function(V)
@@ -328,7 +316,7 @@ class FEobject():
             solver.solve_local_rhs(u)
             return
 
-    def to_matrix(self,comp_dsde): #probably not optimal, but as it is compiled it doesn't matter
+    def to_matrix(self, comp_dsde): #probably not optimal, but as it is compiled it doesn't matter
         """
         Convert to matrix
 
@@ -337,16 +325,16 @@ class FEobject():
         :return: jacobian ds/de in dolfin matrix form
         :rtype: as_matrix
         """
-        len1=sqrt(np.shape(comp_dsde)[0])
+        len1 = sqrt(np.shape(comp_dsde)[0])
         if len1 % 1 == 0.:
-            len1=int(len1)
-            a = [[comp_dsde[i+j*len1] for i in range(len1)] for j in range(len1)]
+            len1 = int(len1)
+            a = [[comp_dsde[i + j*len1] for i in range(len1)] for j in range(len1)]
             return as_matrix(a)
         else:
             print("error: not square matrix.")
             return 0.
 
-    def epsilon2(self,v):
+    def epsilon2(self, v):
         """
         Get generalized deformation vector
 
@@ -357,7 +345,7 @@ class FEobject():
         """
         return self.feform.generalized_epsilon(v)
 
-    def aux_field2(self,v):
+    def aux_field2(self, v):
         """
         Get auxiliary fields for the Gauss points
 

@@ -4,22 +4,16 @@ Created on Aug 6, 2018
 @author: Ioannis Stefanou
 
 '''
+import numpy as np
+from operator import itemgetter
 from dolfin import *
-
-import dolfin as d
-
+from math import *
+import gc
 from copy import deepcopy
-mpi_comm_world=d.MPI.comm_world
-#
+import dolfin as d
+mpi_comm_world = d.MPI.comm_world
 from ngeoFE.fedefinitions import FEobject
 from ngeoFE.solvers import Backward_Euler_Solver
-#
-import numpy as np
-
-from operator import itemgetter
-from math import *
-
-import gc
 
 
 class General_FEproblem_properties():
@@ -36,53 +30,52 @@ class UserFEproblem():
     :param feform: finite element variational formulation
     :type feform: FEformulation
     """
-    def __init__(self,feform):
+    def __init__(self, feform, pbc=None):
         # Get attributes
         self.set_general_properties()
         # Creates MPI environment
-        self.comm=mpi_comm_world
-        #print("Hello from process", self.comm.Get_rank())
+        self.comm = mpi_comm_world
         # Generate mesh and set topology 
-        self.mesh,self.subdomains,self.boundaries = self.create_mesh()
+        self.mesh, self.subdomains, self.boundaries = self.create_mesh()
         self.cell = self.mesh.ufl_cell().cellname()
         # Get regions
         self.subdomains = self.create_subdomains(self.mesh)
         self.mark_boundaries(self.boundaries)
         # Create material objects
-        self.mats=self.set_materials()
+        self.mats = self.set_materials()
         # Dictionary for BC types
         self.BCtype = {
-            "DC": 0, #Dirichlet: increment proportionally to step time
-            "DC-C": 2, #Dirichlet: set at the beginning and keep constant
-            "NM": 1, #Neumann: increment proportionally to step time
-            "NM-C": 3, #Neumann: set at the beginning and keep constant
-            "RB": 5, #Robin
-            "NM-n": 6, #Neumann: normal to the boundary traction (pressure); increment proportionally to step time
-            "NM-n-C": 7, #Neumann: normal to the boundary traction (pressure); set at the biginning and keep constant
+            "DC": 0,  # Dirichlet: increment proportionally to step time
+            "DC-C": 2,  # Dirichlet: set at the beginning and keep constant
+            "NM": 1,  # Neumann: increment proportionally to step time
+            "NM-C": 3,  # Neumann: set at the beginning and keep constant
+            "RB": 5,  # Robin
+            "NM-n": 6,  # Neumann: normal to the boundary traction (pressure); increment proportionally to step time
+            "NM-n-C": 7,  # Neumann: normal to the boundary traction (pressure); set at the biginning and keep constant
             }
         # Set BCs
-        self.bcs=self.set_bcs()
+        self.bcs = self.set_bcs()
         # Set FE formulation
-        self.feform=feform 
+        self.feform = feform 
         # Set indices for history output from residual
-        self.histories=self.history_output()
-        #Set indices for state variables output at the Gauss points #ALEX 19/05/2022
-        self.Gausspointsquery=self.create_Gauss_point_query_domain(self.mesh)
-               
-        self.svars_histories=self.history_svars_output()
-        # print(self.svars_histories)
+        self.histories = self.history_output()
+        # Set indices for state variables output at the Gauss points
+        self.Gausspointsquery = self.create_Gauss_point_query_domain(self.mesh)
+        # Create history output for state variables
+        self.svars_histories = self.history_svars_output()
         # Creates FE object
-
         self.large_displacements = self.large_displacements()
-        try:
+        self.keep_previous = False
+        # Now create the FE object, depending on whether periodic boundary conditions are defined or not
+        if hasattr(self, 'pbc') and self.pbc is not None:
             # If periodic boundary conditions are defined
-            self.feobj=UserFEobject(self.mesh,self.feform,self.subdomains,self.boundaries,self.genprops,self.bcs,self.comm,self.pbcs,self.keep_previous,self.large_displacements)
-        except AttributeError:   
-            self.feobj=UserFEobject(self.mesh,self.feform,self.subdomains,self.boundaries,self.genprops,self.bcs,self.comm,symbolic_histories=self.histories,Gausspointsquery=self.Gausspointsquery,symbolic_svars_histories=self.svars_histories,large_displacements=self.large_displacements)
+            self.feobj = UserFEobject(self.mesh, self.feform, self.subdomains, self.boundaries, self.genprops, self.bcs, self.comm, self.pbc, self.keep_previous, self.large_displacements)
+        else:
+            self.feobj = UserFEobject(self.mesh, self.feform, self.subdomains, self.boundaries, self.genprops, self.bcs, self.comm, symbolic_histories=self.histories, Gausspointsquery=self.Gausspointsquery, symbolic_svars_histories=self.svars_histories, large_displacements=self.large_displacements)
         # Initializes state variables vector
         self.set_initial_conditions()
         # Creates Incremental Solver object
-        self.slv=Backward_Euler_Solver(self.feobj, self.mats)
+        self.slv = Backward_Euler_Solver(self.feobj, self.mats)
 
 
     def set_general_properties(self):
@@ -130,7 +123,7 @@ class UserFEproblem():
         """
         pass
 
-    def create_subdomains(self,mesh):
+    def create_subdomains(self, mesh):
         """
         Create subdomains by marking regions. If no subdomains, set subdomain id=0 everywhere.
         Subdomains define regions with different properties in the problem
@@ -142,7 +135,7 @@ class UserFEproblem():
         subdomains.set_all(0) #assigns material/props number 0 everywhere
         return subdomains
 
-    def mark_boundaries(self,boundaries):
+    def mark_boundaries(self, boundaries):
         """
         Mark boundary domains if not marked by mesh file
 
@@ -163,7 +156,7 @@ class UserFEproblem():
         """
         pass
     
-    def create_Gauss_point_query_domain(self,mesh):
+    def create_Gauss_point_query_domain(self, mesh):
         """
         creates separate Gauss query domain for extraction of appropriate svars degrees of freedom from FunctionSpace Vsvars
         """
@@ -175,7 +168,7 @@ class UserFEproblem():
         """
         pass
     
-    def solve(self,file="",silent=False,summary=True):
+    def solve(self, file="", silent=False, summary=True):
         """
         Solves the FE problem
 
@@ -202,7 +195,7 @@ class UserFEproblem():
         """
         Sets large displacements flag
         """
-        self.large_displacements=False
+        self.large_displacements = False
         pass
 
 class BoC():
@@ -214,19 +207,18 @@ class BoC():
     :type symbolic: List
     :type BC: list of dof's for Neumann and Robin or dolfin DirichletBC
     """
-    def __init__(self,symbolic,BC):
+    def __init__(self, symbolic, BC):
         """
         Constructor
         """
-        self.description=""
-        self.type=symbolic[1][0]
-        self.target_value=np.array(symbolic[1][2])
-        self.dvalue=self.target_value
-        self.value=0.
-        self.region_id=symbolic[0]
-        self.dof=np.array(symbolic[1][1])
-        #self.symbolic=symbolic
-        self.BC=BC
+        self.description = ""
+        self.type = symbolic[1][0]
+        self.target_value = np.array(symbolic[1][2])
+        self.dvalue = self.target_value
+        self.value = 0.
+        self.region_id = symbolic[0]
+        self.dof = np.array(symbolic[1][1])
+        self.BC = BC
 
 class UserFEobject(FEobject):
     """
@@ -255,35 +247,34 @@ class UserFEobject(FEobject):
     :type large_displacements: Indicates that large displacements are calculated with the ALE method
     :param large_displacements: Logical
     """
-    def __init__(self,mesh,feform,subdomains,boundaries,generalprops,symbolic_bcs,comm,pbc=None,keep_previous=False,symbolic_histories=None,Gausspointsquery=None,symbolic_svars_histories=None,large_displacements=False):
+    def __init__(self, mesh, feform, subdomains, boundaries, generalprops, symbolic_bcs, comm, pbc=None, keep_previous=False, symbolic_histories=None, Gausspointsquery=None, symbolic_svars_histories=None, large_displacements=False):
 
-        self.description="put your description"
-        self.pbc=pbc
-        self.boundaries=boundaries
+        self.description = "put your description"
+        self.pbc = pbc
+        self.boundaries = boundaries
         self.DCbcs0=[]; self.DCbcs=[]; self.NMbcs=[]; self.RBbcs=[]; self.NMnbcs=[];
-#         self.initial=False ####9/9/2019 Alex put it
 
-        if symbolic_bcs!=None: 
-            self.symbolic_bcs=sorted(symbolic_bcs,key=itemgetter(1))
+        if symbolic_bcs != None: 
+            self.symbolic_bcs = sorted(symbolic_bcs, key=itemgetter(1))
         else:
-            self.symbolic_bcs=None
+            self.symbolic_bcs = None
         #set general properties
-        self.param=generalprops
+        self.param = generalprops
         super().__init__(mesh, feform, generalprops.p_nsvars, subdomains, comm, pbc, keep_previous)
         #Set history output dofs
-        self.symbolic_history=symbolic_histories
+        self.symbolic_history = symbolic_histories
         self.set_history_output_indices()
         #Set state variables history output dofs
-        self.Gausspointsquery=Gausspointsquery
+        self.Gausspointsquery = Gausspointsquery
         
-        self.symbolic_svars_history=symbolic_svars_histories
+        self.symbolic_svars_history = symbolic_svars_histories
         self.set_svars_history_output_indices()
         if large_displacements == True:
-            self.large_displacements= True
+            self.large_displacements = True
         else:
-            self.large_displacements= False
+            self.large_displacements = False
 
-    def update_mesh(self, mesh, displacement,minus=False):
+    def update_mesh(self, mesh, displacement, minus=False):
         """
         Function that utilizes the ALE module of dolfin to update the mesh after each iteration.
         If the increment in total is not converged then it resets to the previously converged increment.
@@ -333,8 +324,8 @@ class UserFEobject(FEobject):
         :type Res: numpy array of reals.
         """
         #Set variational forms
-        if self.dotv_coeffs()!=None:
-            self.dt=Expression("dt",dt=0.,degree=1)
+        if self.dotv_coeffs() != None:
+            self.dt = Expression("dt", dt=0., degree=1)
             self.Jac, self.Res = self.setVarFormTransient()
         else:
             self.Jac, self.Res = self.setVarForm()
@@ -586,59 +577,56 @@ class UserFEobject(FEobject):
                 NMn.dvalue=0.
         return
 
-    def setfi(self,dt):
+    def setfi(self, dt):
         """
         Set user's volumic forces and tractor increment
 
         :param dt: time increment
         :type dt: double
         """
-        tmp=dt*np.zeros(self.ndofs)
-        self.f.interpolate(Constant(tmp))#=Constant(0.) #TODO 
+        tmp = dt*np.zeros(self.ndofs)
+        self.f.interpolate(Constant(tmp))
 
     def setVarForm(self):
         """
         Set Jacobian and Residual (Voigt form) default version
         """
-        n=FacetNormal(self.mesh)
-        #
-        ds=Measure("ds", domain=self.mesh,subdomain_data = self.boundaries,metadata=self.metadata)
-        Jac = inner(dot(self.to_matrix(self.dsde2),self.epsilon2(self.u)),self.epsilon2(self.v))*dx(metadata=self.metadata)
-        Res = -inner(self.sigma2,self.epsilon2(self.v))*dx(metadata=self.metadata)
+        n = FacetNormal(self.mesh)
+        ds = Measure("ds", domain=self.mesh, subdomain_data=self.boundaries, metadata=self.metadata)
+        Jac = inner(dot(self.to_matrix(self.dsde2), self.epsilon2(self.u)), self.epsilon2(self.v))*dx(metadata=self.metadata)
+        Res = -inner(self.sigma2, self.epsilon2(self.v))*dx(metadata=self.metadata)
         for NM in self.NMbcs:
-            Res+= dot(NM.ti,self.v)*ds(NM.region_id)
+            Res += dot(NM.ti, self.v)*ds(NM.region_id)
         for NMn in self.NMnbcs:
-            Res+=NMn.p*dot(n,as_vector(np.take(self.v,NMn.indices)))*ds(NMn.region_id)
+            Res += NMn.p*dot(n, as_vector(np.take(self.v, NMn.indices)))*ds(NMn.region_id)
         for RB in self.RBbcs:
-            Res+= dot(np.multiply(RB.ks,self.u),self.v)*ds(RB.region_id)
+            Res += dot(np.multiply(RB.ks, self.u), self.v)*ds(RB.region_id)
 
-        Jac+=self.feform.setVarFormAdditionalTerms_Jac(self.u,self.Du,self.v,self.svars2,self.metadata,0.,self.to_matrix(self.dsde2))
-        Res+=self.feform.setVarFormAdditionalTerms_Res(self.u,self.Du,self.v,self.svars2,self.metadata,0.)
+        Jac += self.feform.setVarFormAdditionalTerms_Jac(self.u, self.Du, self.v, self.svars2, self.metadata, 0., self.to_matrix(self.dsde2))
+        Res += self.feform.setVarFormAdditionalTerms_Res(self.u, self.Du, self.v, self.svars2, self.metadata, 0.)
         return Jac, Res
 
     def setVarFormTransient(self):
         """
         Set Jacobian and Residual (Voigt form) default version for transient problems
         """
-        n=FacetNormal(self.mesh)
-        #print(self.dt.values())
-        ds=Measure("ds", subdomain_data = self.boundaries)#,metadata=self.metadata)
+        n = FacetNormal(self.mesh)
+        ds = Measure("ds", subdomain_data=self.boundaries)#,metadata=self.metadata)
 
-        Jac = (1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.u)) , self.v)*dx(metadata=self.metadata)
-        Jac+= (1./self.dt)*self.dt*inner(dot(self.to_matrix(self.dsde2) , self.epsilon2(self.u)),self.epsilon2(self.v))*dx(metadata=self.metadata)
-        Res = -(1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(),self.Du)), self.v)*dx(metadata=self.metadata)
-
-        Res+= -(1./self.dt)*self.dt*inner(self.sigma2,self.epsilon2(self.v))*dx(metadata=self.metadata)
+        Jac = (1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(), self.u)), self.v)*dx(metadata=self.metadata)
+        Jac += (1./self.dt)*self.dt*inner(dot(self.to_matrix(self.dsde2), self.epsilon2(self.u)), self.epsilon2(self.v))*dx(metadata=self.metadata)
+        Res = -(1./self.dt)*inner(as_vector(np.multiply(self.dotv_coeffs(), self.Du)), self.v)*dx(metadata=self.metadata)
+        Res += -(1./self.dt)*self.dt*inner(self.sigma2, self.epsilon2(self.v))*dx(metadata=self.metadata)
 
         for NM in self.NMbcs:
-            Res+= (1./self.dt)*self.dt*dot(NM.ti,self.v)*ds(NM.region_id)
+            Res += (1./self.dt)*self.dt*dot(NM.ti, self.v)*ds(NM.region_id)
         for NMn in self.NMnbcs:
-            Res+= (1./self.dt)*self.dt*NMn.p*dot(n,as_vector(np.take(self.v,NMn.indices)))*ds(NMn.region_id)
+            Res += (1./self.dt)*self.dt*NMn.p*dot(n, as_vector(np.take(self.v, NMn.indices)))*ds(NMn.region_id)
         for RB in self.RBbcs:
-            Res+= (1./self.dt)*self.dt*dot(np.multiply(RB.ks,self.u),self.v)*ds(RB.region_id) 
+            Res += (1./self.dt)*self.dt*dot(np.multiply(RB.ks, self.u), self.v)*ds(RB.region_id) 
 
-        Jac+=self.feform.setVarFormAdditionalTerms_Jac(self.u,self.Du,self.v,self.svars2,self.metadata,self.dt,self.to_matrix(self.dsde2))
-        Res+=self.feform.setVarFormAdditionalTerms_Res(self.u,self.Du,self.v,self.svars2,self.metadata,self.dt)
+        Jac += self.feform.setVarFormAdditionalTerms_Jac(self.u, self.Du, self.v, self.svars2, self.metadata, self.dt, self.to_matrix(self.dsde2))
+        Res += self.feform.setVarFormAdditionalTerms_Res(self.u, self.Du, self.v, self.svars2, self.metadata, self.dt)
 
 
         return Jac, Res
